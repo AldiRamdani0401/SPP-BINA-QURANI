@@ -19,12 +19,13 @@
 </head>
 
 <body>
-  <div class="min-h-screen flex flex-col">
-    <div class="no-select sticky top-0 z-20">
+  <div class="flex flex-col">
+    <div class="no-select sticky-top">
       <?php require __DIR__ . "/../../components/admin/navbar.php" ?>
     </div>
-      <div class="flex flex-1">
-        <aside class="no-select h-full w-72 fixed p-0" style="background:#8FA06A;">
+    <div class="container-fluid p-0 flex flex-col h-full">
+      <div class="flex flex-row justify-between">
+        <div id="sidebar" class="no-select d-none d-md-block p-0" style="background:#8FA06A;position:fixed; height:100%;border:1px solid red;">
           <?php require __DIR__ . "/../../components/admin/sidebar.php" ?>
-        </aside>
-        <div id="admin-content" class="flex-1 z-10">
+        </div>
+        <div id="admin-content" style="border:1px solid red;"></div>
