@@ -1,5 +1,5 @@
   // Library
-  const { signal, store, component } = reef;
+  const { signal, store, component, render } = reef;
   const nosql = new FlyJson();
 
   const datas = store([], {
@@ -145,10 +145,17 @@
     const btnResetElement = document.createElement("button");
       btnResetElement.innerText = "Reset";
       btnResetElement.setAttribute("id", `btn-reset-${name}`);
-      btnResetElement.style.backgroundColor = "red";
-      btnResetElement.style.color = "white";
-      btnResetElement.style.border = "none";
-      btnResetElement.style.height = "35px";
+      btnResetElement.classList.add(
+        "bg-red-600",
+        "text-white",
+        "px-2",
+        "py-1",
+        "rounded-lg",
+        "absolute",
+        "left-0",
+        "right-0",
+        "mx-auto"
+      );
 
       // Gunakan data dari parameter function di sini
       btnResetElement.addEventListener("click", function () {
@@ -293,8 +300,9 @@
     main.load = limit;
   }
 
-  function templateFilterDataByLimit() {
-    let dom = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
+  function templateFilterData() {
+    let dom = '';
+    let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
 
     // Reset `filter.limits` untuk menghindari duplikat
     filter.limits = [];
@@ -316,16 +324,38 @@
         for (let i = 1; i <= countData; i++) {
             const limit = i * 10;
             filter.limits.push(limit);
-            dom += `<option value="${limit}">${limit} Data</option>`;
+            filterLimit += `<option value="${limit}">${limit} Data</option>`;
         }
     }
 
-    dom += '</select>';
+    filterLimit += '</select>';
+
+    let filterByGroup = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
+    if (groups.list.length > 1) {
+        groups.list.forEach((group) => {
+          let groupName = group;
+          if (groupName == "L") groupName = "Laki-Laki" ;
+          if (groupName == "P") groupName = "Perempuan";
+          filterByGroup += `<option value="${group}">${groupName}</option>`;
+        });
+    } else {
+      filterByGroup += "Loading...";
+    }
+    filterByGroup += "</select>";
+
+    dom += filterLimit + filterByGroup;
     return dom;
   }
 
 
-  component('#container-filter-data-table-1', templateFilterDataByLimit, {events:{handleLimitData}, signals:['filter-data']});
+  component('#container-filter-data-table', templateFilterData, {
+    events:{
+      handleLimitData, handleFilterDataGroupBy, templateBtnReset
+    },
+    signals:[
+      'filter-data'
+    ]
+  });
 
   function handleFilterDataGroupBy(element) {
     const container = document.getElementById('select-data-group-by');
@@ -345,42 +375,12 @@
         }
         main.total = result.length;
     helperFilteredData(result);
-    templateBtnReset(result, 'filter', 'container-filter-data-table-2', refreshTemplateFilterDataGroupBy);
+    templateBtnReset(result, 'filter', 'container-btn-reset', refreshTemplateFilterData);
   }
 
-  function templateFilterDataGroupBy() {
-    let dom = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
-    if (groups.list.length > 1) {
-        groups.list.forEach((group) => {
-          let groupName = group;
-          if (groupName == "L") groupName = "Laki-Laki" ;
-          if (groupName == "P") groupName = "Perempuan";
-          dom += `<option value="${group}">${groupName}</option>`;
-        });
-    } else {
-      dom += "Loading...";
-    }
-    dom += "</select>";
-    return dom;
+  function refreshTemplateFilterData() {
+   render('#container-filter-data-table', templateFilterData);
   }
-
-  function refreshTemplateFilterDataGroupBy() {
-    const container = document.getElementById('container-filter-data-table-2');
-    let dom = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
-    if (groups.list.length > 1) {
-        groups.list.forEach((group) => {
-          let groupName = group;
-          if (groupName == "L") groupName = "Laki-Laki" ;
-          if (groupName == "P") groupName = "Perempuan";
-          dom += `<option value="${group}">${groupName}</option>`;
-        });
-    } else {
-      dom += "Loading...";
-    }
-    dom += "</select>";
-    container.innerHTML = dom;
-  }
-  component('#container-filter-data-table-2', templateFilterDataGroupBy, {events:{handleFilterDataGroupBy}});
 
   // Input Search
   function showTooltip() {
@@ -418,34 +418,21 @@
     select += '</select>';
     dom += select;
     dom += `
-    <div class="d-flex flex-row">
-        <div style="position: relative; display: inline-block;">
+    <div class="flex flex-row h-full">
+        <div class="relative inline-block">
         <input id="search-input-table"
            type="text"
            placeholder="Masukan Kata Kunci Pencarian"
-           style="border-radius:5px 0 0 5px;height:35px;"
+           class="rounded-l-lg h-full"
            onfocus="showTooltip()"
            onblur="hideTooltip()" />
           <!-- Tooltip -->
-          <span id="tooltip"
-            style="visibility: hidden;
-                  font-size:12px;
-                  background-color: #333;
-                  color: #fff;
-                  text-align: center;
-                  padding: 5px;
-                  border-radius: 5px;
-                  position: absolute;
-                  top: 40px;
-                  left: 0;
-                  z-index: 2000;
-                  white-space: nowrap;">
-            Default: <i>nama_lengkap, Class, Father Name, Mother Name</i>
-          </span>
+         <span id="tooltip" class="invisible text-xs bg-gray-800 text-white text-center p-1.5 rounded absolute top-10 left-0 z-50 whitespace-nowrap">
+          Default: <i>nama_lengkap, Class, Father Name, Mother Name</i>
+        </span>
       </div>
-        <button
-          style="border:none;border-top-right-radius:5px;border-bottom-right-radius:5px;height:35px;background:#161AF5;" onclick="searchData()">
-            <img src="${icon}" height="28" width="33">
+        <button class="rounded-r-lg bg-blue-900 h-full" onclick="searchData()">
+            <img class="p-1" src="${icon}">
         </button>
       </div>
     `;
@@ -514,7 +501,7 @@
   // # Table Head
   function templateTableHead() {
     let dom = '<tr class="sticky-top" style="background:#EDEDED;">';
-    dom += '<th class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">No</th>';
+    dom += '<th class="p-2 border text-sm text-nowrap">No</th>';
     const headNames = main.headers;
     let formatedHeadNames = [];
     headNames.forEach(headName => {
@@ -525,7 +512,7 @@
 
     formatedHeadNames.forEach(name => {
       dom += `
-        <th class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${name}</th>
+        <th class="p-2 border text-sm text-nowrap">${name}</th>
       `;
     });
 
@@ -542,26 +529,28 @@
       main.datas.forEach(data => {
         const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
         dom += `
-          <tr style="background:white;">
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;">${count}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.nomor_induk_siswa}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.nama_lengkap}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;"><img height="100" class="rounded" src="../assets/${data.photo_siswa}" alt="photo ${data.nama_lengkap}"/></td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.kelas}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${jenis_kelamin}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.tempat_lahir}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.tanggal_lahir}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.nama_ayah}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.nama_ibu}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.rt}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.rw}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.desa}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.kecamatan}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.kabupaten}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.provinsi}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.kode_pos}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.di_buat}</td>
-            <td class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">${data.di_perbarui}</td>
+          <tr class="bg-white">
+            <td class="p-2 border text-sm text-nowrap">${count}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.nomor_induk_siswa}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.nama_lengkap}</td>
+            <td class="p-2 border text-sm text-nowrap">
+              <img class="w-20 rounded" src="../assets/${data.photo_siswa}" alt="photo ${data.nama_lengkap}"/>
+            </td>
+            <td class="p-2 border text-sm text-nowrap">${data.kelas}</td>
+            <td class="p-2 border text-sm text-nowrap">${jenis_kelamin}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.tempat_lahir}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.tanggal_lahir}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.nama_ayah}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.nama_ibu}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.rt}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.rw}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.desa}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.kecamatan}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.kabupaten}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.provinsi}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.kode_pos}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.di_buat}</td>
+            <td class="p-2 border text-sm text-nowrap">${data.di_perbarui}</td>
           </tr>
         `;
         count++;
@@ -569,7 +558,7 @@
     } else {
       dom += `
           <tr style="background:white;">
-            <td colspan="16" class="p-2" style="border:1px solid #BBBBBB;font-size:16px;text-wrap:nowrap;">Data Not Found</td>
+            <td colspan="16" class="p-2 border text-sm text-nowrap">Data Not Found</td>
           </tr>
         `;
     }
@@ -601,7 +590,7 @@
   function templatePagination() {
     if (main.load != main.total) {
       return `
-          <button type="button" onclick="loadMore()">Load More</button>
+          <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
           <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${main.load} of ${main.total} </span>
       `;
     } else {
