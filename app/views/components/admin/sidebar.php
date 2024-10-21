@@ -1,286 +1,277 @@
-<div id="sidebar" class="py-2 d-none d-sm-block" style="background:#8FA06A;height:90%;overflow:auto;">
-  <ul class="d-flex flex-column gap-1 m-0 p-0" style="list-style-type:none;">
-    <li class="d-flex px-2 align-items-center" style="text-decoration:none;background:#7B8C56;height:70px;">
-      <a href="/admin" class="d-flex align-items-center gap-2 px-2" style="text-decoration:none; width:100%;">
-        <img src="<?= base_url(path: 'assets/icon/dashboard-icon.png')?>" height="20">
-        <span style="font-size:20px;color:white;">Dashboard</span>
+<div id="sidebar" class="py-2 max-h-[90%] bg-[#8FA06A] overflow-auto">
+  <ul class="flex flex-col gap-1 m-0 p-0 list-none">
+    <!-- Dashboard -->
+    <li class="flex justify-center items-center py-3 bg-[#7B8C56] hover:bg-[#46522e] hover:font-bold cursor-pointer">
+      <a href="/admin" class="flex items-center gap-2 px-2 w-full">
+        <img src="<?= base_url(path: 'assets/icon/dashboard-icon.png')?>" class="p-1">
+        <span class="text-lg text-white">Dashboard</span>
       </a>
     </li>
-    <li style="background:#7B8C56;">
-      <div id="master-data" class="d-flex justify-content-between align-items-center"
-        style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Master Data</span>
+    <!-- Master Data -->
+    <li class="w-full bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="master-data" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-center items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+          <span class="text-lg text-white">Master Data</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-master-data" src="<?= base_url(path: 'assets/icon/plus-math.png')?>" height="20">
+        <div class="p-3 flex justify-center"
+          style="background:#6A813A;">
+          <img id="sidebar-dropdown-icon-master-data" src="<?= base_url(path: 'assets/icon/plus-math.png')?>">
         </div>
       </div>
     </li>
-    <ul id="dropdown-master-data" class="d-none p-0" style="list-style-type:none;">
+    <ul id="dropdown-master-data" class="hidden p-0 pl-3 list-none">
       <li class="sidebar-dropdown">
-        <a href="/admin/data-siswa" class=" d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png')?>" height="20">
-            <span style="font-size:20px;color:white;">Data Siswa</span>
+        <a href="/admin/data-siswa" class="flex items-center cursor-pointer">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png')?>">
+            <span class="text-sm text-white">Data Siswa</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Data Orang Tua Siswa</span>
+        <a id="master-data" class="flex items-center">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Data Orang Tua Siswa</span>
           </div>
         </a>
       </li>
       <li id="data-kelas" class="sidebar-dropdown">
-        <a class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Data Kelas</span>
+        <a class="flex items-center">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Data Kelas</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Data Biaya SPP</span>
+        <a id="master-data" class="flex items-center">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Data Biaya SPP</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Data Pembayaran</span>
-          </div>
-        </a>
-      </li>
-    </ul>
-    <li style="background:#7B8C56;">
-      <div id="pembayaran-spp" class="d-flex justify-content-between align-items-center"
-      style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/receive-cash.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Pembayaran SPP</span>
-        </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-pembayaran-spp" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>" height="20">
-        </div>
-      </div>
-    </li>
-    <ul id="dropdown-pembayaran-spp" class="d-none p-0" style="list-style-type:none;">
-      <li class="sidebar-dropdown">
-        <a class=" d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Konfirmasi Pembayaran</span>
-          </div>
-        </a>
-      </li>
-      <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Riwayat Pembayaran</span>
-          </div>
-        </a>
-      </li>
-      <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Tunggakan Pembayaran</span>
-          </div>
-        </a>
-      </li>
-      <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
-          style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Pembayaran Bulanan</span>
+        <a id="master-data" class="flex items-center cursor-pointer">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Data Pembayaran</span>
           </div>
         </a>
       </li>
     </ul>
-    <li style="background:#7B8C56;">
-      <div id="pengaturan-spp" class="d-flex justify-content-between align-items-center"
-      style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/icon-config-spp.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Pengaturan SPP</span>
+    <!-- Pembayaran SPP -->
+    <li class="bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="pembayaran-spp" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-center items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/receive-cash.png') ?>">
+          <span class="text-lg text-white">Pembayaran SPP</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-pengaturan-spp" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>" height="20">
+        <div class="p-3 flex justify-center bg-[#6A813A]">
+          <img id="sidebar-dropdown-icon-pembayaran-spp" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>">
         </div>
       </div>
     </li>
-    <ul id="dropdown-pengaturan-spp" class="d-none p-0" style="list-style-type:none;">
+    <ul id="dropdown-pembayaran-spp" class="hidden p-0 pl-3 list-none">
       <li class="sidebar-dropdown">
-        <a class=" d-flex justify-content-between align-items-center"
+        <a class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Kelola Biaya SPP</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Konfirmasi Pembayaran</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Kelola Potongan Biaya</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Riwayat Pembayaran</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Kelola Jatuh Tempo SPP</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Tunggakan Pembayaran</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Riwayat Pembaruan Biaya</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Pembayaran Bulanan</span>
           </div>
         </a>
       </li>
     </ul>
-    <li style="background:#7B8C56;">
-      <div id="manajemen-akun" class="d-flex justify-content-between align-items-center"
-      style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/icon-manage-account.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Manajemen Akun</span>
+    <!-- Pengaturan SPP -->
+    <li class="bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="pengaturan-spp" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-between items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/icon-config-spp.png') ?>">
+          <span class="text-lg text-white">Pengaturan SPP</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-manajemen-akun" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>" height="20">
+        <div class="p-3 flex justify-center bg-[#6A813A]">
+          <img id="sidebar-dropdown-icon-pengaturan-spp" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>">
         </div>
       </div>
     </li>
-    <ul id="dropdown-manajemen-akun" class="d-none p-0" style="list-style-type:none;">
+    <ul id="dropdown-pengaturan-spp" class="hidden p-0 pl-3 list-none">
       <li class="sidebar-dropdown">
-        <a class=" d-flex justify-content-between align-items-center"
+        <a class=" flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Manajemen Akun Siswa</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Kelola Biaya SPP</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Manajemen Akun Orang Tua Siswa</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Kelola Potongan Biaya</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center cursor-pointer"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Manajemen Akun Admin</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Kelola Jatuh Tempo SPP</span>
+          </div>
+        </a>
+      </li>
+      <li class="sidebar-dropdown">
+        <a id="master-data" class="flex items-center"
+          style="text-decoration:none;cursor:pointer;">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Riwayat Pembaruan Biaya</span>
           </div>
         </a>
       </li>
     </ul>
-    <li style="background:#7B8C56;">
-      <div id="laporan-statistik" class="d-flex justify-content-between align-items-center"
-      style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/icon-laporan-statistik.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Laporan & Statistik</span>
+    <!-- Manajemen Akun -->
+    <li class="bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="manajemen-akun" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-between items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/icon-manage-account.png') ?>">
+          <span class="text-lg text-white">Manajemen Akun</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-laporan-statistik" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>" height="20">
+        <div class="p-3 flex justify-center bg-[#6A813A]">
+          <img id="sidebar-dropdown-icon-manajemen-akun" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>">
         </div>
       </div>
     </li>
-    <ul id="dropdown-laporan-statistik" class="d-none p-0" style="list-style-type:none;">
+    <ul id="dropdown-manajemen-akun" class="hidden p-0 pl-3 list-none">
       <li class="sidebar-dropdown">
-        <a class=" d-flex justify-content-between align-items-center"
+        <a class=" flex items-center"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Statistik Pembayaran</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Manajemen Akun Siswa</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Laporan Per Kelas</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Manajemen Akun Orang Tua Siswa</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Cetak Laporan</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Manajemen Akun Admin</span>
           </div>
         </a>
       </li>
     </ul>
-    <li style="background:#7B8C56;">
-      <div id="pengaturan-aplikasi" class="d-flex justify-content-between align-items-center"
-      style="text-decoration:none;cursor:pointer;" onclick="openSideBarDropdown(this.id)">
-        <div class="d-flex align-items-center gap-2 px-3">
-          <img src="<?= base_url(path: 'assets/icon/icon-pengaturan.png') ?>" height="20">
-          <span style="font-size:20px;color:white;">Pengaturan Aplikasi</span>
+    <!-- Laporan & Statistik -->
+    <li class="bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="laporan-statistik" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-between items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/icon-laporan-statistik.png') ?>">
+          <span class="text-lg text-white">Laporan & Statistik</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center"
-          style="background:#6A813A; width:41px; height:70px;">
-          <img id="sidebar-dropdown-icon-pengaturan-aplikasi" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>" height="20">
+        <div class="p-3 flex justify-center bg-[#6A813A]">
+          <img id="sidebar-dropdown-icon-laporan-statistik" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>">
         </div>
       </div>
     </li>
-    <ul id="dropdown-pengaturan-aplikasi" class="d-none p-0" style="list-style-type:none;">
+    <ul id="dropdown-laporan-statistik" class="hidden p-0 list-none">
       <li class="sidebar-dropdown">
-        <a class=" d-flex justify-content-between align-items-center"
+        <a class=" flex items-center"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Metode Pembayaran</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Statistik Pembayaran</span>
           </div>
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="d-flex justify-content-between align-items-center"
+        <a id="master-data" class="flex items-center"
           style="text-decoration:none;cursor:pointer;">
-          <div class="d-flex align-items-center gap-2 px-3">
-            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>" height="20">
-            <span style="font-size:20px;color:white;">Pengaturan Aplikasi</span>
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Laporan Per Kelas</span>
+          </div>
+        </a>
+      </li>
+      <li class="sidebar-dropdown">
+        <a id="master-data" class="flex items-center"
+          style="text-decoration:none;cursor:pointer;">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Cetak Laporan</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <!-- Pengaturan Aplikasi -->
+    <li class="bg-[#7B8C56] hover:font-bold hover:bg-[#46522e] cursor-pointer">
+      <div id="pengaturan-aplikasi" class="flex justify-between" onclick="openSideBarDropdown(this.id)">
+        <div class="flex justify-between items-center gap-2 p-3">
+          <img src="<?= base_url(path: 'assets/icon/icon-pengaturan.png') ?>">
+          <span class="text-lg text-white">Pengaturan Aplikasi</span>
+        </div>
+        <div class="p-3 flex justify-center bg-[#6A813A]">
+          <img id="sidebar-dropdown-icon-pengaturan-aplikasi" src="<?= base_url(path: 'assets/icon/plus-math.png') ?>">
+        </div>
+      </div>
+    </li>
+    <ul id="dropdown-pengaturan-aplikasi" class="hidden p-0 list-none">
+      <li class="sidebar-dropdown">
+        <a class=" flex items-center"
+          style="text-decoration:none;cursor:pointer;">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Metode Pembayaran</span>
+          </div>
+        </a>
+      </li>
+      <li class="sidebar-dropdown">
+        <a id="master-data" class="flex items-center"
+          style="text-decoration:none;cursor:pointer;">
+          <div class="flex justify-between items-center gap-2 p-3">
+            <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
+            <span class="text-sm text-white">Pengaturan Aplikasi</span>
           </div>
         </a>
       </li>
@@ -295,16 +286,16 @@
     const dropdownId = 'dropdown-' + param;
     const dropdownIcon = document.getElementById('sidebar-dropdown-icon-' + param);
     const dropdownElement = document.getElementById(dropdownId);
-    const isHidden = dropdownElement.classList.contains('d-none');
+    const isHidden = dropdownElement.classList.contains('hidden');
     if (isHidden) {
-      dropdownElement.classList.remove('d-none');
+      dropdownElement.classList.remove('hidden');
       btnOnClick.style.backgroundColor = '#46522e';
-      btnOnClick.classList.add('fw-bold');
+      btnOnClick.classList.add('font-bold');
       dropdownIcon.setAttribute('src', '<?= base_url(path: './assets/icon/minus.png') ?>');
     } else {
-      dropdownElement.classList.add('d-none');
+      dropdownElement.classList.add('hidden');
       btnOnClick.style.backgroundColor = '';
-      btnOnClick.classList.remove('fw-bold');
+      btnOnClick.classList.remove('font-bold');
       dropdownIcon.setAttribute('src', '<?= base_url(path: 'assets/icon/plus-math.png') ?>');
     }
   }
