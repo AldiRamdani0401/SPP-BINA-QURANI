@@ -2,38 +2,55 @@
   const { signal, store, component, render } = reef;
   const nosql = new FlyJson();
 
-  const datas = store([], {
-    // Add
-    add(datas, data) {
-      datas.push(data);
-    },
-
-    // Remove
-    delete(datas, data) {
-      let index = datas.indexOf(data);
-      if (index < 0) return;
-      datas.splice(index, 1);
-    }
-  });
+  const main = signal({
+    datas: [],
+    headers: [],
+    kelas: [],
+    ListFilterByGroup: [],
+    filtered_data1:[],
+    filtered_data2:[],
+    filtered_data3:[],
+    load: 0,
+    limit: 10,
+    total: 0,
+    offset: 10,
+  }, 'main-table-data');
 
   function loadDataSiswa(callback) {
-    fetch('/data-siswa')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
+    // Menghitung offset berdasarkan halaman
+    const offset = main.offset;
+    const limit = main.limit;
+
+    // console.log(offset, limit);
+
+    // Mengirimkan request menggunakan method POST
+    fetch('/data-siswa', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        limit: limit,
+        offset: offset
       })
-      .then(data => {
-        main.headers = data[0];
-        data[1].forEach((dt) => {
-          datas.add(dt);
-        });
-        if (typeof callback === 'function') {
-          callback(); // Panggil callback
-        }
-      })
-      .catch(error => console.error('Fetch error:', error));
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(datas => {
+      console.log(datas)
+      main.datas = [...datas.data];
+      main.headers = Object.keys(datas.data[0]);
+      main.load = datas.data.length;
+      main.total = datas.total;
+      if (typeof callback === 'function') {
+        callback();
+      }
+    })
+    .catch(error => console.error('Fetch error:', error));
   }
 
   function loadDataKelas(callback) {
@@ -44,30 +61,15 @@
         }
         return response.json();
       })
-      .then(data => {
-        data[1].forEach((dt) => {
-          groupsStore.add(dt);
-        });
-        // // Memeriksa apakah callback adalah fungsi
+      .then(datas => {
+        main.kelas = [...datas[1]];
+        // Memeriksa apakah callback adalah fungsi
         if (typeof callback === 'function') {
           callback(); // Panggil callback
         }
       })
       .catch(error => console.error('Fetch error:', error));
   }
-
-
-  const main = signal({
-    datas: [],
-    headers: [],
-    filtered_data1:[],
-    filtered_data2:[],
-    filtered_data3:[],
-    load: 10,
-    limit: 10,
-    total: 0,
-    page: 1,
-  }, 'table-data');
 
   // Helper Function Store Data
 
@@ -91,34 +93,12 @@
     }
   }
 
-
-  // Groups COMPONENT
-  const groups = signal({
-    list: [],
-    selected: '',
-    selectedIndex: 0
-  }, 'groups');
-
-  const groupsStore = store([], {
-    // Add
-    add(groups, group) {
-      groups.push(group);
-    },
-
-    // Remove
-    delete(groups, group) {
-      let index = groups.indexOf(group);
-      if (index < 0) return;
-      groups.splice(index, 1);
-    }
-  });
-
   // Get Tab Labels
   function getListGroupBy() {
-    let jenisKelamin = nosql.set(datas.value).select(['jenis_kelamin']).exec();
+    let jenisKelamin = nosql.set(main.datas).select(['jenis_kelamin']).exec();
         jenisKelamin = [...new Set(jenisKelamin.map(item => item.jenis_kelamin))].sort((a, b) => a - b);
 
-    let kelas = nosql.set(groupsStore.value).select(['nama_kelas']).exec();
+    let kelas = nosql.set(main.ListFilterByGroup).select(['nama_kelas']).exec();
     // kelas = [...new Set(kelas.map(item => item.class))].sort((a, b) => a - b); // Mengambil value dari object class dan mengurutkan secara ascending
 
     let result = [...jenisKelamin];
@@ -128,7 +108,7 @@
     });
 
     result.forEach((data) => {
-      groups.list.push(data);
+      main.ListFilterByGroup.push(data);
     });
   }
 
@@ -171,7 +151,7 @@
             main.total = datas.value.length;
           }
           main.load = main.datas.length;
-          main.page = 1;
+          main.offset = 1;
 
           btnResetElement.remove();
         } else if (main.filtered_data2.includes(...data)) {
@@ -179,7 +159,7 @@
           main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
           main.load = main.datas.length;
           main.total = main.filtered_data1.length;
-          main.page = 1;
+          main.offset = 1;
           btnResetElement.remove();
         } else if (main.filtered_data3.includes(...data)) {
 
@@ -188,7 +168,7 @@
           main.datas = nosql.set(datas).paginate(1, 10).exec();
           main.load = main.datas.length;
           main.total = main.filtered_data2.length;
-          main.page = 1;
+          main.offset = 1;
           btnResetElement.remove();
         } else {
 
@@ -196,7 +176,7 @@
           main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
           main.load = main.datas.length;
           main.total = main.filtered_data1.length;
-          main.page = 1;
+          main.offset = 1;
           btnResetElement.remove();
         }
 
@@ -293,69 +273,69 @@
     const limit = element.target.value;
     main.limit = limit;
     if (main.filtered_data1.length > 0) {
-      main.datas = nosql.set(main.filtered_data1).paginate(main.page, limit).exec();
+      main.datas = nosql.set(main.filtered_data1).paginate(main.offset, limit).exec();
     } else {
-      main.datas = nosql.set(datas.value).paginate(main.page, limit).exec();
+      main.datas = nosql.set(datas.value).paginate(main.offset, limit).exec();
     }
     main.load = limit;
   }
 
-  function templateFilterData() {
-    let dom = '';
-    let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
+  // function templateFilterData() {
+  //   let dom = '';
+  //   let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
 
-    // Reset `filter.limits` untuk menghindari duplikat
-    filter.limits = [];
-    let countData = 0;
+  //   // Reset `filter.limits` untuk menghindari duplikat
+  //   filter.limits = [];
+  //   let countData = 0;
 
-    // Menentukan `countData` berdasarkan apakah data yang difilter ada atau tidak
-    if (main.filtered_data1.length > 0) {
-      if (main.filtered_data1.length >= 10) {
-        countData = Math.ceil(main.filtered_data1.length / 10);
-      } else {
-        countData = 0;
-      }
-    } else {
-        countData = Math.ceil(datas.value.length / 10);
-    }
+  //   // Menentukan `countData` berdasarkan apakah data yang difilter ada atau tidak
+  //   if (main.filtered_data1.length > 0) {
+  //     if (main.filtered_data1.length >= 10) {
+  //       countData = Math.ceil(main.filtered_data1.length / 10);
+  //     } else {
+  //       countData = 0;
+  //     }
+  //   } else {
+  //       countData = Math.ceil(datas.value.length / 10);
+  //   }
 
-    // Mengisi `filter.limits` dan `dom` hanya jika ada data
-    if (countData > 0) {
-        for (let i = 1; i <= countData; i++) {
-            const limit = i * 10;
-            filter.limits.push(limit);
-            filterLimit += `<option value="${limit}">${limit} Data</option>`;
-        }
-    }
+  //   // Mengisi `filter.limits` dan `dom` hanya jika ada data
+  //   if (countData > 0) {
+  //       for (let i = 1; i <= countData; i++) {
+  //           const limit = i * 10;
+  //           filter.limits.push(limit);
+  //           filterLimit += `<option value="${limit}">${limit} Data</option>`;
+  //       }
+  //   }
 
-    filterLimit += '</select>';
+  //   filterLimit += '</select>';
 
-    let filterByGroup = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
-    if (groups.list.length > 1) {
-        groups.list.forEach((group) => {
-          let groupName = group;
-          if (groupName == "L") groupName = "Laki-Laki" ;
-          if (groupName == "P") groupName = "Perempuan";
-          filterByGroup += `<option value="${group}">${groupName}</option>`;
-        });
-    } else {
-      filterByGroup += "Loading...";
-    }
-    filterByGroup += "</select>";
+  //   let filterByGroup = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
+  //   if (groups.list.length > 1) {
+  //       groups.list.forEach((group) => {
+  //         let groupName = group;
+  //         if (groupName == "L") groupName = "Laki-Laki" ;
+  //         if (groupName == "P") groupName = "Perempuan";
+  //         filterByGroup += `<option value="${group}">${groupName}</option>`;
+  //       });
+  //   } else {
+  //     filterByGroup += "Loading...";
+  //   }
+  //   filterByGroup += "</select>";
 
-    dom += filterLimit + filterByGroup;
-    return dom;
-  }
+  //   dom += filterLimit + filterByGroup;
+  //   return dom;
+  // }
 
 
-  component('#container-filter-data-table', templateFilterData, {
-    events:{
-      handleLimitData, handleFilterDataGroupBy, templateBtnReset
-    },
-    signals:[
-      'filter-data'
-    ]
-  });
+  // component('#container-filter-data-table', templateFilterData, {
+  //   events:{
+  //     handleLimitData, handleFilterDataGroupBy, templateBtnReset
+  //   },
+  //   signals:[
+  //     'filter-data'
+  //   ]
+  // });
 
   function handleFilterDataGroupBy(element) {
     const container = document.getElementById('select-data-group-by');
@@ -500,7 +480,7 @@
 
   // # Table Head
   function templateTableHead() {
-    let dom = '<tr class="sticky-top" style="background:#EDEDED;">';
+    let dom = '<tr class="sticky top-0 bg-[#EDEDED]">';
     dom += '<th class="p-2 border text-sm text-nowrap">No</th>';
     const headNames = main.headers;
     let formatedHeadNames = [];
@@ -519,7 +499,7 @@
     dom += '</tr>';
     return dom;
   }
-  component('#table-head', templateTableHead, {signals: ['table-data']});
+  component('#table-head', templateTableHead, {signals: ['main-table-data']});
 
   // # Table Body
   function templateTableData() {
@@ -565,26 +545,53 @@
     return dom;
   }
 
-  component('#table-body', templateTableData, {signals: ['table-data']});
+  component('#table-body', templateTableData, {signals: ['main-table-data']});
 
   // Pagination Table
-  function loadMore() {
-    let nextPage = main.page + 1; // simpan nilai currentPage yang baru
-    let result = null;
-    if (main.filtered_data1.length == 0) {
-      result = nosql.set(datas.value).paginate(nextPage, main.limit).exec();
-      console.log('masuk 1', result);
-      console.log(nextPage);
-    } else {
-      result = nosql.set(main.filtered_data1).paginate(nextPage, main.limit).exec();
-      console.log('masuk 2', result);
-    }
+  function loadMore(callback) {
+    const offset = main.offset;
+    const limit = main.limit;
+    const orderBy = main.orderBy;
+    const filterBy = main.filterBy;
 
-    if (result.length > 0) {
-      main.page = nextPage;
-      main.datas.push(...result);
+    // Hanya kirim request jika load saat ini kurang dari total
+    if (main.load < main.total) {
+        // Mengirimkan request menggunakan method POST
+        fetch('/data-siswa', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                limit: limit,
+                offset: offset
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(datas => {
+            if (datas && datas.data) {
+                // Push data baru ke dalam main.datas
+                main.datas.push(...datas.data);
+                main.load += datas.data.length;
+                main.offset += main.limit;
+
+                // Cek apakah load sudah mencapai total
+                if (main.load >= main.total) {
+                    main.load = main.total; // Set load sama dengan total
+                }
+
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
     }
-    main.load = main.datas.length;
   }
 
   function templatePagination() {
@@ -600,7 +607,7 @@
     }
   }
 
-  component('#pagination', templatePagination, {signals: ['table-data'], events: {loadMore}});
+  component('#pagination', templatePagination, {signals: ['main-table-data'], events: {loadMore}});
 
   // Event Load
   document.addEventListener("DOMContentLoaded", () => {
@@ -608,8 +615,6 @@
       loadDataKelas(() => {
         getListGroupBy();
       });
-      main.datas = nosql.set(datas.value).paginate(1, 10).exec();
       main.load = main.datas.length;
-      main.total = datas.value.length;
     });
   });
