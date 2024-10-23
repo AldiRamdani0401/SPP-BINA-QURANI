@@ -6,10 +6,11 @@
     datas: [],
     headers: [],
     kelas: [],
-    ListFilterByGroup: [],
+    listFilterGroupBy: [],
     filtered_data1:[],
     filtered_data2:[],
-    filtered_data3:[],
+    orderBy: '',
+    filterBy: '',
     load: 0,
     limit: 10,
     total: 0,
@@ -21,8 +22,6 @@
     const offset = main.offset;
     const limit = main.limit;
 
-    // console.log(offset, limit);
-
     // Mengirimkan request menggunakan method POST
     fetch('/data-siswa', {
       method: 'POST',
@@ -31,7 +30,7 @@
       },
       body: JSON.stringify({
         limit: limit,
-        offset: offset
+        offset: offset,
       })
     })
     .then(response => {
@@ -41,11 +40,13 @@
       return response.json();
     })
     .then(datas => {
-      console.log(datas)
       main.datas = [...datas.data];
       main.headers = Object.keys(datas.data[0]);
       main.load = datas.data.length;
       main.total = datas.total;
+      console.log(datas.data);
+      console.log(limit);
+      console.log(offset);
       if (typeof callback === 'function') {
         callback();
       }
@@ -74,21 +75,16 @@
   // Helper Function Store Data
 
   function helperFilteredData(data) {
+    console.log(data);
     if (main.filtered_data1.length == 0) {
-      console.log(data);
       main.filtered_data1 = data;
       main.datas = [...main.filtered_data1];
-      main.load = main.datas.length;
-      return;
-    } else if (main.filtered_data2.length == 0) {
-      main.filtered_data2 = data;
-      main.datas = [...main.filtered_data2];
-      main.load = main.datas.length;
+      main.load = data.length;
       return;
     } else {
-      main.filtered_data3 = data;
-      main.datas = [...main.filtered_data3];
-      main.load = main.datas.length;
+      main.filtered_data2= data;
+      main.datas = [...main.filtered_data2];
+      main.load = data.length;
       return;
     }
   }
@@ -98,18 +94,10 @@
     let jenisKelamin = nosql.set(main.datas).select(['jenis_kelamin']).exec();
         jenisKelamin = [...new Set(jenisKelamin.map(item => item.jenis_kelamin))].sort((a, b) => a - b);
 
-    let kelas = nosql.set(main.ListFilterByGroup).select(['nama_kelas']).exec();
-    // kelas = [...new Set(kelas.map(item => item.class))].sort((a, b) => a - b); // Mengambil value dari object class dan mengurutkan secara ascending
+    let kelas = nosql.set(main.kelas).select(['nama_kelas']).exec();
+        kelas = [...new Set(kelas.map(item => item.nama_kelas))].sort((a, b) => a - b); // Ascending
 
-    let result = [...jenisKelamin];
-
-    kelas.forEach((data) => {
-      result.push(data.nama_kelas);
-    });
-
-    result.forEach((data) => {
-      main.ListFilterByGroup.push(data);
-    });
+    main.listFilterGroupBy = [...jenisKelamin, ...kelas];
   }
 
   // Table Component
@@ -123,68 +111,48 @@
 
     const container = document.getElementById(containerId);
     const btnResetElement = document.createElement("button");
-      btnResetElement.innerText = "Reset";
-      btnResetElement.setAttribute("id", `btn-reset-${name}`);
-      btnResetElement.classList.add(
-        "bg-red-600",
-        "text-white",
-        "px-2",
-        "py-1",
-        "rounded-lg",
-        "absolute",
-        "left-0",
-        "right-0",
-        "mx-auto"
-      );
+          btnResetElement.innerText = "Reset";
+          btnResetElement.setAttribute("id", `btn-reset-${name}`);
+          btnResetElement.classList.add(
+            "bg-red-600",
+            "text-white",
+            "px-2",
+            "py-1",
+            "rounded-lg",
+            "absolute",
+            "left-0",
+            "right-0",
+            "mx-auto"
+          );
 
-      // Gunakan data dari parameter function di sini
-      btnResetElement.addEventListener("click", function () {
-        if (main.filtered_data1.includes(...data)) {
-          main.filtered_data1 = [];
-          if (main.filtered_data2.length > 0){
-            main.filtered_data1 = main.filtered_data2;
-            main.datas = main.filtered_data2;
-            main.total = main.datas.length;
-            main.filtered_data2 = [];
-          } else {
-            main.datas = nosql.set(datas.value).paginate(1, 10).exec();
-            main.total = datas.value.length;
-          }
-          main.load = main.datas.length;
-          main.offset = 1;
+          // Gunakan data dari parameter function di sini
+          btnResetElement.addEventListener("click", function () {
+            main.load = 0;
+            main.total = 0;
+            main.offset = 10;
+            main.limit = 10;
+            main.filterBy = '';
 
-          btnResetElement.remove();
-        } else if (main.filtered_data2.includes(...data)) {
-          main.filtered_data2 = [];
-          main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
-          main.load = main.datas.length;
-          main.total = main.filtered_data1.length;
-          main.offset = 1;
-          btnResetElement.remove();
-        } else if (main.filtered_data3.includes(...data)) {
+            if (main.filtered_data1.includes(...data)) {
+                main.filtered_data1 = [];
+                main.datas = [];
+                loadDataSiswa();
+                btnResetElement.remove();
+            } else {
+                main.filtered_data2 = [];
+                main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
+                main.load = main.datas.length;
+                main.total = main.filtered_data1.length;
+                main.offset = 0;
+                btnResetElement.remove();
+                console.log(2);
+            }
 
-          let datas = main.filtered_data2.length != 0 ? main.filtered_data2 : main.filtered_data1;
-          main.filtered_data3 = [];
-          main.datas = nosql.set(datas).paginate(1, 10).exec();
-          main.load = main.datas.length;
-          main.total = main.filtered_data2.length;
-          main.offset = 1;
-          btnResetElement.remove();
-        } else {
-
-          main.filtered_data2 = [];
-          main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
-          main.load = main.datas.length;
-          main.total = main.filtered_data1.length;
-          main.offset = 1;
-          btnResetElement.remove();
-        }
-
-        if (typeof callback === 'function'){
-          callback();
-        }
-      });
-      container.appendChild(btnResetElement);
+            if (typeof callback === 'function'){
+                callback();
+            }
+          });
+          container.appendChild(btnResetElement);
   }
 
   // # Search Input Table
@@ -230,12 +198,12 @@
       } else {
         if (filter != "null") {
           // Pencarian Dengan Filter, Tanpa Group By
-          result = nosql.set(datas.value).begin()
+          result = nosql.set(main.datas).begin()
             .where(filter, 'LIKE', keyword, false)
             .distinct('id').end().exec();
           } else {
             // Pencarian Tanpa Filter & Tanpa Group By
-            result = nosql.set(datas.value).begin()
+            result = nosql.set(main.datas).begin()
             .where('nama_lengkap', 'LIKE', keyword, false)
             .or().where('kelas', 'LIKE', keyword, false)
             .or().where('nama_ayah', 'LIKE', keyword, false)
@@ -275,87 +243,127 @@
     if (main.filtered_data1.length > 0) {
       main.datas = nosql.set(main.filtered_data1).paginate(main.offset, limit).exec();
     } else {
-      main.datas = nosql.set(datas.value).paginate(main.offset, limit).exec();
+      main.datas = nosql.set(main.datas).paginate(main.offset, limit).exec();
     }
     main.load = limit;
   }
 
-  // function templateFilterData() {
-  //   let dom = '';
-  //   let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
+  function templateFilterData() {
+    let dom = '';
+    let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
 
-  //   // Reset `filter.limits` untuk menghindari duplikat
-  //   filter.limits = [];
-  //   let countData = 0;
+    // Reset `filter.limits` untuk menghindari duplikat
+    filter.limits = [];
+    let countData = 0;
 
-  //   // Menentukan `countData` berdasarkan apakah data yang difilter ada atau tidak
-  //   if (main.filtered_data1.length > 0) {
-  //     if (main.filtered_data1.length >= 10) {
-  //       countData = Math.ceil(main.filtered_data1.length / 10);
-  //     } else {
-  //       countData = 0;
-  //     }
-  //   } else {
-  //       countData = Math.ceil(datas.value.length / 10);
-  //   }
+    // Menentukan `countData` berdasarkan apakah data yang difilter ada atau tidak
+    if (main.filtered_data1.length > 0) {
+      if (main.filtered_data1.length >= 10) {
+        countData = Math.ceil(main.filtered_data1.length / 10);
+      } else {
+        countData = 0;
+      }
+    } else {
+        countData = Math.ceil(main.total / 10);
+    }
 
-  //   // Mengisi `filter.limits` dan `dom` hanya jika ada data
-  //   if (countData > 0) {
-  //       for (let i = 1; i <= countData; i++) {
-  //           const limit = i * 10;
-  //           filter.limits.push(limit);
-  //           filterLimit += `<option value="${limit}">${limit} Data</option>`;
-  //       }
-  //   }
+    // Mengisi `filter.limits` dan `dom` hanya jika ada data
+    if (countData > 0) {
+        for (let i = 1; i <= countData; i++) {
+            const limit = i * 10;
+            filter.limits.push(limit);
+            filterLimit += `<option value="${limit}">${limit} Data</option>`;
+        }
+    }
 
-  //   filterLimit += '</select>';
+    filterLimit += '</select>';
 
-  //   let filterByGroup = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
-  //   if (groups.list.length > 1) {
-  //       groups.list.forEach((group) => {
-  //         let groupName = group;
-  //         if (groupName == "L") groupName = "Laki-Laki" ;
-  //         if (groupName == "P") groupName = "Perempuan";
-  //         filterByGroup += `<option value="${group}">${groupName}</option>`;
-  //       });
-  //   } else {
-  //     filterByGroup += "Loading...";
-  //   }
-  //   filterByGroup += "</select>";
+    let filterByGroup = `<select id="select-data-group-by" style="height:35px;width:fit-content;border-radius:5px;font-size:13px;" onchange="handleFilterDataGroupBy(this.value)"> <option disabled selected selected="selected" value="null">-- Group By --</option>`;
 
-  //   dom += filterLimit + filterByGroup;
-  //   return dom;
-  // }
+    if (main.listFilterGroupBy.length > 0) {
+      main.listFilterGroupBy.forEach((group) => {
+        let groupName = '';
+        let groupKey = '';
 
+          switch (group) {
+            case 'L':
+                groupName = 'Laki-Laki';
+                groupKey = 'jenis_kelamin';
+              break;
+            case 'P':
+                groupName = 'Perempuan';
+                groupKey = 'jenis_kelamin';
+              break;
+            default:
+                groupName = group;
+                groupKey = 'kelas';
+              break;
+          }
+          filterByGroup += `<option name="${groupKey}" id="${group}" value="${group}">${groupName}</option>`;
+        });
+    } else {
+      filterByGroup += "Loading...";
+    }
+    filterByGroup += "</select>";
 
-  // component('#container-filter-data-table', templateFilterData, {
-  //   events:{
-  //     handleLimitData, handleFilterDataGroupBy, templateBtnReset
-  //   },
-  //   signals:[
-  //     'filter-data'
-  //   ]
-  // });
+    dom += filterLimit + filterByGroup;
+    return dom;
+  }
+
+  component('#container-filter-data-table', templateFilterData, {
+    events:{
+      handleLimitData, handleFilterDataGroupBy, templateBtnReset
+    },
+    signals:[
+      'main-table-data'
+    ]
+  });
 
   function handleFilterDataGroupBy(element) {
+    main.datas = [];
+    main.offset = 10;
+    main.limit = 10;
     const container = document.getElementById('select-data-group-by');
           container.setAttribute('disabled', true);
-    const filterBy = element.target?.value ?? element;
-    let result = null;
-      if (main.filtered_data1.length > 0) {
-        result = nosql.set(main.filtered_data1).begin()
-          .where('jenis_kelamin', 'LIKE', filterBy, false).or()
-          .where('kelas', 'LIKE', filterBy, false).end()
-          .exec();
-      } else {
-        result = nosql.set(datas.value).begin()
-          .where('jenis_kelamin', 'LIKE', filterBy, false).or()
-          .where('kelas', 'LIKE', filterBy, false).end()
-          .exec();
-        }
-        main.total = result.length;
-    helperFilteredData(result);
-    templateBtnReset(result, 'filter', 'container-btn-reset', refreshTemplateFilterData);
+    const filterByValue = element.target?.value ?? element;
+    const keyFilterBy = document.getElementById(filterByValue).getAttribute('name');
+
+    const orderBy = main.orderBy;
+    const limit = main.limit;
+    const offset = main.offset;
+
+    const filterByParamAndValue = `${keyFilterBy} = '${filterByValue}'`;
+    main.filterBy = filterByParamAndValue;
+
+    // Mengirimkan request menggunakan method POST
+    fetch('/data-siswa', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        filterBy: filterByParamAndValue,
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset,
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(datas => {
+      main.datas = [...datas.data];
+      main.load = datas.data.length;
+      main.total = datas.total;
+
+      helperFilteredData(datas.data);
+      templateBtnReset(datas.data, 'filter', 'container-btn-reset', refreshTemplateFilterData);
+
+    })
+    .catch(error => console.error('Fetch error:', error));
   }
 
   function refreshTemplateFilterData() {
@@ -480,8 +488,7 @@
 
   // # Table Head
   function templateTableHead() {
-    let dom = '<tr class="sticky top-0 bg-[#EDEDED]">';
-    dom += '<th class="p-2 border text-sm text-nowrap">No</th>';
+    let dom = '<tr class="sticky top-0 bg-[#EDEDED]"><th class="p-2 border text-sm text-nowrap">No</th>';
     const headNames = main.headers;
     let formatedHeadNames = [];
     headNames.forEach(headName => {
@@ -508,37 +515,25 @@
     if (main.datas.length > 0) {
       main.datas.forEach(data => {
         const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
-        dom += `
-          <tr class="bg-white">
-            <td class="p-2 border text-sm text-nowrap">${count}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.nomor_induk_siswa}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.nama_lengkap}</td>
-            <td class="p-2 border text-sm text-nowrap">
-              <img class="w-20 rounded" src="../assets/${data.photo_siswa}" alt="photo ${data.nama_lengkap}"/>
-            </td>
-            <td class="p-2 border text-sm text-nowrap">${data.kelas}</td>
-            <td class="p-2 border text-sm text-nowrap">${jenis_kelamin}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.tempat_lahir}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.tanggal_lahir}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.nama_ayah}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.nama_ibu}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.rt}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.rw}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.desa}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.kecamatan}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.kabupaten}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.provinsi}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.kode_pos}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.di_buat}</td>
-            <td class="p-2 border text-sm text-nowrap">${data.di_perbarui}</td>
-          </tr>
-        `;
+            dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
+              for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                  if (key == 'photo_siswa') {
+                    dom += `<td class="p-2 border text-sm text-nowrap">
+                              <img class="w-20 rounded" src="../assets/${data[key]}" alt="photo ${data.nama_lengkap}"/>
+                            </td>`;
+                  } else {
+                    dom += `<td class="p-2 border text-sm text-nowrap">${data[key]}</td>`;
+                  }
+                }
+              }
+            dom += '</tr>';
         count++;
       });
     } else {
       dom += `
           <tr style="background:white;">
-            <td colspan="16" class="p-2 border text-sm text-nowrap">Data Not Found</td>
+            <td colspan="16" class="p-2 border text-sm text-nowrap">Loading...</td>
           </tr>
         `;
     }
@@ -563,8 +558,10 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                limit: limit,
-                offset: offset
+              limit: limit,
+              offset: offset,
+              orderBy: orderBy,
+              filterBy: filterBy
             })
         })
         .then(response => {
