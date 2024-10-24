@@ -14,14 +14,14 @@
     load: 0,
     limit: 10,
     total: 0,
-    offset: 10,
+    offset: 0,
   }, 'main-table-data');
 
   function loadDataSiswa(callback) {
     // Menghitung offset berdasarkan halaman
     const offset = main.offset;
     const limit = main.limit;
-
+    console.log('loadDatasiswa: ', main.offset, main.limit)
     // Mengirimkan request menggunakan method POST
     fetch('/data-siswa', {
       method: 'POST',
@@ -40,13 +40,24 @@
       return response.json();
     })
     .then(datas => {
+      // if (main.datas.length > 0) {
+      //   console.log(1);
+
+      //   let cleanData = nosql.set(main.datas).distinct('nomor_induk_siswa').exec();
+      //   console.log(cleanData);
+      //   main.datas = [...cleanData];
+      // } else {
+      //   console.log(2);
+      //   main.datas = [...datas.data];
+      // }
+
       main.datas = [...datas.data];
-      main.headers = Object.keys(datas.data[0]);
+      main.headers = Object.keys(datas?.data[0]);
       main.load = datas.data.length;
       main.total = datas.total;
-      console.log(datas.data);
-      console.log(limit);
-      console.log(offset);
+
+      console.log(main.datas);
+
       if (typeof callback === 'function') {
         callback();
       }
@@ -75,7 +86,7 @@
   // Helper Function Store Data
 
   function helperFilteredData(data) {
-    console.log(data);
+    console.log('helperFilteredData : ', data);
     if (main.filtered_data1.length == 0) {
       main.filtered_data1 = data;
       main.datas = [...main.filtered_data1];
@@ -138,7 +149,7 @@
                 main.datas = [];
                 loadDataSiswa();
                 btnResetElement.remove();
-            } else {
+            } else if (main.filtered_data2.includes(...data)) {
                 main.filtered_data2 = [];
                 main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
                 main.load = main.datas.length;
@@ -146,6 +157,12 @@
                 main.offset = 0;
                 btnResetElement.remove();
                 console.log(2);
+            } else {
+                main.datas = [];
+                main.filtered_data1 = [];
+                loadDataSiswa();
+                btnResetElement.remove();
+                console.log(3);
             }
 
             if (typeof callback === 'function'){
@@ -231,49 +248,56 @@
   }
 
   // Filter Data
-  const filter = signal({
-    limits: [],
-    group_by: null,
-  }, 'filter-data');
+  // const filter = signal({
+  //   limits: [],
+  //   group_by: null,
+  // }, 'filter-data');
 
   // ## Filter Data By Limit
   function handleLimitData(element) {
-    const limit = element.target.value;
+    main.limit = 0;
+    main.offset = 0;
+    main.load = 0;
+    main.total = 0;
+    main.datas = [];
+
+    const limit = parseInt(element.target.value);
     main.limit = limit;
+
+    console.log('handle limit: ', main.limit, main.offset)
     if (main.filtered_data1.length > 0) {
-      main.datas = nosql.set(main.filtered_data1).paginate(main.offset, limit).exec();
+      console.log('malah masuk sinis');
+
+      // main.datas = nosql.set(main.filtered_data1).paginate(main.offset, limit).exec();
     } else {
-      main.datas = nosql.set(main.datas).paginate(main.offset, limit).exec();
+      loadDataSiswa();
     }
+    templateBtnReset(main.datas, 'filter', 'container-btn-reset', refreshTemplateFilterData);
     main.load = limit;
   }
 
+  // Perbaiki Bagian Ini
   function templateFilterData() {
+    console.log('template filter-data: ', main.limit, main.offset)
     let dom = '';
     let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
 
     // Reset `filter.limits` untuk menghindari duplikat
-    filter.limits = [];
-    let countData = 0;
+    let countData = Math.ceil(main.total / 10);
 
-    // Menentukan `countData` berdasarkan apakah data yang difilter ada atau tidak
-    if (main.filtered_data1.length > 0) {
-      if (main.filtered_data1.length >= 10) {
-        countData = Math.ceil(main.filtered_data1.length / 10);
-      } else {
-        countData = 0;
-      }
-    } else {
+    // Jika data yang difilter ada dan `main.total` lebih dari 10, hitung `countData`
+    if (main.filtered_data1.length > 0 && main.total > 10) {
         countData = Math.ceil(main.total / 10);
     }
 
-    // Mengisi `filter.limits` dan `dom` hanya jika ada data
+    // Mengisi `filter.limits` dan `dom` hanya jika `countData` lebih dari 0
     if (countData > 0) {
         for (let i = 1; i <= countData; i++) {
             const limit = i * 10;
-            filter.limits.push(limit);
-            filterLimit += `<option value="${limit}">${limit} Data</option>`;
+            // Selected Limit
+              filterLimit += `<option id="limit-value-${limit}" value="${limit}" ${main.limit == limit ? 'selected' : ''}>${limit} Data</option>`;
         }
+
     }
 
     filterLimit += '</select>';
@@ -321,8 +345,8 @@
 
   function handleFilterDataGroupBy(element) {
     main.datas = [];
-    main.offset = 10;
     main.limit = 10;
+    main.offset = 0;
     const container = document.getElementById('select-data-group-by');
           container.setAttribute('disabled', true);
     const filterByValue = element.target?.value ?? element;
@@ -355,7 +379,8 @@
       return response.json();
     })
     .then(datas => {
-      main.datas = [...datas.data];
+      main.offset += limit;
+      main.datas.push(...datas.data);
       main.load = datas.data.length;
       main.total = datas.total;
 
@@ -512,7 +537,7 @@
   function templateTableData() {
     let dom = '';
     let count = 1;
-    if (main.datas.length > 0) {
+    if (main.datas?.length > 0) {
       main.datas.forEach(data => {
         const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
             dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
@@ -544,13 +569,23 @@
 
   // Pagination Table
   function loadMore(callback) {
-    const offset = main.offset;
-    const limit = main.limit;
-    const orderBy = main.orderBy;
-    const filterBy = main.filterBy;
+    let offset = main.offset + main.limit;
+    let limit = main.limit;
+    const orderBy = main.orderBy || 'nomor_induk_siswa'; // Default ke 'id' jika orderBy tidak didefinisikan
+    const filterBy = main.filterBy || null; // Default ke null jika filterBy tidak didefinisikan
+
+    // Pastikan load tidak melebihi total
+    const remainingData = main.total - main.load;
+
+    // Jika remainingData lebih kecil dari limit, kita hanya ambil sisa data
+    if (remainingData < limit) {
+        limit = remainingData;
+    }
 
     // Hanya kirim request jika load saat ini kurang dari total
-    if (main.load < main.total) {
+    if (main.load < main.total && main.offset < main.total) {
+        console.log('Loadmore: ', offset, limit);
+
         // Mengirimkan request menggunakan method POST
         fetch('/data-siswa', {
             method: 'POST',
@@ -575,24 +610,32 @@
                 // Push data baru ke dalam main.datas
                 main.datas.push(...datas.data);
                 main.load += datas.data.length;
-                main.offset += main.limit;
+                main.offset += limit;
 
                 // Cek apakah load sudah mencapai total
                 if (main.load >= main.total) {
                     main.load = main.total; // Set load sama dengan total
                 }
 
+                // Jalankan callback jika disediakan
                 if (typeof callback === 'function') {
                     callback();
                 }
             }
         })
         .catch(error => console.error('Fetch error:', error));
+    } else {
+        console.log('All data loaded'); // Tambahkan logging untuk kondisi ini
+        if (typeof callback === 'function') {
+            callback();
+        }
+        return false;
     }
-  }
+}
+
 
   function templatePagination() {
-    if (main.load != main.total) {
+    if (main.load <= main.total) {
       return `
           <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
           <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${main.load} of ${main.total} </span>
