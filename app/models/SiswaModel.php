@@ -2,7 +2,7 @@
 
 class SiswaModel extends Model
 {
-  public function getAllDataSiswa($filterBy = null, $orderBy = 'id', $limit = 10, $offset = 0): array
+  public function getAllDataSiswa($filterBy = null, $orderBy = 'nomor_induk_siswa', $limit = 10, $offset = 10): array
   {
     // Query untuk menghitung total data siswa
     $countSql = "SELECT COUNT(*) as total FROM tb_siswa";
