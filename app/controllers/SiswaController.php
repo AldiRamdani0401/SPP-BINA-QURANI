@@ -32,7 +32,7 @@ class SiswaController extends Controller
       $filterBy = isset($input['filterBy']) && $input['filterBy'] != '' ? $input['filterBy'] : null;
       $orderBy = isset($input['orderBy']) && $input['orderBy'] != '' ? $input['orderBy'] : 'nomor_induk_siswa';
       $limit = isset($input['limit']) ? (int) $input['limit'] : 10;
-      $offset = isset($input['offset']) ? (int) $input['offset'] : 10;
+      $offset = isset($input['offset']) ? (int) $input['offset'] : null;
 
       error_log("LIMIT : $limit");
       error_log("OFFSET : $offset");
