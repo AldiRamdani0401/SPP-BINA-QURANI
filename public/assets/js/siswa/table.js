@@ -21,7 +21,6 @@
     // Menghitung offset berdasarkan halaman
     const offset = main.offset;
     const limit = main.limit;
-    console.log('loadDatasiswa: ', main.offset, main.limit)
     // Mengirimkan request menggunakan method POST
     fetch('/data-siswa', {
       method: 'POST',
@@ -56,8 +55,6 @@
       main.load = datas.data.length;
       main.total = datas.total;
 
-      console.log(main.datas);
-
       if (typeof callback === 'function') {
         callback();
       }
@@ -86,17 +83,14 @@
   // Helper Function Store Data
 
   function helperFilteredData(data) {
-    console.log('helperFilteredData : ', data);
     if (main.filtered_data1.length == 0) {
       main.filtered_data1 = data;
       main.datas = [...main.filtered_data1];
-      main.load = data.length;
-      return;
+      return main.load = data.length;
     } else {
       main.filtered_data2= data;
       main.datas = [...main.filtered_data2];
-      main.load = data.length;
-      return;
+      return main.load = data.length;
     }
   }
 
@@ -156,13 +150,11 @@
                 main.total = main.filtered_data1.length;
                 main.offset = 0;
                 btnResetElement.remove();
-                console.log(2);
             } else {
                 main.datas = [];
                 main.filtered_data1 = [];
                 loadDataSiswa();
                 btnResetElement.remove();
-                console.log(3);
             }
 
             if (typeof callback === 'function'){
@@ -175,13 +167,13 @@
   // # Search Input Table
   // ## Search Data
   function searchData() {
+    main.datas = [];
     const inputSearchElement = document.getElementById('search-input-table');
     const selectSearchFilterElement = document.getElementById('select-search-filter');
     const filter = selectSearchFilterElement.value;
+    const keyword = inputSearchElement.value;
 
-    let result = null;
-    if (inputSearchElement.value != "") {
-      const keyword = inputSearchElement.value;
+    if (keyword != "") {
       if (main.filtered_data1.length > 0) {
         if (filter != "null") {
             // Pencarian Dengan Filter, Tanpa Group By
@@ -219,18 +211,32 @@
             .where(filter, 'LIKE', keyword, false)
             .distinct('id').end().exec();
           } else {
-            // Pencarian Tanpa Filter & Tanpa Group By
-            result = nosql.set(main.datas).begin()
-            .where('nama_lengkap', 'LIKE', keyword, false)
-            .or().where('kelas', 'LIKE', keyword, false)
-            .or().where('nama_ayah', 'LIKE', keyword, false)
-            .or().where('nama_ibu', 'LIKE', keyword, false)
-            .distinct('id').end().exec();
+            const filterByParamAndValue = `nama_lengkap LIKE '%${keyword}%'`;
+            // Mengirimkan request menggunakan method POST
+            fetch('/data-siswa', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                filterBy: filterByParamAndValue,
+              })
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+              }
+              return response.json();
+            })
+            .then(datas => {
+              main.load = datas.data.length;
+              main.total = datas.total;
+              helperFilteredData([...datas.data]);
+              templateBtnReset(main.datas, 'search', 'search-table', refreshTemplateInputSearch);
+            })
+            .catch(error => console.error('Fetch error:', error));
           }
         }
-      main.total = result.length;
-      helperFilteredData(result);
-      templateBtnReset(result, 'search', 'search-table', refreshTemplateInputSearch);
     } else {
         Swal.fire({
           title: 'Oops!',
@@ -258,27 +264,47 @@
     main.limit = 0;
     main.offset = 0;
     main.load = 0;
-    main.total = 0;
     main.datas = [];
 
     const limit = parseInt(element.target.value);
     main.limit = limit;
 
-    console.log('handle limit: ', main.limit, main.offset)
     if (main.filtered_data1.length > 0) {
-      console.log('malah masuk sinis');
-
-      // main.datas = nosql.set(main.filtered_data1).paginate(main.offset, limit).exec();
-    } else {
-      loadDataSiswa();
+      // Mengirimkan request menggunakan method POST
+      fetch('/data-siswa', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filterBy: main.filterBy,
+          orderBy: 'nomor_induk_siswa',
+          limit: limit,
+          offset: 0,
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(datas => {
+        main.datas.push(...datas.data);
+        main.load = datas.data.length;
+        main.total = datas.total;
+      helperFilteredData(datas.data);
+      })
+      .catch(error => console.error('Fetch error:', error));
+      } else {
+        loadDataSiswa();
+        main.load = limit;
+      }
+      templateBtnReset(main.datas, 'filter', 'container-btn-reset', refreshTemplateFilterData);
     }
-    templateBtnReset(main.datas, 'filter', 'container-btn-reset', refreshTemplateFilterData);
-    main.load = limit;
-  }
 
   // Perbaiki Bagian Ini
   function templateFilterData() {
-    console.log('template filter-data: ', main.limit, main.offset)
     let dom = '';
     let filterLimit = '<select id="select-data-limit" style="height:35px;border-radius:5px;font-size:13px;" onchange="handleLimitData(this.value)"><option disabled selected value="null">-- Limit Data --</option>';
 
@@ -344,9 +370,12 @@
   });
 
   function handleFilterDataGroupBy(element) {
-    main.datas = [];
     main.limit = 10;
     main.offset = 0;
+    main.load = 0;
+    main.total = 0;
+    main.datas = [];
+
     const container = document.getElementById('select-data-group-by');
           container.setAttribute('disabled', true);
     const filterByValue = element.target?.value ?? element;
@@ -386,7 +415,7 @@
 
       helperFilteredData(datas.data);
       templateBtnReset(datas.data, 'filter', 'container-btn-reset', refreshTemplateFilterData);
-
+      main.offset -= 10;
     })
     .catch(error => console.error('Fetch error:', error));
   }
@@ -574,18 +603,11 @@
     const orderBy = main.orderBy || 'nomor_induk_siswa'; // Default ke 'id' jika orderBy tidak didefinisikan
     const filterBy = main.filterBy || null; // Default ke null jika filterBy tidak didefinisikan
 
-    // Pastikan load tidak melebihi total
-    const remainingData = main.total - main.load;
-
-    // Jika remainingData lebih kecil dari limit, kita hanya ambil sisa data
-    if (remainingData < limit) {
-        limit = remainingData;
-    }
+    // TEST
+    SimpleTest(offset, main.offset + main.limit, 'Load More');
 
     // Hanya kirim request jika load saat ini kurang dari total
-    if (main.load < main.total && main.offset < main.total) {
-        console.log('Loadmore: ', offset, limit);
-
+    if (main.load < main.total) {
         // Mengirimkan request menggunakan method POST
         fetch('/data-siswa', {
             method: 'POST',
@@ -625,7 +647,6 @@
         })
         .catch(error => console.error('Fetch error:', error));
     } else {
-        console.log('All data loaded'); // Tambahkan logging untuk kondisi ini
         if (typeof callback === 'function') {
             callback();
         }
@@ -635,7 +656,7 @@
 
 
   function templatePagination() {
-    if (main.load <= main.total) {
+    if (main.load < main.total) {
       return `
           <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
           <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${main.load} of ${main.total} </span>

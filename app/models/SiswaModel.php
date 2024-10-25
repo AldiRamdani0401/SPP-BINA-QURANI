@@ -2,7 +2,7 @@
 
 class SiswaModel extends Model
 {
-  public function getAllDataSiswa($filterBy = null, $orderBy = 'nomor_induk_siswa', $limit = 10, $offset = 10): array
+  public function getAllDataSiswa($filterBy = null, $orderBy = 'nomor_induk_siswa', $limit = 10, $offset = null): array
   {
     // Query untuk menghitung total data siswa
     $countSql = "SELECT COUNT(*) as total FROM tb_siswa";
@@ -17,7 +17,6 @@ class SiswaModel extends Model
 
     if($totalCount < 2) {
       $limit = 1;
-      $offset = 0;
     }
 
     // Membangun query dasar
@@ -38,11 +37,21 @@ class SiswaModel extends Model
       $sql .= " ORDER BY " . $orderBy;
     }
 
-    $sql .= " LIMIT ? OFFSET ?";
+    if ($limit >= 10 && $offset != null) {
+      $sql .= " LIMIT ? OFFSET ?";
+    } else {
+      $sql .= " LIMIT ? ";
+    }
     error_log($sql);
     // Menyiapkan dan mengeksekusi query
     $stmt = $this->db->prepare(query: $sql);
-    $stmt->bind_param("ii", $limit,$offset);
+
+    if ($limit >= 10 && $offset != null) {
+      $stmt->bind_param("ii", $limit,$offset);
+    } else {
+      $stmt->bind_param("i", $limit);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
     $siswaData = $result->fetch_all(mode: MYSQLI_ASSOC);

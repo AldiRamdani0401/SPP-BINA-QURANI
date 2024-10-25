@@ -55,7 +55,7 @@
         </div>
       </div>
       <!-- Count 4 -->
-      <div class="flex justify-center flex-row gap-3 rounded-[10px] bg-[#6A813A] py-5">
+      <div class="flex justify-center flex-row gap-3 *:rounded-[10px] bg-[#6A813A] py-5">
         <div class="flex flex-col gap-1 justify-center px-0 w-[208px]">
           <div class="flex justify-center align-items-center w-full h-full bg-[#769B27] py-1">
             <h3 class="text-white m-0 text-lg font-semibold">Total Seluruh Siswa</h3>
@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- Count 5 -->
-      <div class="flex justify-center flex-row gap-3 rounded-[10px] bg-[#6A813A] py-5">
+      <div class="flex justify-center flex-row gap-3 *: rounded-[10px] bg-[#6A813A] py-5">
         <div class="flex flex-col gap-1 justify-center px-0 w-[208px]">
           <div class="flex justify-center align-items-center w-full h-full bg-[#769B27] py-1">
             <h3 class="text-white m-0 text-lg font-semibold">Total Seluruh Siswa</h3>
