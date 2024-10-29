@@ -7,22 +7,22 @@
     headers: [],
     kelas: [],
     listFilterGroupBy: [],
-    reset: [],
-    orderBy: 'nomor_induk_siswa',
-    filterBy: null,
-    keyword: null,
+    filtered_data1:[],
+    filtered_data2:[],
+    orderBy: '',
+    filterBy: '',
+    keyword: '',
     load: 0,
     limit: 10,
     total: 0,
     offset: 0,
-    status: 'Loading..',
   }, 'main-table-data');
 
   function loadDataSiswa(callback) {
+    // Menghitung offset berdasarkan halaman
     const offset = main.offset;
     const limit = main.limit;
-    const orderBy = main.orderBy;
-    const filterBy = main.filterBy;
+    // Mengirimkan request menggunakan method POST
     fetch('/data-siswa', {
       method: 'POST',
       headers: {
@@ -31,8 +31,6 @@
       body: JSON.stringify({
         limit: limit,
         offset: offset,
-        orderBy: orderBy,
-        filterBy: filterBy
       })
     })
     .then(response => {
@@ -42,20 +40,27 @@
       return response.json();
     })
     .then(datas => {
+      // if (main.datas.length > 0) {
+      //   console.log(1);
+
+      //   let cleanData = nosql.set(main.datas).distinct('nomor_induk_siswa').exec();
+      //   console.log(cleanData);
+      //   main.datas = [...cleanData];
+      // } else {
+      //   console.log(2);
+      //   main.datas = [...datas.data];
+      // }
+
       main.datas = [...datas.data];
-      main.headers = [...Object.keys(datas?.data[0])];
+      main.headers = Object.keys(datas?.data[0]);
       main.load = datas.data.length;
       main.total = datas.total;
 
       if (typeof callback === 'function') {
-        callback(datas);
+        callback();
       }
     })
-    .catch(error => {
-      main.load = 0;
-      main.total = 0;
-      main.status = 'Data Not Found';
-    });
+    .catch(error => console.error('Fetch error:', error));
   }
 
   function loadDataKelas(callback) {
@@ -77,17 +82,18 @@
   }
 
   // Helper Function Store Data
-  const reset = [];
-  const helperReset = {
-    add(data) {
-      main.reset.push(data);
-    },
 
-    delete(index, amount) {
-      main.reset.splice(index, amount)
+  function helperFilteredData(data) {
+    if (main.filtered_data1.length == 0) {
+      main.filtered_data1 = data;
+      main.datas = [...main.filtered_data1];
+      return main.load = data.length;
+    } else {
+      main.filtered_data2= data;
+      main.datas = [...main.filtered_data2];
+      return main.load = data.length;
     }
   }
-
 
   // Get Tab Labels
   function getListGroupBy() {
@@ -103,14 +109,12 @@
   // Table Component
 
   // ## Reset Button
-  function templateBtnReset(name, containerId, callback) {
+  function templateBtnReset(data, name, containerId, callback) {
     const existingBtnReset = document.getElementById(`btn-reset-${name}`);
     if (existingBtnReset) {
       return false;
     }
-
     const container = document.getElementById(containerId);
-
     const btnResetElement = document.createElement("button");
           btnResetElement.innerText = "Reset";
           btnResetElement.setAttribute("id", `btn-reset-${name}`);
@@ -126,40 +130,34 @@
             "mx-auto"
           );
 
-          helperReset.add(btnResetElement.id);
-
           // Gunakan data dari parameter function di sini
           btnResetElement.addEventListener("click", function () {
-            const order = main.reset.indexOf(btnResetElement.id);
-            switch (order) {
-              case 0:
-                main.load = 0;
-                main.total = 0;
-                main.offset = 0;
-                main.limit = 10;
-                main.filterBy = null;
-                main.keyword = null;
+            main.load = 0;
+            main.total = 0;
+            main.offset = 0;
+            main.limit = 10;
+            main.filterBy = '';
+
+            if (main.filtered_data1.includes(...data)) {
+                main.filtered_data1 = [];
+                main.datas = [];
                 loadDataSiswa();
-                main.reset.map((btn) => {
-                  let button = document.getElementById(btn);
-                  button.click();
-                  button.remove();
-                })
-                helperReset.delete(order, 2);
-                break;
-              case 1:
-                main.load = 0;
-                main.total = 0;
+                btnResetElement.remove();
+            } else if (main.filtered_data2.includes(...data)) {
+                main.filtered_data2 = [];
+                main.datas = nosql.set(main.filtered_data1).paginate(1, 10).exec();
+                main.load = main.datas.length;
+                main.total = main.filtered_data1.length;
                 main.offset = 0;
                 btnResetElement.remove();
-                helperReset.delete(order, 1);
-                if (main.keyword != null){
-                  console.log('ada keyword', main.keyword);
-                  console.log(main.filterBy);
-                }
+            } else {
+                main.datas = [];
+                main.filtered_data1 = [];
                 loadDataSiswa();
-                break;
+                main.offset = 0;
+                btnResetElement.remove();
             }
+
             if (typeof callback === 'function'){
                 callback();
             }
@@ -172,36 +170,78 @@
   function searchData() {
     const inputSearchElement = document.getElementById('search-input-table');
     const selectSearchFilterElement = document.getElementById('select-search-filter');
-    const filterSearch = selectSearchFilterElement.value;
-    const filterBy = main.filterBy || null;
+    const filter = selectSearchFilterElement.value;
     const keyword = inputSearchElement.value;
 
     if (keyword !== "") {
       main.datas = [];
-      if (filterSearch != "null" && filterBy != "null") {
-          console.log('search 1');
-          main.filterBy = `${filterSearch} = '${keyword}' AND ${filterBy}`;
-          loadDataSiswa(() => {
-            templateBtnReset('search', 'container-btn-reset-search', refreshTemplateInputSearch);
-            main.filterBy = filterBy;
-          });
-        } else if (filterBy != null) {
-          // Pencarian Tanpa Filter Pencarian, Tapi dengan Group By
-          console.log('search 2');
-          main.filterBy = `(nama_lengkap LIKE '%${keyword}%' OR kelas LIKE '%${keyword}%' OR nama_ayah LIKE '%${keyword}%' OR nama_ibu LIKE '%${keyword}%') AND ${filterBy}`;
-          loadDataSiswa(() => {
-            templateBtnReset('search', 'container-btn-reset-search', refreshTemplateInputSearch);
-            main.filterBy = filterBy;
-          });
-        } else {
-          console.log('search 3');
-          // Pencarian Tanpa Filter Pencarian & Tanpa Group By
-          main.filterBy = `nama_lengkap LIKE '%${keyword}%' OR kelas LIKE '%${keyword}%' OR nama_ayah LIKE '%${keyword}%' OR nama_ibu LIKE '%${keyword}%'`;
+      console.log(main.filterBy);
+      if (main.filtered_data1.length > 0) {
+        if (filter != "null") {
+            // Pencarian Dengan Filter, Tanpa Group By
+            result = nosql.set(main.filtered_data1).begin()
+              .where(filter, 'LIKE', keyword, false)
+              .end().exec();
+          } else {
+            // Pencarian Tanpa Filter & Tanpa Group By
+            console.log(main.filtered_data1);
 
-          loadDataSiswa(() => {
-            templateBtnReset('search', 'container-btn-reset-search', refreshTemplateInputSearch);
-          });
-          main.keyword = keyword;
+            result = nosql.set(main.filtered_data1).begin()
+              .where('nama_lengkap', 'LIKE', keyword, false)
+              .or().where('kelas', 'LIKE', keyword, false)
+              .or().where('nama_ayah', 'LIKE', keyword, false)
+              .or().where('nama_ibu', 'LIKE', keyword, false)
+              .end().distinct('id').exec();
+              console.log(result);
+              return;
+          }
+      } else if (main.filtered_data2.length > 0) {
+        if (filter != "null") {
+          // Pencarian Dengan Filter, Tanpa Group By
+            result = nosql.set(main.filtered_data2).begin()
+              .where(filter, 'LIKE', keyword, false)
+              .end().distinct('id').exec();
+          } else {
+            // Pencarian Tanpa Filter & Tanpa Group By
+            result = nosql.set(main.filtered_data2).begin()
+              .where('nama_lengkap', 'LIKE', keyword, false)
+              .or().where('kelas', 'LIKE', keyword, false)
+              .or().where('nama_ayah', 'LIKE', keyword, false)
+              .or().where('nama_ibu', 'LIKE', keyword, false)
+              .end().distinct('id').exec();
+          }
+      } else {
+        if (filter != "null") {
+          // Pencarian Dengan Filter, Tanpa Group By
+          result = nosql.set(main.datas).begin()
+            .where(filter, 'LIKE', keyword, false)
+            .distinct('id').end().exec();
+          } else {
+            const filterByParamAndValue = `nama_lengkap LIKE '%${keyword}%' OR kelas LIKE '%${keyword}%' OR nama_ayah LIKE '%${keyword}%' OR nama_ibu LIKE '%${keyword}%'`;
+            // Mengirimkan request menggunakan method POST
+            fetch('/data-siswa', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                filterBy: filterByParamAndValue,
+              })
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+              }
+              return response.json();
+            })
+            .then(datas => {
+              main.load = datas.data.length;
+              main.total = datas.total;
+              helperFilteredData([...datas.data]);
+              templateBtnReset(main.datas, 'search', 'container-btn-reset-search', refreshTemplateInputSearch);
+            })
+            .catch(error => console.error('Fetch error:', error));
+          }
         }
     } else {
         Swal.fire({
@@ -219,15 +259,55 @@
     }
   }
 
+  // Filter Data
+  // const filter = signal({
+  //   limits: [],
+  //   group_by: null,
+  // }, 'filter-data');
+
   // ## Filter Data By Limit
   function handleLimitData(element) {
+    main.limit = 0;
+    main.offset = 0;
+    main.load = 0;
+    main.datas = [];
+
     const limit = parseInt(element.target.value);
     main.limit = limit;
 
-    loadDataSiswa(() => {
-      templateBtnReset('filter', 'container-btn-reset-groupby', refreshTemplateFilterData);
-    });
-  }
+    if (main.filtered_data1.length > 0) {
+      // Mengirimkan request menggunakan method POST
+      fetch('/data-siswa', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filterBy: main.filterBy,
+          orderBy: 'nomor_induk_siswa',
+          limit: limit,
+          offset: 0,
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(datas => {
+        main.datas.push(...datas.data);
+        main.load = datas.data.length;
+        main.total = datas.total;
+      helperFilteredData(datas.data);
+      })
+      .catch(error => console.error('Fetch error:', error));
+      } else {
+        loadDataSiswa();
+        main.load = limit;
+      }
+      templateBtnReset(main.datas, 'filter', 'container-btn-reset', refreshTemplateFilterData);
+    }
 
   // Perbaiki Bagian Ini
   function templateFilterData() {
@@ -236,6 +316,11 @@
 
     // Reset `filter.limits` untuk menghindari duplikat
     let countData = Math.ceil(main.total / 10);
+
+    // Jika data yang difilter ada dan `main.total` lebih dari 10, hitung `countData`
+    if (main.filtered_data1.length > 0 && main.total > 10) {
+        countData = Math.ceil(main.total / 10);
+    }
 
     // Mengisi `filter.limits` dan `dom` hanya jika `countData` lebih dari 0
     if (countData > 0) {
@@ -302,15 +387,43 @@
     const filterByValue = element.target?.value ?? element;
     const keyFilterBy = document.getElementById(filterByValue).getAttribute('name');
 
-    const keyword = main.keyword && `(nama_lengkap LIKE '%${main.keyword}%' OR kelas LIKE '%${main.keyword}%' OR nama_ayah LIKE '%${main.keyword}%' OR nama_ibu LIKE '%${main.keyword}%')`;
+    const orderBy = main.orderBy;
+    const limit = main.limit;
+    const offset = main.offset;
 
-    const defaultParam = `${keyFilterBy} = '${filterByValue}'`;
-    const filterByParamAndValue = keyword != null ? `${keyword} AND ${defaultParam}` : defaultParam;
+    const filterByParamAndValue = `${keyFilterBy} = '${filterByValue}'`;
     main.filterBy = filterByParamAndValue;
-    loadDataSiswa(() => {
-      templateBtnReset('filter', 'container-btn-reset-groupby', refreshTemplateFilterData);
-      main.filterBy = keyword != null ? keyword : defaultParam;
-    });
+
+    // Mengirimkan request menggunakan method POST
+    fetch('/data-siswa', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        filterBy: filterByParamAndValue,
+        orderBy: orderBy,
+        limit: limit,
+        offset: offset,
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(datas => {
+      main.offset += limit;
+      main.datas.push(...datas.data);
+      main.load = datas.data.length;
+      main.total = datas.total;
+
+      helperFilteredData(datas.data);
+      templateBtnReset(datas.data, 'filter', 'container-btn-reset', refreshTemplateFilterData);
+      main.offset -= 10;
+    })
+    .catch(error => console.error('Fetch error:', error));
   }
 
   function refreshTemplateFilterData() {
@@ -431,7 +544,7 @@
     container.innerHTML = dom;
   }
 
-  component('#search-table', templateInputSearch, {events: {searchData, showTooltip, hideTooltip, refreshTemplateInputSearch}, signals: ['main-table-data']});
+  component('#search-table', templateInputSearch, {events: {searchData, showTooltip, hideTooltip, refreshTemplateInputSearch}});
 
   // # Table Head
   function templateTableHead() {
@@ -480,7 +593,7 @@
     } else {
       dom += `
           <tr style="background:white;">
-            <td colspan="19" class="p-2 border text-sm text-nowrap">${main.status}</td>
+            <td colspan="16" class="p-2 border text-sm text-nowrap">Loading...</td>
           </tr>
         `;
     }
@@ -491,23 +604,55 @@
 
   // Pagination Table
   function loadMore(callback) {
-    let tempData = main.datas;
-    console.log(1, tempData, main.offset);
-    main.offset += main.limit;
+    let offset = main.offset + main.limit;
+    let limit = main.limit;
+    const orderBy = main.orderBy || 'nomor_induk_siswa'; // Default ke 'id' jika orderBy tidak didefinisikan
+    const filterBy = main.filterBy || null; // Default ke null jika filterBy tidak didefinisikan
+
+    console.log(main.filterBy);
     // TEST
-    SimpleTest(main.offset + main.limit, main.offset + main.limit, 'Load More');
+    SimpleTest(offset, main.offset + main.limit, 'Load More');
 
     // Hanya kirim request jika load saat ini kurang dari total
     if (main.load < main.total) {
-        loadDataSiswa((datas) => {
-          tempData.push(...datas.data);
-          console.log(2, tempData);
-          main.datas = [...tempData];
-          main.load = main.datas.length;
-        });
-        if (main.load >= main.total) {
-            main.load = main.total;
-        }
+        // Mengirimkan request menggunakan method POST
+        fetch('/data-siswa', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              limit: limit,
+              offset: offset,
+              orderBy: orderBy,
+              filterBy: filterBy
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(datas => {
+            if (datas && datas.data) {
+                // Push data baru ke dalam main.datas
+                main.datas.push(...datas.data);
+                main.load += datas.data.length;
+                main.offset += limit;
+
+                // Cek apakah load sudah mencapai total
+                if (main.load >= main.total) {
+                    main.load = main.total; // Set load sama dengan total
+                }
+
+                // Jalankan callback jika disediakan
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
     } else {
         if (typeof callback === 'function') {
             callback();
