@@ -492,7 +492,7 @@
   // Pagination Table
   function loadMore(callback) {
     let tempData = main.datas;
-    console.log(1, tempData, main.offset);
+    console.log(1, tempData, main.offset)
     main.offset += main.limit;
     // TEST
     SimpleTest(main.offset + main.limit, main.offset + main.limit, 'Load More');
