@@ -360,7 +360,7 @@
            placeholder="Masukan Kata Kunci Pencarian"
            class="rounded-l-lg h-full"
            onfocus="showTooltip()"
-           onblur="hideTooltip()" autocomplete="off"/>
+           onblur="hideTooltip()" />
           <!-- Tooltip -->
          <span id="tooltip" class="invisible text-xs bg-gray-800 text-white text-center p-1.5 rounded absolute top-10 left-0 z-50 whitespace-nowrap">
          Default: <i>Nama Lengkap Siswa, Kelas, Nama Ayah, Nama Ibu</i>
@@ -404,7 +404,7 @@
            placeholder="Masukan Kata Kunci Pencarian"
            style="border-radius:5px 0 0 5px;height:35px;"
            onfocus="showTooltip()"
-           onblur="hideTooltip()" autocomplete="off"/>
+           onblur="hideTooltip()" />
           <!-- Tooltip -->
           <span id="tooltip"
             style="visibility: hidden;

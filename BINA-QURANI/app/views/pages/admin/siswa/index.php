@@ -1,6 +1,6 @@
-<div id="content" class="container-lg relative flex flex-col h-full px-0 mx-auto bg-[#BBBBBB]">
+<div id="content" class="container-lg flex flex-col h-full px-0 mx-auto bg-[#BBBBBB]">
   <!-- Form Modal -->
-  <div id="container-modal-form" class="relative top-0 w-full">
+  <div id="container-modal-form" class="relative w-full">
   </div>
   <!-- Banner -->
   <div class="no-select flex flex-col px-5 py-4 items-center bg-[#769B27]">

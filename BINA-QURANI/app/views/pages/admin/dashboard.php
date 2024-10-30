@@ -7,12 +7,12 @@
     <div class="flex justify-center flex-col px-0 gap-3">
       <div class="mx-auto">
         <h1 class="title-banner m-0 text-white px-4 py-3 w-fit bg-[#9BBD53] rounded-full text-2xl">
-          Selamat Datang <span class="title-banner font-bold text-3xl">Hilda Amelia</span>
+          Selamat Datang <span class="title-banner font-bold text-3xl">Jenong</span>
         </h1>
       </div>
       <div class="mx-auto">
         <h2 class="title-banner m-0 text-white px-4 py-2 w-fit bg-[#9BBD53] text-lg rounded-lg">
-          Hari ini <span class="title-banner font-bold">Rabu</span>, <span class="title-banner font-bold">30 Oktober
+          Hari ini <span class="title-banner font-bold">Senin</span>, <span class="title-banner font-bold">10 September
             2024</span>
         </h2>
       </div>

@@ -1,7 +1,3 @@
-const formData = signal({
-  data_orang_tua: []
-}, 'form-data');
-
 // Get Data
 function loadDataProvincies() {
   return fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
@@ -35,135 +31,114 @@ function loadDataVillages(kecamatanId){
   .catch(error => console.error('Fetch error:', error));
 }
 
-function loadDataOrangTua(value, param, target) {
-  if (formData.data_orang_tua.length == 0) {
-      return fetch('/data-orang-tua')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then( data => {
-          formData.data_orang_tua = [...data[1]];
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          throw error; // Meneruskan kesalahan agar bisa ditangani di tempat lain
-        });
-  } else {
-    if (value.length > 3) {
-        const result = nosql.set(formData.data_orang_tua).where('nama_lengkap', 'LIKE', value, false).where('hubungan', '===', param).exec();
-        render(`#${target}`,
-          `<div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-            <ul class="my-auto" style="list-style-type: none;">
-            ${result.map((data) => {
-                return `<li id="${data.id}">${data.nama_lengkap}</li>`;
-              }).join('')}
-            </ul>
-          </div>`
-        );
+function loadDataOrangTua() {
+  return fetch('/data-orang-tua')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
       }
-  }
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+      throw error; // Meneruskan kesalahan agar bisa ditangani di tempat lain
+    });
 }
-
 
 function loadListAyah() {
   const container = document.getElementById('container-list-ayah');
   const inputElement = document.getElementById('nama-ayah');
   const inputValue = inputElement.value;
 
-  if (inputValue.length > 3) {
-    loadDataOrangTua()
-      .then(data => {
-        const result = nosql.set(data[1]).where('nama_lengkap', 'LIKE', inputValue, false).where('hubungan', '===', 'Ayah').exec();
+  loadDataOrangTua()
+    .then(data => {
+      const result = nosql.set(data[1]).where('nama_lengkap', 'LIKE', inputValue, false).where('hubungan', '===', 'Ayah').exec();
 
-        // Membuat konten berdasarkan data yang diambil
-        let containerList = `
-        <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-        <ul class="my-auto" style="list-style-type: none;">
-        `;
+      // Membuat konten berdasarkan data yang diambil
+      let containerList = `
+      <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+      <ul class="my-auto" style="list-style-type: none;">
+      `;
 
-        // Menambahkan data ke dalam list
-        result.forEach(ayah => {
-          containerList += `<li id="${ayah.id}" class="list-ayah">${ayah.nama_lengkap}</li>`;
-        });
-
-        containerList += `
-            </ul>
-          </div>
-        `;
-
-        // Update kontainer dengan HTML baru
-        container.innerHTML = containerList;
-
-        // function handleSelectedList(element) {
-        //   const value = element.target.innerText;
-        //   inputElement.value = element.target.innerText;
-        //   inputElement.style.backgroundColor = `#ebffeb`;
-
-        //   const selectedData = nosql.set(result).where('nama_lengkap', '===', value).exec();
-
-        //   const containerListNomorTelepon = document.getElementById('container-list-nomor-telepon-ayah');
-        //         containerListNomorTelepon.innerHTML = `
-        //           <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-        //             <ul class="my-auto" style="list-style-type: none;">
-        //               <li id="${selectedData[0].nomor_telepon}">
-        //                 ${selectedData[0].nomor_telepon}
-        //               </li>
-        //             </ul>
-        //           </div>
-        //         `;
-
-        //   const containerListEmail = document.getElementById('container-list-email-ayah');
-        //         containerListEmail.innerHTML = `
-        //           <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-        //             <ul class="my-auto" style="list-style-type: none;">
-        //               <li id="${selectedData[0].email}">
-        //                 ${selectedData[0].email}
-        //               </li>
-        //             </ul>
-        //           </div>
-        //         `;
-        //         function fillInput(elementId, inputValue, clearContainerId) {
-        //           document.getElementById(elementId).value = inputValue;
-        //           document.getElementById(elementId).style.backgroundColor = `#ebffeb`;
-        //           document.getElementById(clearContainerId).innerHTML = '';
-        //         }
-
-        //         // Event pertama: Mengisi nomor telepon
-        //         document.getElementById(selectedData[0].nomor_telepon).addEventListener('click', () => {
-        //           fillInput('nomor-telepon-ayah', selectedData[0].nomor_telepon, 'container-list-nomor-telepon-ayah');
-
-        //           // Setelah nomor telepon diisi, tampilkan dan aktifkan event untuk email
-        //           document.getElementById(selectedData[0].email).style.display = 'block'; // Tampilkan email
-        //           document.getElementById(selectedData[0].email).addEventListener('click', () => {
-        //             fillInput('email-ayah', selectedData[0].email, 'container-list-email-ayah');
-        //           });
-        //         });
-
-        //         // Pastikan elemen email tersembunyi sebelum nomor telepon diklik
-        //         document.getElementById(selectedData[0].email).style.display = 'none';
-
-        //         // selectedData[0].nomor_telepon
-        //         // inputTelepon.style.backgroundColor = `#ebffeb`;
-        //   // const inputEmail = document.getElementById('email-ayah');
-        //   //       inputEmail.value = selectedData[0].email;
-        //   //       inputEmail.style.backgroundColor = `#ebffeb`;
-        //   container.innerHTML = '';
-        // }
-
-        let getList = document.querySelectorAll('.list-ayah');
-          getList.forEach(list => {
-            list.addEventListener('click', (element) => {
-              handleSelectedList(element);
-            });
-          });
-      })
-      .catch(error => {
-        console.error('Error:', error);
+      // Menambahkan data ke dalam list
+      result.forEach(ayah => {
+        containerList += `<li id="${ayah.id}" class="list-ayah">${ayah.nama_lengkap}</li>`;
       });
-  }
+
+      containerList += `
+          </ul>
+        </div>
+      `;
+
+      // Update kontainer dengan HTML baru
+      container.innerHTML = containerList;
+
+      function handleSelectedList(element) {
+        const value = element.target.innerText;
+        inputElement.value = element.target.innerText;
+        inputElement.style.backgroundColor = `#ebffeb`;
+
+        const selectedData = nosql.set(result).where('nama_lengkap', '===', value).exec();
+
+        const containerListNomorTelepon = document.getElementById('container-list-nomor-telepon-ayah');
+              containerListNomorTelepon.innerHTML = `
+                <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+                  <ul class="my-auto" style="list-style-type: none;">
+                    <li id="${selectedData[0].nomor_telepon}">
+                      ${selectedData[0].nomor_telepon}
+                    </li>
+                  </ul>
+                </div>
+              `;
+
+        const containerListEmail = document.getElementById('container-list-email-ayah');
+              containerListEmail.innerHTML = `
+                <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+                  <ul class="my-auto" style="list-style-type: none;">
+                    <li id="${selectedData[0].email}">
+                      ${selectedData[0].email}
+                    </li>
+                  </ul>
+                </div>
+              `;
+              function fillInput(elementId, inputValue, clearContainerId) {
+                document.getElementById(elementId).value = inputValue;
+                document.getElementById(elementId).style.backgroundColor = `#ebffeb`;
+                document.getElementById(clearContainerId).innerHTML = '';
+              }
+
+              // Event pertama: Mengisi nomor telepon
+              document.getElementById(selectedData[0].nomor_telepon).addEventListener('click', () => {
+                fillInput('nomor-telepon-ayah', selectedData[0].nomor_telepon, 'container-list-nomor-telepon-ayah');
+
+                // Setelah nomor telepon diisi, tampilkan dan aktifkan event untuk email
+                document.getElementById(selectedData[0].email).style.display = 'block'; // Tampilkan email
+                document.getElementById(selectedData[0].email).addEventListener('click', () => {
+                  fillInput('email-ayah', selectedData[0].email, 'container-list-email-ayah');
+                });
+              });
+
+              // Pastikan elemen email tersembunyi sebelum nomor telepon diklik
+              document.getElementById(selectedData[0].email).style.display = 'none';
+
+              // selectedData[0].nomor_telepon
+              // inputTelepon.style.backgroundColor = `#ebffeb`;
+        // const inputEmail = document.getElementById('email-ayah');
+        //       inputEmail.value = selectedData[0].email;
+        //       inputEmail.style.backgroundColor = `#ebffeb`;
+        container.innerHTML = '';
+      }
+
+      let getList = document.querySelectorAll('.list-ayah');
+        getList.forEach(list => {
+          list.addEventListener('click', (element) => {
+            handleSelectedList(element);
+          });
+        });
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
 
 function loadListIbu() {
@@ -473,70 +448,38 @@ function loadListDesa() {
 
 const arrayInputElements = [];
 
-  function getInputElements() {
-    const formElement = document.getElementById('form');
-    const inputElements = formElement.querySelectorAll('input, select');
-        inputElements.forEach((element, index) => {
-          index === 0 ? element.disabled = false : element.disabled = true;
-          index === 0 ? element.classList.add('bg-white') : element.classList.add('bg-slate-300');
-          element.addEventListener('change', (e) => {
-            handleFillableInput(e);
-          });
-          element.id == 'nama-ayah' ? element.addEventListener('keyup', (e) => {
-            loadDataOrangTua(element.value, 'Ayah', 'container-list-ayah');
-          }) : '';
+function getInputElements() {
+  const formElement = document.getElementById('form');
+  const inputElements = formElement.querySelectorAll('input, select');
 
-          arrayInputElements.push(element);
-        });
-  }
-let breakPoint = 0;
+  inputElements.forEach((input, index) => {
+    if (index === 0) {
+      input.disabled = false; // Hanya input pertama yang diaktifkan
+      input.style.backgroundColor = '#ffffff';
+    } else {
+      input.disabled = true;  // Input lainnya dinonaktifkan
+      input.style.backgroundColor = '#eaeaea';
+    }
+    arrayInputElements.push(input); // Menyimpan elemen input ke array
+  });
+}
+
 function handleFillableInput(element) {
-  const selectedElement = element.target;
-  const currentIndex = breakPoint == 0 ? arrayInputElements.indexOf(selectedElement) : breakPoint;
-  breakPoint = 0;
-
-  const setBreakPoint = (index) => {
-    breakPoint = index;
-    arrayInputElements.slice(0, index).map((element) => {
-      if (element.value == '') {
-          element.disabled = false;
-          element.classList.remove('bg-slate-300');
-          element.classList.add('bg-white');
-      }
-    });
-  }
-
-  let nextElement = null;
+  const selectedElement = document.getElementById(element.id);
+  const currentIndex = arrayInputElements.indexOf(selectedElement);
 
   if (selectedElement.value.trim() !== '') {
-      console.log(1)
-      selectedElement.classList.remove('bg-white');
-      selectedElement.classList.add('bg-green-100');
-      if (currentIndex < arrayInputElements.length - 1) {
-          console.log(2)
-          nextElement = arrayInputElements[currentIndex + 1];
-          nextElement.disabled = false;
-          nextElement.classList.remove('bg-slate-300');
-          nextElement.classList.add('bg-white');
-      }
+    // Input yang diisi akan memiliki latar belakang hijau
+    selectedElement.style.backgroundColor = '#ebffeb';
+
+    // Jika ada input berikutnya, aktifkan
+    if (currentIndex < arrayInputElements.length - 1) {
+      const nextElement = arrayInputElements[currentIndex + 1];
+      nextElement.disabled = false;  // Aktifkan input berikutnya
+      nextElement.style.backgroundColor = '#ffffff';
+    }
   } else {
-    console.log(3)
-    selectedElement.classList.remove('bg-green-100');
-    selectedElement.classList.add('bg-white');
-    arrayInputElements.map((element, index) => {
-      if (index != currentIndex && element.value == ''){
-          element.disabled = true;
-          element.value = '';
-          element.classList.remove('bg-white');
-          element.classList.add('bg-slate-300');
-      } else {
-        index = index > arrayInputElements.length ? arrayInputElements.map((el, i) => {
-          el.value != '' && i;
-        }) : index;
-        setBreakPoint(index);
-        console.log('breakPoint', breakPoint);
-      }
-    });
+    selectedElement.style.backgroundColor = '#ffffff'; // Jika kosong, kembalikan warna default
   }
 }
 
@@ -549,6 +492,61 @@ function handleFillableInput(element) {
     selectedDesa = [];
   }
 
+  // function enableInputs(element) {
+  //   const formElement = element;
+  //   const inputElements = formElement.querySelectorAll('input, select'); // Pilih input dan select
+
+  //   // Mengaktifkan elemen pertama kali
+  //   inputElements.forEach((input, index) => {
+  //     if (index === 0 || (input.value.trim() !== '' && input.value.trim() !== 'null')) {
+  //       input.disabled = false; // Hanya elemen pertama yang aktif
+  //       input.style.backgroundColor = '#ffffff';
+  //     } else {
+  //       input.disabled = true;  // Elemen lainnya dinonaktifkan
+  //       input.style.backgroundColor = '#eaeaea';
+  //     }
+  //   });
+
+  //   // Memastikan elemen dapat diaktifkan sesuai urutan
+  //   inputElements.forEach((input, index) => {
+  //     input.addEventListener('input', () => {
+  //       if (input.value.trim() !== '' && index < inputElements.length - 1) {
+  //         inputElements[index + 1].disabled = false;  // Aktifkan elemen berikutnya
+  //         inputElements[index + 1].style.backgroundColor = '#ffffff';
+  //       } else {
+  //         inputElements[index + 1].disabled = true;
+  //         inputElements[index + 1].style.backgroundColor = '#eaeaea';
+  //       }
+  //     });
+
+  //     // Khusus untuk elemen dengan atribut '
+  //     if (input.getAttribute('set-data') === 'auto') {
+  //       input.addEventListener('click', () => {
+  //         if (input.value.trim() !== '' && index < inputElements.length - 1) {
+  //           inputElements[index + 1].disabled = false;  // Aktifkan elemen berikutnya
+  //           if(inputElements[index + 1].value.trim() !== ''){
+  //             inputElements[index + 1].style.backgroundColor = '#ebffeb';
+  //           } else {
+  //             inputElements[index + 1].style.backgroundColor = '#ffffff';
+  //           }
+  //         } else {
+  //           inputElements[index + 1].disabled = true;
+  //           inputElements[index + 1].style.backgroundColor = '#eaeaea';
+  //         }
+  //       });
+  //     }
+
+  //     // Khusus untuk elemen select, gunakan 'change' event
+  //     if (input.tagName.toLowerCase() === 'select') {
+  //       input.addEventListener('change', () => {
+  //         if (input.value.trim() !== '' && index < inputElements.length - 1) {
+  //           inputElements[index + 1].disabled = false;  // Aktifkan elemen berikutnya
+  //           inputElements[index + 1].style.backgroundColor = '#ffffff';
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   function loadFormTambahData() {
   const container = document.getElementById('container-modal-form');
@@ -567,7 +565,7 @@ function handleFillableInput(element) {
                 <label for="nama-lengkap-siswa" class="text-sm">Nama Lengkap Siswa :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" class="border rounded-md text-sm p-2" id="nama-lengkap-siswa" placeholder="Nama Lengkap Siswa"  required/>
+              <input type="text" class="border rounded-md text-sm p-2" id="nama-lengkap-siswa" placeholder="Nama Lengkap Siswa" onchange="handleFillableInput(this)" required />
             </div>
             <div class="flex flex-col">
               <div class="flex flex-row gap-1">
@@ -577,39 +575,29 @@ function handleFillableInput(element) {
                 </label>
                 <span class="text-red-500">*</span>
               </div>
-              <input
-                  type="number"
-                  class="no-adjustment-input border rounded-md text-sm p-2"
-                  min="11111"
-                  max="99999"
-                  id="nomor-induk-siswa"
-                  placeholder="Nomor Induk Siswa"
-                  pattern="\d{5}"
-                  oninput="this.value = this.value.slice(0, 5);"
-                  required
-              />
+              <input type="number" class="no-adjustment-input border rounded-md text-sm p-2" min="00000" max="99999" id="nomor-induk-siswa" placeholder="Nomor Induk Siswa" onchange="handleFillableInput(this)" oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);" required />
             </div>
             <div class="flex flex-col">
               <div class="flex flex-row gap-1">
                 <label for="tempat-lahir-siswa" class="text-sm">Tempat Lahir :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" class="border p-2 text-sm rounded-md" id="tempat-lahir-siswa" placeholder="Tempat Lahir"  required />
+              <input type="text" class="border p-2 text-sm rounded-md" id="tempat-lahir-siswa" placeholder="Tempat Lahir" onchange="handleFillableInput(this)" required />
             </div>
             <div class="flex flex-col">
               <div class="flex flex-row gap-1">
                 <label for="tanggal-lahir-siswa" class="text-sm">Tanggal Lahir :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="date" class="border p-2 rounded-md text-sm" id="tanggal-lahir-siswa"  required />
+              <input type="date" class="border p-2 rounded-md text-sm" id="tanggal-lahir-siswa" onchange="handleFillableInput(this)" required />
             </div>
             <div class="flex flex-col">
               <div class="flex flex-row gap-1">
                 <label for="jenis-kelamin" class="text-sm">Jenis Kelamin :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <select id="jenis-kelamin" class="border rounded-md text-sm p-2" >
-                <option disabled selected selected="selected" value="">-- Pilih Jenis Kelamin --</option>
+              <select id="jenis-kelamin" class="border rounded-md text-sm p-2" onchange="handleFillableInput(this)">
+                <option disabled selected selected="selected" value="null">-- Pilih Jenis Kelamin --</option>
                 <option value="L">Laki-Laki</option>
                 <option value="P">Perempuan</option>
               </select>
@@ -619,7 +607,11 @@ function handleFillableInput(element) {
                 <label for="kelas" class="text-sm">Kelas :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <select id="kelas" class="border p-2 rounded-md text-sm" >
+              <select id="kelas" class="border p-2 rounded-md text-sm" onchange="handleFillableInput(this)">
+                <option disabled selected value="null">-- Pilih Kelas --</option>
+                ${main.kelas?.map((kelas) => {
+                  return `<option value="${kelas.nama_kelas}">${kelas.nama_kelas}</option>`;
+                })}
               </select>
             </div>
           </div>
@@ -630,7 +622,8 @@ function handleFillableInput(element) {
                 <label for="nama-ayah" class="text-sm">Nama Ayah :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" class="border p-2 rounded-md text-sm" id="nama-ayah" placeholder="Nama Ayah Siswa" required />
+              <input type="text" class="border p-2 rounded-md text-sm" id="nama-ayah" placeholder="Nama Ayah Siswa"
+               onkeyup="loadListAyah()" onchange="handleFillableInput(this)" required />
                 <div id="container-list-ayah" class="relative w-full">
                 </div>
             </div>
@@ -641,7 +634,7 @@ function handleFillableInput(element) {
               </div>
               <input type="number" pattern="[0-9]" class="no-adjustment-input border rounded-md text-sm p-2"
                 id="nomor-telepon-ayah" placeholder="Nomor Telepon Ayah"
-                 />
+                onchange="handleFillableInput(this)" />
                 <div id="container-list-nomor-telepon-ayah" class="relative w-full">
                 </div>
             </div>
@@ -650,7 +643,7 @@ function handleFillableInput(element) {
                 <label for="email-ayah" class="text-sm">Email Ayah :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="email" class="border rounded-md text-sm p-2" id="email-ayah" placeholder="Masukan Email Ayah" />
+              <input type="email" class="border rounded-md text-sm p-2" id="email-ayah" placeholder="Masukan Email Ayah" onchange="handleFillableInput(this)"/>
                 <div id="container-list-email-ayah" class="relative w-full">
                 </div>
             </div>
@@ -659,7 +652,7 @@ function handleFillableInput(element) {
                 <label for="nama-ibu" class="text-sm">Nama Ibu :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" class="border rounded-md text-sm p-2" id="nama-ibu" placeholder="Nama Ibu Siswa" onkeyup="loadListIbu()"  />
+              <input type="text" class="border rounded-md text-sm p-2" id="nama-ibu" placeholder="Nama Ibu Siswa" onkeyup="loadListIbu()" onchange="handleFillableInput(this)" />
                 <div id="container-list-ibu" class="relative w-full">
                 </div>
             </div>
@@ -668,14 +661,14 @@ function handleFillableInput(element) {
                 <label for="nomor-telepon-ibu" class="text-sm">Nomor Telepon Ibu :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="number" pattern="[0-9]" class="no-adjustment-input border text-sm rounded-md p-2" id="nomor-telepon-ibu" placeholder="Nomor Telepon Ibu"  />
+              <input type="number" pattern="[0-9]" class="no-adjustment-input border text-sm rounded-md p-2" id="nomor-telepon-ibu" placeholder="Nomor Telepon Ibu" onchange="handleFillableInput(this)" />
             </div>
             <div class="flex flex-col">
               <div class="flex flex-row gap-1">
                 <label for="email-ibu" class="text-sm">Email Ibu :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="email" class="border rounded-md text-sm p-2" id="email-ibu" placeholder="Masukan Email Ibu"  />
+              <input type="email" class="border rounded-md text-sm p-2" id="email-ibu" placeholder="Masukan Email Ibu" onchange="handleFillableInput(this)" />
             </div>
           </div>
           <div class="flex flex-col gap-2 border rounded-2 p-2">
@@ -686,7 +679,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="provinsi" placeholder="Masukan Provinsi"
-                onkeyup="loadListProvinsi()"  />
+                onkeyup="loadListProvinsi()" onchange="handleFillableInput(this)" />
                 <div id="container-list-provinsi" class="relative w-full">
                 </div>
             </div>
@@ -696,7 +689,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="kabupaten" placeholder="Masukan Kabupaten"
-                onkeyup="loadListKabupaten()" />
+                onkeyup="loadListKabupaten()" onchange="handleFillableInput(this)"/>
                 <div id="container-list-kabupaten" class="position w-full">
                 </div>
             </div>
@@ -705,7 +698,7 @@ function handleFillableInput(element) {
                 <label for="kecamatan" class="text-sm">Kecamatan :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeyup="loadListKecamatan()" />
+              <input type="text" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeyup="loadListKecamatan()" onchange="handleFillableInput(this)"/>
                 <div id="container-list-kecamatan" class="relative w-full">
                 </div>
             </div>
@@ -715,7 +708,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="desa" placeholder="Masukan Desa / Keluruhan"
-                required onkeyup="loadListDesa()" />
+                required onkeyup="loadListDesa()" onchange="handleFillableInput(this)"/>
                 <div id="container-list-desa" class="relative w-full">
                 </div>
             </div>
@@ -725,7 +718,7 @@ function handleFillableInput(element) {
                   <label for="rt" class="text-sm">RT :</label>
                   <span class="text-red-500">*</span>
                 </div>
-                <input type="number" min="0" max="100" class="col border rounded-md text-sm p-2" id="rt" placeholder="000"  oninput="formatInputNumber('rt')" />
+                <input type="number" min="0" max="100" class="col border rounded-md text-sm p-2" id="rt" placeholder="000"  oninput="formatInputNumber('rt')" onchange="handleFillableInput(this)"/>
               </div>
               <div class="col-6 flex flex-col">
                 <div class="flex flex-row gap-1">
@@ -733,12 +726,12 @@ function handleFillableInput(element) {
                   <span class="text-red-500">*</span>
                 </div>
                 <input type="number" min="0" max="100" class="col border rounded-md text-sm p-2" id="rw" placeholder="000"
-                oninput="formatInputNumber('rw')"  />
+                oninput="formatInputNumber('rw')" onchange="handleFillableInput(this)" />
               </div>
             </div>
             <div class="flex flex-col">
               <label for="kode-pos" class="text-sm">Kode Pos :</label>
-              <input type="number" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kode-pos" placeholder="Masukan Kode Pos" />
+              <input type="number" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kode-pos" placeholder="Masukan Kode Pos" onchange="handleFillableInput(this)"/>
             </div>
           </div>
           <div class="flex flex-col gap-2">
@@ -763,13 +756,6 @@ function handleFillableInput(element) {
   // Gunakan innerHTML untuk menambahkan elemen
   container.innerHTML += element;
   getInputElements();
-  render('#kelas',
-    `<option disabled selected value="">-- Pilih Kelas --</option>
-      ${main.kelas?.map((kelas) => {
-        return `<option value="${kelas.nama_kelas}">${kelas.nama_kelas}</option>`;
-      })}
-    `
-  , {signals: ['main-table-data']})
 }
 
 function formatInputNumber(id) {
