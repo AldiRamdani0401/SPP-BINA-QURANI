@@ -18,6 +18,7 @@ $app->get(route: '/admin/{id}', controller: 'AdminController', action: 'show', m
 $app->get(route: '/admin/data-siswa', controller: 'SiswaController', action: 'show', middleware: [AuthMiddleware::class]);
 $app->get(route: '/admin/data-siswa/{id}', controller: 'SiswaController', action: 'show', middleware: [AuthMiddleware::class]);
 
+$app->get(route: '/admin/data-orang-tua-siswa', controller: 'OrangTuaController', action: 'show', middleware: [AuthMiddleware::class]);
 $app->post(route: '/data-siswa', controller: 'SiswaController', action: 'getAllDataSiswa', middleware: [AuthMiddleware::class]);
 $app->get(route: '/data-siswa/{id}', controller: 'SiswaController', action: 'getDataSiswa', middleware: [AuthMiddleware::class]);
 

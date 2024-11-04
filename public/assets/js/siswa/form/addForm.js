@@ -1,82 +1,31 @@
-const formData = signal({
-  data_orang_tua: []
-}, 'form-data');
+const orangtua = signal({
+  datas: [],
+  selected: [],
+}, 'data-orang-tua');
 
-// Get Data
-function loadDataProvincies() {
-  return fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json')
-    .then(response => response.json())
-    .catch(error => {
-      console.error('Fetch error:', error);
-      throw error;
-    });
-}
+const regions = signal({
+  provinsi: [],
+  kabupaten: [],
+  kecamatan: [],
+  desa: [],
+  selected: [],
+}, 'data-provinsi');
 
-function loadDataRegencies(provinceId){
-  return fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`)
-  .then(response => response.json())
-  .catch(error => {
-    console.error('Fetch error:', error);
-    throw error;
-  });
-}
-
-function loadDataDistricts(kabupatenId){
-// ID KABUPATEN KARAWANG = 3215
-  return fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${kabupatenId}.json`)
-  .then(response => response.json())
-  .catch(error => console.error('Fetch error:', error));
-}
-
-function loadDataVillages(kecamatanId){
-// ID Kecamatan TALAGASARI = 3215100
-  return fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${kecamatanId}.json`)
-  .then(response => response.json())
-  .catch(error => console.error('Fetch error:', error));
-}
-
-function loadDataOrangTua(value, param, target) {
-  if (formData.data_orang_tua.length == 0) {
-      return fetch('/data-orang-tua')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then( data => {
-          formData.data_orang_tua = [...data[1]];
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          throw error; // Meneruskan kesalahan agar bisa ditangani di tempat lain
-        });
-  } else {
-    if (value.length > 3) {
-        const result = nosql.set(formData.data_orang_tua).where('nama_lengkap', 'LIKE', value, false).where('hubungan', '===', param).exec();
-        render(`#${target}`,
-          `<div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-            <ul class="my-auto" style="list-style-type: none;">
-            ${result.map((data) => {
-                return `<li id="${data.id}">${data.nama_lengkap}</li>`;
-              }).join('')}
-            </ul>
-          </div>`
-        );
-      }
-  }
-}
-
+const form = signal({
+  datas: {}
+}, 'data-form');
 
 function loadListAyah() {
   const container = document.getElementById('container-list-ayah');
   const inputElement = document.getElementById('nama-ayah');
-  const inputValue = inputElement.value;
+  const keyword = inputElement.value;
 
-  if (inputValue.length > 3) {
-    loadDataOrangTua()
-      .then(data => {
-        const result = nosql.set(data[1]).where('nama_lengkap', 'LIKE', inputValue, false).where('hubungan', '===', 'Ayah').exec();
+  if (keyword.length > 3) {
+        const result = nosql.set(orangtua.datas)
+              .where('nama_lengkap', 'LIKE', keyword, false)
+              .where('hubungan', '===', 'Ayah').exec();
+
+        orangtua.selected = [...result];
 
         // Membuat konten berdasarkan data yang diambil
         let containerList = `
@@ -86,7 +35,8 @@ function loadListAyah() {
 
         // Menambahkan data ke dalam list
         result.forEach(ayah => {
-          containerList += `<li id="${ayah.id}" class="list-ayah">${ayah.nama_lengkap}</li>`;
+          containerList += `<li id="${ayah.id}" name="nama-ayah" class="ayah" onclick="
+            handleSelectedList(this)">${ayah.nama_lengkap}</li>`;
         });
 
         containerList += `
@@ -96,132 +46,42 @@ function loadListAyah() {
 
         // Update kontainer dengan HTML baru
         container.innerHTML = containerList;
-
-        // function handleSelectedList(element) {
-        //   const value = element.target.innerText;
-        //   inputElement.value = element.target.innerText;
-        //   inputElement.style.backgroundColor = `#ebffeb`;
-
-        //   const selectedData = nosql.set(result).where('nama_lengkap', '===', value).exec();
-
-        //   const containerListNomorTelepon = document.getElementById('container-list-nomor-telepon-ayah');
-        //         containerListNomorTelepon.innerHTML = `
-        //           <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-        //             <ul class="my-auto" style="list-style-type: none;">
-        //               <li id="${selectedData[0].nomor_telepon}">
-        //                 ${selectedData[0].nomor_telepon}
-        //               </li>
-        //             </ul>
-        //           </div>
-        //         `;
-
-        //   const containerListEmail = document.getElementById('container-list-email-ayah');
-        //         containerListEmail.innerHTML = `
-        //           <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-        //             <ul class="my-auto" style="list-style-type: none;">
-        //               <li id="${selectedData[0].email}">
-        //                 ${selectedData[0].email}
-        //               </li>
-        //             </ul>
-        //           </div>
-        //         `;
-        //         function fillInput(elementId, inputValue, clearContainerId) {
-        //           document.getElementById(elementId).value = inputValue;
-        //           document.getElementById(elementId).style.backgroundColor = `#ebffeb`;
-        //           document.getElementById(clearContainerId).innerHTML = '';
-        //         }
-
-        //         // Event pertama: Mengisi nomor telepon
-        //         document.getElementById(selectedData[0].nomor_telepon).addEventListener('click', () => {
-        //           fillInput('nomor-telepon-ayah', selectedData[0].nomor_telepon, 'container-list-nomor-telepon-ayah');
-
-        //           // Setelah nomor telepon diisi, tampilkan dan aktifkan event untuk email
-        //           document.getElementById(selectedData[0].email).style.display = 'block'; // Tampilkan email
-        //           document.getElementById(selectedData[0].email).addEventListener('click', () => {
-        //             fillInput('email-ayah', selectedData[0].email, 'container-list-email-ayah');
-        //           });
-        //         });
-
-        //         // Pastikan elemen email tersembunyi sebelum nomor telepon diklik
-        //         document.getElementById(selectedData[0].email).style.display = 'none';
-
-        //         // selectedData[0].nomor_telepon
-        //         // inputTelepon.style.backgroundColor = `#ebffeb`;
-        //   // const inputEmail = document.getElementById('email-ayah');
-        //   //       inputEmail.value = selectedData[0].email;
-        //   //       inputEmail.style.backgroundColor = `#ebffeb`;
-        //   container.innerHTML = '';
-        // }
-
-        let getList = document.querySelectorAll('.list-ayah');
-          getList.forEach(list => {
-            list.addEventListener('click', (element) => {
-              handleSelectedList(element);
-            });
-          });
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
   }
 }
 
 function loadListIbu() {
   const container = document.getElementById('container-list-ibu');
   const inputElement = document.getElementById('nama-ibu');
-  const inputValue = inputElement.value;
+  const keyword = inputElement.value;
 
-  loadDataOrangTua()
-    .then(data => {
-      const result = nosql.set(data[1]).where('nama_lengkap', 'LIKE', inputValue, false).where('hubungan', '===', 'Ibu').exec();
+  if (keyword.length > 3) {
+        const result = nosql.set(orangtua.datas)
+              .where('nama_lengkap', 'LIKE', keyword, false)
+              .where('hubungan', '===', 'Ibu').exec();
 
-      // Membuat konten berdasarkan data yang diambil
-      let containerList = `
-      <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-      <ul class="my-auto" style="list-style-type: none;">
-      `;
+        orangtua.selected = [...result];
 
-      // Menambahkan data ke dalam list
-      result.forEach(ibu => {
-        containerList += `<li id="${ibu.id}" class="list-ibu">${ibu.nama_lengkap}</li>`;
-      });
+        // Membuat konten berdasarkan data yang diambil
+        let containerList = `
+        <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+        <ul class="my-auto" style="list-style-type: none;">
+        `;
 
-      containerList += `
-          </ul>
-        </div>
-      `;
-
-      // Update kontainer dengan HTML baru
-      container.innerHTML = containerList;
-
-      function handleSelectedList(element) {
-        const value = element.target.innerText;
-        inputElement.value = element.target.innerText;
-        inputElement.style.backgroundColor = `#ebffeb`;
-        const selectedData = nosql.set(result).where('nama_lengkap', '===', value).exec();
-        const inputTelepon = document.getElementById('nomor-telepon-ibu');
-              inputTelepon.value = selectedData[0].nomor_telepon;
-              inputTelepon.style.backgroundColor = `#ebffeb`;
-        const inputEmail = document.getElementById('email-ibu');
-              inputEmail.value = selectedData[0].email;
-              inputEmail.style.backgroundColor = `#ebffeb`;
-        container.innerHTML = '';
-      }
-
-      let getList = document.querySelectorAll('.list-ibu');
-        getList.forEach(list => {
-          list.addEventListener('click', (element) => {
-            handleSelectedList(element);
-          });
+        // Menambahkan data ke dalam list
+        result.forEach(ibu => {
+          containerList += `<li id="${ibu.id}" name="nama-ibu" class="ibu" onclick="
+            handleSelectedList(this)">${ibu.nama_lengkap}</li>`;
         });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+
+        containerList += `
+            </ul>
+          </div>
+        `;
+
+        // Update kontainer dengan HTML baru
+        container.innerHTML = containerList;
+  }
 }
-
-
-let selectedProvinsi = [];
 
 function loadListProvinsi() {
   const container = document.getElementById('container-list-provinsi');
@@ -231,244 +91,196 @@ function loadListProvinsi() {
     return;
   }
 
+  if (regions.provinsi.length == 0) {
+    loadDataProvincies();
+  }
+
+  const keyword = inputElement.value;
+
   inputElement.addEventListener('blur', () => {
-    const inputValue = inputElement.value; // Ambil nilai terbaru saat blur
-    if (inputValue === '') {
-      selectedProvinsi = [];
-      inputElement.style.backgroundColor = '#fff';
-      container.innerHTML = '';
+    if (keyword === '') {
+      inputElement.classList.remove('bg-green-100');
+      inputElement.classList.add('bg-white');
     } else {
-      inputElement.style.backgroundColor = '#eaeaea';
+      inputElement.classList.remove('bg-white');
+      inputElement.classList.add('bg-green-100');
     }
   });
 
-  loadDataProvincies()
-    .then(data => {
-      // Pastikan data terfilter hanya sesuai yang diinginkan
-      const result = nosql.set(data).where('name', 'LIKE', inputElement.value, false).exec();
+  if (keyword.length > 3 && regions.provinsi.length > 0) {
+    const result = nosql.set(regions.provinsi)
+          .where('name', 'LIKE', keyword, false).exec();
 
-      // Buat HTML untuk daftar provinsi
-      let containerList = `
-        <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-          <ul class="my-auto" style="list-style-type: none;">
-      `;
-      result.forEach(provinsi => {
-        containerList += `<li id="${provinsi.id}" class="list-provinsi">${provinsi.name}</li>`;
-      });
-      containerList += '</ul></div>';
+    // Membuat konten berdasarkan data yang diambil
+    let containerList = `
+    <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+    <ul class="my-auto" style="list-style-type: none;">
+    `;
 
-      // Update konten container dengan daftar yang dibuat
-      container.innerHTML = containerList;
-
-      // Tambahkan event listener pada setiap item list provinsi
-      const listItems = container.querySelectorAll('.list-provinsi');
-      listItems.forEach(list => {
-        list.addEventListener('click', (event) => {
-          handleSelectedList(event);
-        });
-      });
-
-      // Fungsi untuk menangani pemilihan item dari list
-      function handleSelectedList(event) {
-        const value = event.target.innerText;
-        inputElement.value = value;
-        inputElement.style.backgroundColor = '#eaeaea';
-        selectedProvinsi.push({ id: event.target.id, name: value });
-        container.innerHTML = ''; // Bersihkan container setelah item dipilih
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
+    // Menambahkan data ke dalam list
+    result.forEach(provinsi => {
+      containerList += `<li id="${provinsi.id}" name="provinsi" class="provinsi" onclick="handleSelectedRegion(this)">${provinsi.name}</li>`;
     });
+
+    containerList += `
+        </ul>
+      </div>
+    `;
+
+    // Update kontainer dengan HTML baru
+    container.innerHTML = containerList;
+  }
 }
 
 let selectedKabupaten = [];
 function loadListKabupaten() {
   const container = document.getElementById('container-list-kabupaten');
   const inputElement = document.getElementById('kabupaten');
-  const provinsiId = selectedProvinsi[0].id
-
   if (!container || !inputElement) {
     console.error('Elemen container atau input tidak ditemukan');
     return;
   }
 
+  if (regions.kabupaten.length == 0) {
+    loadDataRegencies(regions.selected[0][0]);
+    console.log(regions.kabupaten);
+  }
+
+  const keyword = inputElement.value;
+
   inputElement.addEventListener('blur', () => {
-    const inputValue = inputElement.value;
-    if (inputValue === '') {
-      selectedKabupaten = [];
-      inputElement.style.backgroundColor = '#fff';
-      container.innerHTML = '';
+    if (keyword === '') {
+      inputElement.classList.remove('bg-green-100');
+      inputElement.classList.add('bg-white');
     } else {
-      inputElement.style.backgroundColor = '#eaeaea';
+      inputElement.classList.remove('bg-white');
+      inputElement.classList.add('bg-green-100');
     }
   });
 
-  loadDataRegencies(provinsiId)
-    .then(data => {
-      const result = nosql.set(data).where('province_id', '===', provinsiId).where('name', 'LIKE', inputElement.value, false).exec();
+  if (keyword.length > 3 && regions.kabupaten.length > 0) {
+    const result = nosql.set(regions.kabupaten)
+          .where('name', 'LIKE', keyword, false).exec();
 
-      // Membuat konten berdasarkan data yang diambil
-      let containerList = `
-      <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-      <ul class="my-auto" style="list-style-type: none;">
-      `;
+    // Membuat konten berdasarkan data yang diambil
+    let containerList = `
+    <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+    <ul class="my-auto" style="list-style-type: none;">
+    `;
 
-      // Menambahkan data ke dalam list
-      result.forEach(kabupaten => {
-        containerList += `<li id="${kabupaten.id}" class="list-kabupaten">${kabupaten.name}</li>`;
-      });
-
-      containerList += `
-          </ul>
-        </div>
-      `;
-
-      container.innerHTML = containerList;
-
-      function handleSelectedList(element) {
-        const value = element.target.innerText;
-        inputElement.value = element.target.innerText;
-        inputElement.style.backgroundColor = `#eaeaea`;
-        selectedKabupaten.push({id:element.target.id, name:element.target.innerText});
-        container.innerHTML = '';
-      }
-
-      let getList = document.querySelectorAll('.list-kabupaten');
-        getList.forEach(list => {
-          list.addEventListener('click', (element) => {
-            handleSelectedList(element);
-          });
-        });
-    })
-    .catch(error => {
-      console.error('Error:', error);
+    // Menambahkan data ke dalam list
+    result.forEach(kabupaten => {
+      containerList += `<li id="${kabupaten.id}" name="kabupaten" class="kabupaten" onclick="handleSelectedRegion(this)">${kabupaten.name}</li>`;
     });
+
+    containerList += `
+        </ul>
+      </div>
+    `;
+
+    // Update kontainer dengan HTML baru
+    container.innerHTML = containerList;
+  }
 }
 
-let selectedKecamatan = [];
 function loadListKecamatan() {
   const container = document.getElementById('container-list-kecamatan');
   const inputElement = document.getElementById('kecamatan');
-  const inputValue = inputElement.value;
-  const kabupatenId = selectedKabupaten[0].id
-
   if (!container || !inputElement) {
     console.error('Elemen container atau input tidak ditemukan');
     return;
   }
 
+  if (regions.kecamatan.length == 0) {
+    loadDataDistricts(regions.selected[1][0]);
+    console.log(regions.kecamatan);
+  }
+
+  const keyword = inputElement.value;
+
   inputElement.addEventListener('blur', () => {
-    const inputValue = inputElement.value;
-    if (inputValue === '') {
-      selectedKecamatan = [];
-      inputElement.style.backgroundColor = '#fff';
-      container.innerHTML = '';
+    if (keyword === '') {
+      inputElement.classList.remove('bg-green-100');
+      inputElement.classList.add('bg-white');
     } else {
-      inputElement.style.backgroundColor = '#eaeaea';
+      inputElement.classList.remove('bg-white');
+      inputElement.classList.add('bg-green-100');
     }
   });
 
-  loadDataDistricts(kabupatenId)
-    .then(data => {
-      const result = nosql.set(data).where('regency_id', '===', kabupatenId).where('name', 'LIKE', inputValue, false).exec();
+  if (keyword.length > 3 && regions.kecamatan.length > 0) {
+    const result = nosql.set(regions.kecamatan)
+          .where('name', 'LIKE', keyword, false).exec();
 
-      let containerList = `
-      <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-      <ul class="my-auto" style="list-style-type: none;">
-      `;
+    // Membuat konten berdasarkan data yang diambil
+    let containerList = `
+    <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+    <ul class="my-auto" style="list-style-type: none;">
+    `;
 
-      result.forEach(kabupaten => {
-        containerList += `<li id="${kabupaten.id}" class="list-kabupaten">${kabupaten.name}</li>`;
-      });
-
-      containerList += `
-          </ul>
-        </div>
-      `;
-
-      container.innerHTML = containerList;
-
-      function handleSelectedList(element) {
-        const value = element.target.innerText;
-        inputElement.value = element.target.innerText;
-        inputElement.style.backgroundColor = `#eaeaea`;
-        selectedKecamatan.push({id:element.target.id, name:element.target.innerText});
-        container.innerHTML = '';
-      }
-
-      let getList = document.querySelectorAll('.list-kabupaten');
-        getList.forEach(list => {
-          list.addEventListener('click', (element) => {
-            handleSelectedList(element);
-          });
-        });
-    })
-    .catch(error => {
-      console.error('Error:', error);
+    // Menambahkan data ke dalam list
+    result.forEach(kecamatan => {
+      containerList += `<li id="${kecamatan.id}" name="kecamatan" class="kecamatan" onclick="handleSelectedRegion(this)">${kecamatan.name}</li>`;
     });
+
+    containerList += `
+        </ul>
+      </div>
+    `;
+
+    // Update kontainer dengan HTML baru
+    container.innerHTML = containerList;
+  }
 }
 
-let selectedDesa = [];
 function loadListDesa() {
   const container = document.getElementById('container-list-desa');
   const inputElement = document.getElementById('desa');
-  const kecamatanId = selectedKecamatan[0].id;
-
   if (!container || !inputElement) {
     console.error('Elemen container atau input tidak ditemukan');
     return;
   }
 
+  if (regions.desa.length == 0) {
+    loadDataVillages(regions.selected[2][0]);
+    console.log(regions.desa);
+  }
+
+  const keyword = inputElement.value;
+
   inputElement.addEventListener('blur', () => {
-    const inputValue = inputElement.value;
-    if (inputValue === '') {
-      selectedDesa = [];
-      inputElement.style.backgroundColor = '#fff';
-      container.innerHTML = '';
+    if (keyword === '') {
+      inputElement.classList.remove('bg-green-100');
+      inputElement.classList.add('bg-white');
     } else {
-      inputElement.style.backgroundColor = '#eaeaea';
+      inputElement.classList.remove('bg-white');
+      inputElement.classList.add('bg-green-100');
     }
   });
 
-  loadDataVillages(kecamatanId)
-    .then(data => {
-      const result = nosql.set(data).where('district_id', '===', kecamatanId).where('name', 'LIKE', inputElement.value, false).exec();
+  if (keyword.length > 3 && regions.desa.length > 0) {
+    const result = nosql.set(regions.desa)
+          .where('name', 'LIKE', keyword, false).exec();
 
-      let containerList = `
-      <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
-      <ul class="my-auto" style="list-style-type: none;">
-      `;
+    // Membuat konten berdasarkan data yang diambil
+    let containerList = `
+    <div style="max-height:200px;width:215px;position:absolute;background:#eaeaea;top:0px;overflow:auto;">
+    <ul class="my-auto" style="list-style-type: none;">
+    `;
 
-      result.forEach(kabupaten => {
-        containerList += `<li id="${kabupaten.id}" class="list-kabupaten">${kabupaten.name}</li>`;
-      });
-
-      containerList += `
-          </ul>
-        </div>
-      `;
-
-      container.innerHTML = containerList;
-
-      function handleSelectedList(element) {
-        const value = element.target.innerText;
-        inputElement.value = element.target.innerText;
-        inputElement.style.backgroundColor = `#eaeaea`;
-        selectedDesa.push({id:element.target.id, name:element.target.innerText});
-        container.innerHTML = '';
-      }
-
-      let getList = document.querySelectorAll('.list-kabupaten');
-        getList.forEach(list => {
-          list.addEventListener('click', (element) => {
-            handleSelectedList(element);
-          });
-        });
-    })
-    .catch(error => {
-      console.error('Error:', error);
+    // Menambahkan data ke dalam list
+    result.forEach(desa => {
+      containerList += `<li id="${desa.id}" name="desa" class="desa" onclick="handleSelectedRegion(this)">${desa.name}</li>`;
     });
+
+    containerList += `
+        </ul>
+      </div>
+    `;
+
+    // Update kontainer dengan HTML baru
+    container.innerHTML = containerList;
+  }
 }
 
 const arrayInputElements = [];
@@ -477,80 +289,100 @@ const arrayInputElements = [];
     const formElement = document.getElementById('form');
     const inputElements = formElement.querySelectorAll('input, select');
         inputElements.forEach((element, index) => {
-          index === 0 ? element.disabled = false : element.disabled = true;
-          index === 0 ? element.classList.add('bg-white') : element.classList.add('bg-slate-300');
-          element.addEventListener('change', (e) => {
-            handleFillableInput(e);
-          });
+          element.addEventListener('change', (e) => {handleFillable(e)});
           element.id == 'nama-ayah' ? element.addEventListener('keyup', (e) => {
-            loadDataOrangTua(element.value, 'Ayah', 'container-list-ayah');
+            loadListAyah();
+          }) : '';
+          element.id == 'nama-ibu' ? element.addEventListener('keyup', (e) => {
+            loadListIbu();
           }) : '';
 
           arrayInputElements.push(element);
         });
   }
-let breakPoint = 0;
-function handleFillableInput(element) {
-  const selectedElement = element.target;
-  const currentIndex = breakPoint == 0 ? arrayInputElements.indexOf(selectedElement) : breakPoint;
-  breakPoint = 0;
 
-  const setBreakPoint = (index) => {
-    breakPoint = index;
-    arrayInputElements.slice(0, index).map((element) => {
-      if (element.value == '') {
-          element.disabled = false;
-          element.classList.remove('bg-slate-300');
-          element.classList.add('bg-white');
-      }
-    });
-  }
+  function handleFillable(element) {
+    const selectedElement = element.target;
+    const selectedElementValue = selectedElement.value;
 
-  let nextElement = null;
-
-  if (selectedElement.value.trim() !== '') {
-      console.log(1)
-      selectedElement.classList.remove('bg-white');
+    if (selectedElementValue !== '') {
       selectedElement.classList.add('bg-green-100');
-      if (currentIndex < arrayInputElements.length - 1) {
-          console.log(2)
-          nextElement = arrayInputElements[currentIndex + 1];
-          nextElement.disabled = false;
-          nextElement.classList.remove('bg-slate-300');
-          nextElement.classList.add('bg-white');
-      }
-  } else {
-    console.log(3)
-    selectedElement.classList.remove('bg-green-100');
-    selectedElement.classList.add('bg-white');
-    arrayInputElements.map((element, index) => {
-      if (index != currentIndex && element.value == ''){
-          element.disabled = true;
-          element.value = '';
-          element.classList.remove('bg-white');
-          element.classList.add('bg-slate-300');
-      } else {
-        index = index > arrayInputElements.length ? arrayInputElements.map((el, i) => {
-          el.value != '' && i;
-        }) : index;
-        setBreakPoint(index);
-        console.log('breakPoint', breakPoint);
-      }
-    });
+      selectedElement.classList.remove('bg-white');
+
+      const key = selectedElement.id;
+
+      // Menambahkan data ke dalam form.datas
+      form.datas = { ...form.datas, [key]: selectedElementValue };
+      console.log(form.datas);
+    } else {
+      selectedElement.classList.add('bg-white');
+      selectedElement.classList.remove('bg-green-100');
+    }
   }
+
+// NANTI PERBAIKI AGAR JADI REUSABLE : only (Ayah, Ibu). Gabung dengan handleSelectedRegion
+function handleSelectedList(element) {
+  const value = element.innerText;
+  const target = element.getAttribute('name');
+  const targetContainer = 'container-list-' + element.getAttribute('class');
+
+  const targetInputElement = document.getElementById(target);
+        targetInputElement.classList.add('bg-green-100');
+
+  const containerList = document.getElementById(targetContainer);
+
+  const getRelatedElements = Array.from(document.querySelectorAll(`input[id*="${element.getAttribute('class')}"]`));
+
+  const relatedElements = getRelatedElements.filter((relatedElement) => relatedElement != targetInputElement);
+  const teleponInput = `nomor-telepon-${element.getAttribute('class')}`;
+
+        relatedElements.forEach((element) => {
+          console.log(teleponInput);
+          if (element.getAttribute('id') == teleponInput) {
+            element.value = orangtua.selected[0].nomor_telepon;
+          } else {
+            element.value = orangtua.selected[0].email;
+          }
+          element.disabled = false;
+          element.classList.remove('bg-white');
+          element.classList.remove('bg-slate-300');
+          element.classList.add('bg-green-100');
+        });
+    targetInputElement.value = value;
+    containerList.innerHTML = '';
 }
 
+function handleSelectedRegion(element) {
+  console.log("handleSelectedRegion berjalan..");
+  const value = element.innerText;
+  console.log(element);
+  const target = element.getAttribute('name');
+  const targetContainer = 'container-list-' + target;
+  console.log(target);
 
-  function handleReset() {
-    getInputElements();
-    selectedProvinsi = [];
-    selectedKabupaten = [];
-    selectedKecamatan = [];
-    selectedDesa = [];
-  }
+  const targetInputElement = document.getElementById(target);
+  const containerList = document.getElementById(targetContainer);
+    console.log(targetContainer);
+    switch (target) {
+      case 'provinsi':
+        regions.selected[0] = [element.getAttribute('id'), value];
+        break;
+      case 'kabupaten':
+        regions.selected[1] = [element.getAttribute('id'), value];
+        break;
+      case 'kecamatan':
+        regions.selected[2] = [element.getAttribute('id'), value];
+        break;
+      case 'desa':
+        regions.selected[3] = [element.getAttribute('id'), value];
+        break;
+    }
+    targetInputElement.value = value;
+    containerList.innerHTML = '';
+    console.log(regions.selected);
+}
 
-
-  function loadFormTambahData() {
+function loadFormTambahData() {
   const container = document.getElementById('container-modal-form');
   const element = `
     <div class="flex justify-center align-middle p-5 absolute w-fit h-[680px] top-0 bg-black bg-opacity-90 z-10">
@@ -610,8 +442,8 @@ function handleFillableInput(element) {
               </div>
               <select id="jenis-kelamin" class="border rounded-md text-sm p-2" >
                 <option disabled selected selected="selected" value="">-- Pilih Jenis Kelamin --</option>
-                <option value="L">Laki-Laki</option>
-                <option value="P">Perempuan</option>
+                <option class="bg-white" value="L">Laki-Laki</option>
+                <option class="bg-white" value="P">Perempuan</option>
               </select>
             </div>
             <div class="flex flex-col">
@@ -659,7 +491,7 @@ function handleFillableInput(element) {
                 <label for="nama-ibu" class="text-sm">Nama Ibu :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" class="border rounded-md text-sm p-2" id="nama-ibu" placeholder="Nama Ibu Siswa" onkeyup="loadListIbu()"  />
+              <input type="text" class="border rounded-md text-sm p-2" id="nama-ibu" placeholder="Nama Ibu Siswa"/>
                 <div id="container-list-ibu" class="relative w-full">
                 </div>
             </div>
@@ -686,7 +518,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="provinsi" placeholder="Masukan Provinsi"
-                onkeyup="loadListProvinsi()"  />
+                onkeypress="loadListProvinsi()" />
                 <div id="container-list-provinsi" class="relative w-full">
                 </div>
             </div>
@@ -696,7 +528,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="kabupaten" placeholder="Masukan Kabupaten"
-                onkeyup="loadListKabupaten()" />
+                onkeypress="loadListKabupaten()" />
                 <div id="container-list-kabupaten" class="position w-full">
                 </div>
             </div>
@@ -705,7 +537,7 @@ function handleFillableInput(element) {
                 <label for="kecamatan" class="text-sm">Kecamatan :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeyup="loadListKecamatan()" />
+              <input type="text" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeypress="loadListKecamatan()" />
                 <div id="container-list-kecamatan" class="relative w-full">
                 </div>
             </div>
@@ -715,7 +547,7 @@ function handleFillableInput(element) {
                 <span class="text-red-500">*</span>
               </div>
               <input type="text" class="border rounded-md text-sm p-2" id="desa" placeholder="Masukan Desa / Keluruhan"
-                required onkeyup="loadListDesa()" />
+                required onkeypress="loadListDesa()" />
                 <div id="container-list-desa" class="relative w-full">
                 </div>
             </div>
@@ -765,8 +597,8 @@ function handleFillableInput(element) {
   getInputElements();
   render('#kelas',
     `<option disabled selected value="">-- Pilih Kelas --</option>
-      ${main.kelas?.map((kelas) => {
-        return `<option value="${kelas.nama_kelas}">${kelas.nama_kelas}</option>`;
+      ${siswa.kelas?.map((kelas) => {
+        return `<option class="bg-white" value="${kelas.nama_kelas}">${kelas.nama_kelas}</option>`;
       })}
     `
   , {signals: ['main-table-data']})
@@ -790,6 +622,15 @@ function cancelForm() {
   container.innerHTML = '';
 }
 
+function handleReset() {
+  regions.selected = [];
+  form.datas = {};
+  arrayInputElements.forEach((element) => {
+    element.classList.remove('bg-green-100');
+  });
+}
+
+
 function inputPhotoSiswa(event) {
     const fileInput = document.getElementById('fileInput');
     const previewImage = document.getElementById('previewImage');
@@ -805,3 +646,7 @@ function inputPhotoSiswa(event) {
         fileInput.value = ''; // Reset the file input if the file is not valid
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadDataOrangTua();
+});

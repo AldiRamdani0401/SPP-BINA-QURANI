@@ -30,7 +30,7 @@
         </a>
       </li>
       <li class="sidebar-dropdown">
-        <a id="master-data" class="flex items-center">
+        <a id="master-data" href="/admin/data-orang-tua-siswa" class="flex items-center">
           <div class="flex justify-between items-center gap-2 p-3">
             <img src="<?= base_url(path: 'assets/icon/database-icon.png') ?>">
             <span class="text-sm text-white">Data Orang Tua Siswa</span>

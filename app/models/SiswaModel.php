@@ -19,6 +19,8 @@ class SiswaModel extends Model
       $limit = 1;
     }
 
+    error_log("TOTAL : $totalCount");
+
     // Membangun query dasar
     $sql = "SELECT
                 nomor_induk_siswa, nama_lengkap, photo_siswa,
