@@ -9,7 +9,6 @@ function loadDataOrangTua() {
       })
       .then( data => {
         orangtua.datas = [...data[1]];
-        console.log(orangtua.datas);
       })
       .catch(error => {
         console.error('Fetch error:', error);

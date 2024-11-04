@@ -425,6 +425,5 @@
       loadDataKelas(() => {
         getListGroupBy();
       });
-      siswa.load = siswa.datas.length;
     });
   });

@@ -56,5 +56,6 @@
 <script src="<?= base_url(path: 'assets/js/load/siswa.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/load/orang-tua.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/load/kelas.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/load/region.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/siswa/table.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/siswa/form/addForm.js') ?>"></script>
