@@ -620,7 +620,7 @@ function formatInputNumber(id) {
   if (value >= 1 && value <= 100) {
       input.value = value.toString().padStart(3, '0');
   } else {
-      input.value = ''; // Kosongkan input jika tidak sesuai
+      input.value = '';
   }
 }
 
