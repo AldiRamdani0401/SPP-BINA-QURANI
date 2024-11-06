@@ -696,7 +696,7 @@ function inputPhotoSiswa(event) {
         reader.readAsDataURL(file);
     } else {
         alert("Please select a valid image file (png, jpg, jpeg)");
-        fileInput.value = ''; // Reset the file input if the file is not valid
+        fileInput.value = '';
     }
 }
 
