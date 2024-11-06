@@ -336,12 +336,16 @@ function handleSelectedList(element) {
   const relatedElements = getRelatedElements.filter((relatedElement) => relatedElement != targetInputElement);
   const teleponInput = `nomor-telepon-${element.getAttribute('class')}`;
 
+  form.datas = { ...form.datas, [target]: value };
+
         relatedElements.forEach((element) => {
-          console.log(teleponInput);
+          const key = element.getAttribute('id');
           if (element.getAttribute('id') == teleponInput) {
             element.value = orangtua.selected[0].nomor_telepon;
+            form.datas = { ...form.datas, [key]: orangtua.selected[0].nomor_telepon };
           } else {
             element.value = orangtua.selected[0].email;
+            form.datas = { ...form.datas, [key]: orangtua.selected[0].email };
           }
           element.disabled = false;
           element.classList.remove('bg-white');
@@ -350,6 +354,7 @@ function handleSelectedList(element) {
         });
     targetInputElement.value = value;
     containerList.innerHTML = '';
+    console.log(form.datas);
 }
 
 function handleSelectedRegion(element) {
@@ -376,10 +381,13 @@ function handleSelectedRegion(element) {
       case 'desa':
         regions.selected[3] = [element.getAttribute('id'), value];
         break;
-    }
+      }
+    const key = target;
+    form.datas = { ...form.datas, [key]: value };
     targetInputElement.value = value;
     containerList.innerHTML = '';
     console.log(regions.selected);
+    console.log('form : ', form.datas)
 }
 
 function loadFormTambahData() {
@@ -451,7 +459,7 @@ function loadFormTambahData() {
                 <label for="kelas" class="text-sm">Kelas :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <select id="kelas" class="border p-2 rounded-md text-sm" >
+              <select id="kelas" class="border p-2 rounded-md text-sm" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();' >
               </select>
             </div>
           </div>
@@ -537,7 +545,7 @@ function loadFormTambahData() {
                 <label for="kecamatan" class="text-sm">Kecamatan :</label>
                 <span class="text-red-500">*</span>
               </div>
-              <input type="text" pattern="[0-9]" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeypress="loadListKecamatan()" />
+              <input type="text" class="border rounded-md text-sm p-2" id="kecamatan" placeholder="Masukan Kecamatan" onkeypress="loadListKecamatan()" />
                 <div id="container-list-kecamatan" class="relative w-full">
                 </div>
             </div>
@@ -579,13 +587,13 @@ function loadFormTambahData() {
               <output id="imageOutput" class="align-center">
                 <img src="../assets/images/default-image.png" class="w-full" id="previewImage">
               </output>
-              <input type="file" name="fileInput" id="fileInput" accept="image/png, image/jpg, image/jpeg" class="w-full" onchange="inputPhotoSiswa(event)">
+              <input type="file" name="fileInput" id="fileInput" accept="image/png, image/jpg, image/jpeg" class="w-full" onchange="inputPhotoSiswa(event)" required>
             </div>
           </div>
         </div>
         <div class="flex flex-row justify-content-end py-1 gap-2">
-          <button class="bg-red-600 py-1 px-2 rounded-md text-white hover:bg-red-500 hover:font-semibold" onclick="cancelForm()">Batal</button>
-          <button type="reset" class="bg-yellow-500 py-1 px-2 rounded-md hover:bg-yellow-400 hover:font-semibold" onclick="handleReset()">Reset</button>
+          <button type="button" class="bg-red-600 py-1 px-2 rounded-md text-white hover:bg-red-500 hover:font-semibold" onclick="cancelForm()">Batal</button>
+          <button type="button" class="bg-yellow-500 py-1 px-2 rounded-md hover:bg-yellow-400 hover:font-semibold" onclick="handleReset()">Reset</button>
           <button class="bg-blue-800 py-1 px-2 text-white rounded-md hover:bg-blue-600 hover:font-semibold">Tambah</button>
         </div>
       </form>
@@ -612,24 +620,69 @@ function formatInputNumber(id) {
   if (value >= 1 && value <= 100) {
       input.value = value.toString().padStart(3, '0');
   } else {
-      input.value = ''; // Kosongkan input jika tidak sesuai
+      input.value = '';
   }
 }
 
 
 function cancelForm() {
-  const container = document.getElementById('container-modal-form');
-  container.innerHTML = '';
+  Swal.fire({
+    title: 'Oops!',
+    text: 'Tambah Data Siswa Dibatalkan, apakah anda yakin?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya',
+    cancelButtonText: 'Tidak',
+    confirmButtonColor: 'red',
+    cancelButtonColor: 'blue',
+    backdrop: `
+        rgba(0,0,123,0.4)
+        left top
+        no-repeat
+    `
+}).then((result) => {
+    if (result.isConfirmed) {
+        regions.selected = [];
+        form.datas = {};
+        arrayInputElements.forEach((element) => {
+            element.classList.remove('bg-green-100');
+            element.value = '';
+        });
+        previewImage = document.getElementById('previewImage').src = '../assets/images/default-image.png';
+        const container = document.getElementById('container-modal-form');
+        container.innerHTML = '';
+    }
+});
+
 }
 
 function handleReset() {
-  regions.selected = [];
-  form.datas = {};
-  arrayInputElements.forEach((element) => {
-    element.classList.remove('bg-green-100');
+  Swal.fire({
+      title: 'Oops!',
+      text: 'Form akan dikosongkan, apakah anda yakin?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+      confirmButtonColor: 'red',
+      cancelButtonColor: 'blue',
+      backdrop: `
+          rgba(0,0,123,0.4)
+          left top
+          no-repeat
+      `
+  }).then((result) => {
+      if (result.isConfirmed) {
+          regions.selected = [];
+          form.datas = {};
+          arrayInputElements.forEach((element) => {
+              element.classList.remove('bg-green-100');
+              element.value = '';
+          });
+          previewImage = document.getElementById('previewImage').src = '../assets/images/default-image.png';
+      }
   });
 }
-
 
 function inputPhotoSiswa(event) {
     const fileInput = document.getElementById('fileInput');

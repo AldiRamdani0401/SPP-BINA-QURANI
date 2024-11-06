@@ -420,7 +420,6 @@
 
   // Event Load
   document.addEventListener("DOMContentLoaded", () => {
-    loadFormTambahData();
     loadDataSiswa(() => {
       loadDataKelas(() => {
         getListGroupBy();
