@@ -594,7 +594,7 @@ function loadFormTambahData() {
         <div class="flex flex-row justify-content-end py-1 gap-2">
           <button type="button" class="bg-red-600 py-1 px-2 rounded-md text-white hover:bg-red-500 hover:font-semibold" onclick="cancelForm()">Batal</button>
           <button type="button" class="bg-yellow-500 py-1 px-2 rounded-md hover:bg-yellow-400 hover:font-semibold" onclick="handleReset()">Reset</button>
-          <button class="bg-blue-800 py-1 px-2 text-white rounded-md hover:bg-blue-600 hover:font-semibold">Tambah</button>
+          <button type="button" class="bg-blue-800 py-1 px-2 text-white rounded-md hover:bg-blue-600 hover:font-semibold" onclick="addDataSiswa()">Tambah</button>
         </div>
       </form>
     </div>
@@ -609,7 +609,7 @@ function loadFormTambahData() {
         return `<option class="bg-white" value="${kelas.nama_kelas}">${kelas.nama_kelas}</option>`;
       })}
     `
-  , {signals: ['main-table-data']})
+  , {signals: ['main-table-data']});
 }
 
 function formatInputNumber(id) {
