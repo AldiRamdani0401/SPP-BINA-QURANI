@@ -29,8 +29,13 @@ $app->get(route: '/data-siswa/{id}', controller: 'SiswaController', action: 'get
 $app->get(route: '/data-orang-tua', controller: 'OrangTuaController', action: 'getAllDataOrangTua', middleware: [AuthMiddleware::class]);
 $app->get(route: '/data-orang-tua/{id}', controller: 'OrangTuaController', action: 'getDataOrangTua', middleware: [AuthMiddleware::class]);
 
+$app->get(route: '/admin/data-kelas', controller: 'KelasController', action: 'show', middleware: [AuthMiddleware::class]);
 $app->get(route: '/data-kelas', controller: 'KelasController', action: 'getAllDataKelas', middleware: [AuthMiddleware::class]);
 $app->get(route: '/data-kelas/{id}', controller: 'KelasController', action: 'getDataKelas', middleware: [AuthMiddleware::class]);
+
+$app->get(route: '/admin/data-biaya-spp', controller: 'BiayaSppController', action: 'show', middleware: [AuthMiddleware::class]);
+
+$app->get(route: '/admin/data-pembayaran', controller: 'PembayaranController', action: 'show', middleware: [AuthMiddleware::class]);
 
 // User
 $app->get(route: '/user', controller: 'UserController', action: 'index', middleware: [AuthMiddleware::class]);

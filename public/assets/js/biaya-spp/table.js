@@ -2,23 +2,106 @@
   const { component, render } = reef;
   const nosql = new FlyJson();
 
-  function loadDataKelas(callback) {
-    fetch('/data-kelas')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(datas => {
-        siswa.kelas = [...datas[1]];
-        // Memeriksa apakah callback adalah fungsi
-        if (typeof callback === 'function') {
-          callback(); // Panggil callback
-        }
-      })
-      .catch(error => console.error('Fetch error:', error));
-  }
+  const SPP = signal({
+    datas: [],
+    headers: [],
+    load: 10,
+    total: 20
+  }, 'data-biaya-spp');
+
+  SPP.datas = [
+    {
+        kode_spp: '001',
+        biaya: 'Pembangunan',
+        nominal: 300000,
+        jatuh_tempo: 'per bulan',
+        keterangan: ''
+    },
+    {
+        kode_spp: '002',
+        biaya: 'Operasional Sekolah',
+        nominal: 200000,
+        jatuh_tempo: 'per bulan',
+        keterangan: 'Biaya untuk keperluan operasional harian'
+    },
+    {
+        kode_spp: '003',
+        biaya: 'Kegiatan Ekstrakurikuler',
+        nominal: 100000,
+        jatuh_tempo: 'per semester',
+        keterangan: 'Termasuk biaya kegiatan klub dan pelatihan'
+    },
+    {
+        kode_spp: '004',
+        biaya: 'Seragam Sekolah',
+        nominal: 500000,
+        jatuh_tempo: 'sekali pembayaran',
+        keterangan: 'Biaya untuk seragam sekolah lengkap'
+    },
+    {
+        kode_spp: '005',
+        biaya: 'Buku Pelajaran',
+        nominal: 150000,
+        jatuh_tempo: 'per semester',
+        keterangan: 'Pembelian buku pelajaran wajib'
+    },
+    {
+        kode_spp: '006',
+        biaya: 'Perawatan Gedung',
+        nominal: 250000,
+        jatuh_tempo: 'per tahun',
+        keterangan: 'Biaya untuk pemeliharaan gedung sekolah'
+    },
+    {
+        kode_spp: '007',
+        biaya: 'Transportasi Sekolah',
+        nominal: 400000,
+        jatuh_tempo: 'per bulan',
+        keterangan: 'Untuk layanan antar-jemput siswa'
+    },
+    {
+        kode_spp: '008',
+        biaya: 'Uang Praktikum',
+        nominal: 200000,
+        jatuh_tempo: 'per bulan',
+        keterangan: 'Untuk keperluan alat dan bahan praktikum'
+    },
+    {
+        kode_spp: '009',
+        biaya: 'Uang Kegiatan Akhir Tahun',
+        nominal: 600000,
+        jatuh_tempo: 'sekali pembayaran',
+        keterangan: 'Biaya acara perpisahan dan kegiatan akhir tahun'
+    },
+    {
+        kode_spp: '010',
+        biaya: 'Asuransi Kesehatan',
+        nominal: 100000,
+        jatuh_tempo: 'per bulan',
+        keterangan: 'Asuransi kesehatan siswa'
+    }
+];
+
+
+  SPP.headers = ['Kode SPP', 'Biaya', 'Nominal', 'Jatuh Tempo', 'Keterangan'];
+
+  // function loadDataKelas(callback) {
+  //   fetch('/data-biaya-spp')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok: ' + response.statusText);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(datas => {
+  //       siswa.kelas = [...datas[1]];
+  //       // Memeriksa apakah callback adalah fungsi
+  //       if (typeof callback === 'function') {
+  //         callback(); // Panggil callback
+  //       }
+  //     })
+  //     .catch(error => console.error('Fetch error:', error));
+  // }
 
   // Helper Function Store Data
   const reset = [];
@@ -119,12 +202,12 @@
     const keyword = inputSearchElement.value;
 
     if (keyword !== "") {
-      siswa.datas = [];
+      SPP.datas = [];
       if (filterSearch != "" && filterBy != "") {
           console.log('search 1');
-          siswa.filterBy = '';
-          siswa.filterBy = `${filterSearch} LIKE '%${keyword}%' AND ${filterBy}`;
-          console.log(siswa.filterBy);
+          SPP.filterBy = '';
+          SPP.filterBy = `${filterSearch} LIKE '%${keyword}%' AND ${filterBy}`;
+          console.log(SPP.filterBy);
           loadDataSiswa(() => {
             templateBtnReset('search', 'container-btn-reset-search', () => {
               render('#search-table', templateInputSearch)
@@ -248,7 +331,7 @@
       handleLimitData, handleFilterDataGroupBy, templateBtnReset
     },
     signals:[
-      'data-siswa'
+      'data-biaya-spp'
     ]
   });
 
@@ -335,12 +418,12 @@
     return dom;
   }
 
-  component('#search-table', templateInputSearch, {events: {searchData, showTooltip, hideTooltip}, signals: ['data-siswa']});
+  component('#search-table', templateInputSearch, {events: {searchData, showTooltip, hideTooltip}, signals: ['data-biaya-spp']});
 
   // # Table Head
   function templateTableHead() {
     let dom = '<tr class="sticky top-0 bg-[#EDEDED]"><th class="p-2 border text-sm text-nowrap">No</th>';
-    const headNames = orangtua.headers;
+    const headNames = SPP.headers;
     let formatedHeadNames = [];
     headNames.forEach(headName => {
       let nameToUpperCase = headName.charAt(0).toUpperCase() + headName.slice(1);
@@ -357,25 +440,18 @@
     dom += '</tr>';
     return dom;
   }
-  component('#table-head', templateTableHead, {signals: ['data-orang-tua']});
+  component('#table-head', templateTableHead, {signals: ['data-biaya-spp']});
 
   // # Table Body
   function templateTableData() {
     let dom = '';
     let count = 1;
-    if (orangtua.datas?.length > 0) {
-      orangtua.datas.forEach(data => {
-        const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
+    if (SPP.datas?.length > 0) {
+      SPP.datas.forEach(data => {
             dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
               for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                  if (key == 'photo_siswa') {
-                    dom += `<td class="p-2 border text-sm text-nowrap">
-                              <img class="w-20 rounded" src="../assets/${data[key]}" alt="photo ${data.nama_lengkap}"/>
-                            </td>`;
-                  } else {
                     dom += `<td class="p-2 border text-sm text-nowrap">${data[key]}</td>`;
-                  }
                 }
               }
             dom += '</tr>';
@@ -384,33 +460,33 @@
     } else {
       dom += `
           <tr style="background:white;">
-            <td colspan="19" class="p-2 border text-sm text-nowrap">${siswa.status}</td>
+            <td colspan="19" class="p-2 border text-sm text-nowrap">${SPP.status}</td>
           </tr>
         `;
     }
     return dom;
   }
 
-  component('#table-body', templateTableData, {signals: ['data-orang-tua']});
+  component('#table-body', templateTableData, {signals: ['data-biaya-spp']});
 
   // Pagination Table
   function loadMore(callback) {
-    let tempData = siswa.datas;
-    console.log(1, tempData, siswa.offset)
-    siswa.offset += siswa.limit;
+    let tempData = SPP.datas;
+    console.log(1, tempData, SPP.offset)
+    SPP.offset += SPP.limit;
     // TEST
-    SimpleTest(siswa.offset + siswa.limit, siswa.offset + siswa.limit, 'Load More');
+    SimpleTest(SPP.offset + SPP.limit, SPP.offset + SPP.limit, 'Load More');
 
     // Hanya kirim request jika load saat ini kurang dari total
-    if (siswa.load < siswa.total) {
-        loadDataSiswa((datas) => {
+    if (SPP.load < SPP.total) {
+        loadDataSPP((datas) => {
           tempData.push(...datas.data);
           console.log(2, tempData);
-          siswa.datas = [...tempData];
-          siswa.load = siswa.datas.length;
+          SPP.datas = [...tempData];
+          SPP.load = SPP.datas.length;
         });
-        if (siswa.load >= siswa.total) {
-            siswa.load = siswa.total;
+        if (SPP.load >= SPP.total) {
+            SPP.load = SPP.total;
         }
     } else {
         if (typeof callback === 'function') {
@@ -422,24 +498,24 @@
 
 
   function templatePagination() {
-    if (orangtua.load < orangtua.total) {
+    if (SPP.load < SPP.total) {
       return `
           <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
-          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
+          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${SPP.load} of ${SPP.total} </span>
       `;
     } else {
       return `
-        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
+        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${SPP.load} of ${SPP.total} </span>
       `;
     }
   }
 
-  component('#pagination', templatePagination, {signals: ['data-orang-tua'], events: {loadMore}});
+  component('#pagination', templatePagination, {signals: ['data-biaya-spp'], events: {loadMore}});
 
   // Event Load
-  document.addEventListener("DOMContentLoaded", () => {
-    loadDataOrangTua(() => {
-      orangtua.load = 10;
-      orangtua.total = orangtua.datas.length;
-    });
-  });
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   loadDataOrangTua(() => {
+  //     orangtua.load = 10;
+  //     orangtua.total = orangtua.datas.length;
+  //   });
+  // });

@@ -5,7 +5,7 @@
   <!-- Banner -->
   <div class="no-select flex flex-col px-5 py-4 items-center bg-[#769B27]">
     <h1 class="title-banner m-0 text-white text-2xl px-4 py-1">
-      Master Data - Data Siswa
+      Master Data - Data Biaya SPP
     </h1>
   </div>
   <!-- Sub Content 1 -->
@@ -51,12 +51,5 @@
   </div>
 </div>
 <script src="<?= base_url(path: 'assets/js/load/fetch.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/load/siswa.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/load/orang-tua.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/load/kelas.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/load/region.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/siswa/table.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/siswa/detail.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/siswa/form/fetch.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/siswa/form/addForm.js') ?>"></script>
-<script src="<?= base_url(path: 'assets/js/siswa/form/editForm.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/biaya-spp/table.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/biaya-spp/form/addForm.js') ?>"></script>

@@ -7,9 +7,9 @@ class KelasController extends Controller
   public function show($id = null): void
   {
     $data = [
-      'title' => "Data Siswa | Admin",
+      'title' => "Data Kelas | Admin",
     ];
-    $this->render(role: $this->role, view: 'siswa/index', data: $data);
+    $this->render(role: $this->role, view: 'kelas/index', data: $data);
   }
 
   public function getAllDataKelas(): void

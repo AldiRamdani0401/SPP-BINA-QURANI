@@ -2,23 +2,125 @@
   const { component, render } = reef;
   const nosql = new FlyJson();
 
-  function loadDataKelas(callback) {
-    fetch('/data-kelas')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(datas => {
-        siswa.kelas = [...datas[1]];
-        // Memeriksa apakah callback adalah fungsi
-        if (typeof callback === 'function') {
-          callback(); // Panggil callback
-        }
-      })
-      .catch(error => console.error('Fetch error:', error));
-  }
+  const kelas = signal({
+    datas: [],
+    headers: [],
+    load: 10,
+    total: 20
+  }, 'data-kelas');
+
+  kelas.datas = [
+    {
+      id: '001',
+      kelas: '1A',
+      total: 30
+    },
+    {
+      id: '002',
+      kelas: '1B',
+      total: 30
+    },
+    {
+      id: '003',
+      kelas: '1C',
+      total: 30
+    },
+    {
+      id: '004',
+      kelas: '2A',
+      total: 30
+    },
+    {
+      id: '005',
+      kelas: '2B',
+      total: 30
+    },
+    {
+      id: '006',
+      kelas: '2C',
+      total: 30
+    },
+    {
+      id: '007',
+      kelas: '3A',
+      total: 30
+    },
+    {
+      id: '008',
+      kelas: '3B',
+      total: 30
+    },
+    {
+      id: '009',
+      kelas: '3C',
+      total: 30
+    },
+    {
+      id: '010',
+      kelas: '4A',
+      total: 30
+    },
+    {
+      id: '011',
+      kelas: '4B',
+      total: 30
+    },
+    {
+      id: '012',
+      kelas: '4C',
+      total: 30
+    },
+    {
+      id: '013',
+      kelas: '5A',
+      total: 30
+    },
+    {
+      id: '014',
+      kelas: '5B',
+      total: 30
+    },
+    {
+      id: '015',
+      kelas: '5C',
+      total: 30
+    },
+    {
+      id: '016',
+      kelas: '6A',
+      total: 30
+    },
+    {
+      id: '017',
+      kelas: '6B',
+      total: 30
+    },
+    {
+      id: '018',
+      kelas: '6C',
+      total: 30
+    },
+  ];
+
+  kelas.headers = ['Kode Kelas', 'Nama Kelas', 'Total Siswa'];
+
+  // function loadDataKelas(callback) {
+  //   fetch('/data-kelas')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok: ' + response.statusText);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(datas => {
+  //       siswa.kelas = [...datas[1]];
+  //       // Memeriksa apakah callback adalah fungsi
+  //       if (typeof callback === 'function') {
+  //         callback(); // Panggil callback
+  //       }
+  //     })
+  //     .catch(error => console.error('Fetch error:', error));
+  // }
 
   // Helper Function Store Data
   const reset = [];
@@ -340,7 +442,7 @@
   // # Table Head
   function templateTableHead() {
     let dom = '<tr class="sticky top-0 bg-[#EDEDED]"><th class="p-2 border text-sm text-nowrap">No</th>';
-    const headNames = orangtua.headers;
+    const headNames = kelas.headers;
     let formatedHeadNames = [];
     headNames.forEach(headName => {
       let nameToUpperCase = headName.charAt(0).toUpperCase() + headName.slice(1);
@@ -357,25 +459,18 @@
     dom += '</tr>';
     return dom;
   }
-  component('#table-head', templateTableHead, {signals: ['data-orang-tua']});
+  component('#table-head', templateTableHead, {signals: ['data-kelas']});
 
   // # Table Body
   function templateTableData() {
     let dom = '';
     let count = 1;
-    if (orangtua.datas?.length > 0) {
-      orangtua.datas.forEach(data => {
-        const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
+    if (kelas.datas?.length > 0) {
+      kelas.datas.forEach(data => {
             dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
               for (var key in data) {
                 if (data.hasOwnProperty(key)) {
-                  if (key == 'photo_siswa') {
-                    dom += `<td class="p-2 border text-sm text-nowrap">
-                              <img class="w-20 rounded" src="../assets/${data[key]}" alt="photo ${data.nama_lengkap}"/>
-                            </td>`;
-                  } else {
                     dom += `<td class="p-2 border text-sm text-nowrap">${data[key]}</td>`;
-                  }
                 }
               }
             dom += '</tr>';
@@ -391,7 +486,7 @@
     return dom;
   }
 
-  component('#table-body', templateTableData, {signals: ['data-orang-tua']});
+  component('#table-body', templateTableData, {signals: ['data-kelas']});
 
   // Pagination Table
   function loadMore(callback) {
@@ -422,24 +517,24 @@
 
 
   function templatePagination() {
-    if (orangtua.load < orangtua.total) {
+    if (kelas.load < kelas.total) {
       return `
           <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
-          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
+          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${kelas.load} of ${kelas.total} </span>
       `;
     } else {
       return `
-        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
+        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${kelas.load} of ${kelas.total} </span>
       `;
     }
   }
 
-  component('#pagination', templatePagination, {signals: ['data-orang-tua'], events: {loadMore}});
+  component('#pagination', templatePagination, {signals: ['data-kelas'], events: {loadMore}});
 
   // Event Load
-  document.addEventListener("DOMContentLoaded", () => {
-    loadDataOrangTua(() => {
-      orangtua.load = 10;
-      orangtua.total = orangtua.datas.length;
-    });
-  });
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   loadDataOrangTua(() => {
+  //     orangtua.load = 10;
+  //     orangtua.total = orangtua.datas.length;
+  //   });
+  // });
