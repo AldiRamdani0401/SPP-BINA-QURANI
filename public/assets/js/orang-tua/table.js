@@ -340,7 +340,7 @@
   // # Table Head
   function templateTableHead() {
     let dom = '<tr class="sticky top-0 bg-[#EDEDED]"><th class="p-2 border text-sm text-nowrap">No</th>';
-    const headNames = siswa.headers;
+    const headNames = orangtua.headers;
     let formatedHeadNames = [];
     headNames.forEach(headName => {
       let nameToUpperCase = headName.charAt(0).toUpperCase() + headName.slice(1);
@@ -357,14 +357,14 @@
     dom += '</tr>';
     return dom;
   }
-  component('#table-head', templateTableHead, {signals: ['data-siswa']});
+  component('#table-head', templateTableHead, {signals: ['data-orang-tua']});
 
   // # Table Body
   function templateTableData() {
     let dom = '';
     let count = 1;
-    if (siswa.datas?.length > 0) {
-      siswa.datas.forEach(data => {
+    if (orangtua.datas?.length > 0) {
+      orangtua.datas.forEach(data => {
         const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
             dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
               for (var key in data) {
@@ -391,7 +391,7 @@
     return dom;
   }
 
-  component('#table-body', templateTableData, {signals: ['data-siswa']});
+  component('#table-body', templateTableData, {signals: ['data-orang-tua']});
 
   // Pagination Table
   function loadMore(callback) {
@@ -422,26 +422,24 @@
 
 
   function templatePagination() {
-    if (siswa.load < siswa.total) {
+    if (orangtua.load < orangtua.total) {
       return `
           <button type="button" class="bg-blue-900 text-white px-2 py-1 rounded-lg h-full" onclick="loadMore()">Load More</button>
-          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${siswa.load} of ${siswa.total} </span>
+          <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
       `;
     } else {
       return `
-        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${siswa.load} of ${siswa.total} </span>
+        <span class="px-2 py-1" style="background:white; border-radius:5px;"> ${orangtua.load} of ${orangtua.total} </span>
       `;
     }
   }
 
-  component('#pagination', templatePagination, {signals: ['data-siswa'], events: {loadMore}});
+  component('#pagination', templatePagination, {signals: ['data-orang-tua'], events: {loadMore}});
 
   // Event Load
   document.addEventListener("DOMContentLoaded", () => {
-    loadDataSiswa(() => {
-      loadDataKelas(() => {
-        getListGroupBy();
-      });
-      siswa.load = siswa.datas.length;
+    loadDataOrangTua(() => {
+      orangtua.load = 10;
+      orangtua.total = orangtua.datas.length;
     });
   });

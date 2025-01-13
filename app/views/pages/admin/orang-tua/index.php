@@ -15,23 +15,21 @@
     <div id="container-filter-data-table" class="no-select flex justify-center items-center gap-2">
     </div>
     <div id="container-btn-reset-groupby" class="h-full w-16 relative"></div>
-    <div id="search-table"
-      class="flex flex-column items-center justify-center gap-2 border">
+    <div id="search-table" class="flex flex-column items-center justify-center gap-2 border">
     </div>
     <div id="container-btn-reset-search" class="h-full w-16 relative"></div>
     <div class="no-select flex justify-center gap-1">
-      <button class="flex items-center rounded-md bg-blue-900 text-white px-2 py-1 gap-1 hover:bg-blue-600" onclick="loadFormTambahData()">
-          <span class="flex items-center text-md">+</span>
-          <span class="text-md text-nowrap">Tambah</span>
+      <button class="flex items-center rounded-md bg-blue-900 text-white px-2 py-1 gap-1 hover:bg-blue-600"
+        onclick="loadFormTambahData()">
+        <span class="flex items-center text-md">+</span>
+        <span class="text-md text-nowrap">Tambah</span>
       </button>
-      <button class="flex items-center rounded-md bg-yellow-400 px-2 py-1 gap-1 hover:bg-yellow-300" onclick="loadFormTambahData()">
-          <span class="flex items-center text-md">+</span>
+      <!-- <button class="flex items-center rounded-md bg-yellow-400 px-2 py-1 gap-1 hover:bg-yellow-300" onclick="loadFormEditData()">
           <span class="text-md text-nowrap">Edit</span>
       </button>
       <button class="flex items-center rounded-md bg-red-700 text-white px-2 py-1 gap-1 hover:bg-red-600" onclick="loadFormTambahData()">
-          <span class="flex items-center text-md">+</span>
           <span class="text-md text-nowrap">Delete</span>
-      </button>
+      </button> -->
     </div>
   </div>
   <!-- Sub Content 2 -->
@@ -52,7 +50,9 @@
     </div>
   </div>
 </div>
-
-<script src="<?= base_url(path: 'assets/js/load/siswa.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/load/fetch.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/load/orang-tua.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/load/kelas.js') ?>"></script>
+<script src="<?= base_url(path: 'assets/js/load/region.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/orang-tua/table.js') ?>"></script>
 <script src="<?= base_url(path: 'assets/js/orang-tua/form/addForm.js') ?>"></script>

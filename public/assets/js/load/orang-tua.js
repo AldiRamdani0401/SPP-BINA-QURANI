@@ -1,4 +1,4 @@
-function loadDataOrangTua() {
+function loadDataOrangTua(cb) {
   if (orangtua.datas.length == 0){
     return fetch('/data-orang-tua')
       .then(response => {
@@ -9,6 +9,8 @@ function loadDataOrangTua() {
       })
       .then( data => {
         orangtua.datas = [...data[1]];
+        orangtua.headers = [...data[0]];
+        if (typeof cb === 'function') cb();
       })
       .catch(error => {
         console.error('Fetch error:', error);

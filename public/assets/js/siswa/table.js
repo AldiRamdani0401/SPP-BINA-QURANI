@@ -342,21 +342,29 @@
   component('#table-head', templateTableHead, {signals: ['data-siswa']});
 
   // # Table Body
+
+  function detailData() {
+    const container = document.getElementById('container-modal-form');
+    const elements = this;
+    const selectedValue = elements.querySelector('#nomor_induk_siswa').innerText;
+    loadDetail(container, selectedValue);
+  }
+
   function templateTableData() {
     let dom = '';
     let count = 1;
     if (siswa.datas?.length > 0) {
       siswa.datas.forEach(data => {
         const jenis_kelamin = data.jenis_kelamin == 'L' ? 'Laki-Laki' : 'Perempuan';
-            dom += `<tr class="bg-white"><td class="p-2 border text-sm text-nowrap">${count}</td>`;
+            dom += `<tr class="bg-white" onclick="detailData()"><td class="p-2 border text-sm text-nowrap cursor-pointer">${count}</td>`;
               for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                   if (key == 'photo_siswa') {
-                    dom += `<td class="p-2 border text-sm text-nowrap">
+                    dom += `<td id="${key}" class="p-2 border text-sm text-nowrap cursor-pointer">
                               <img class="w-20 rounded" src="../assets/${data[key]}" alt="photo ${data.nama_lengkap}"/>
                             </td>`;
                   } else {
-                    dom += `<td class="p-2 border text-sm text-nowrap">${data[key]}</td>`;
+                    dom += `<td id="${key}" class="p-2 border text-sm text-nowrap cursor-pointer">${data[key]}</td>`;
                   }
                 }
               }
@@ -373,7 +381,7 @@
     return dom;
   }
 
-  component('#table-body', templateTableData, {signals: ['data-siswa']});
+  component('#table-body', templateTableData, {signals: ['data-siswa'], events: {detailData}});
 
   // Pagination Table
   function loadMore(callback) {

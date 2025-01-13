@@ -1,30 +1,47 @@
 <?php
 
-require "core/Router.php";
-require __DIR__ . "/../app/handlers/ErrorHandler.php";
+require_once 'Routes.php';
 
-class App {
-    protected $router;
+class App
+{
+  private $routes;
 
-    public function __construct() {
-        $errorHandler = new ErrorHandler();
-        $this->router = new Router(errorHandler: $errorHandler);
-    }
+  public function __construct()
+  {
+    $this->routes = new Routes();
+    $this->initializeRoutes();
+  }
 
-    public function get($route, $controller, $action, $middleware = []) {
-        $this->router->get($route, $controller, $action, $middleware);
-    }
+  private function initializeRoutes()
+  {
+    //== Auth ==
+    $this->routes->post("/login", "AuthController@login", $middleware = false);
 
-    public function post($route, $controller, $action, $middleware = []) {
-        $this->router->post($route, $controller, $action, $middleware);
-    }
+    // Definisikan rute GET
+    // == GENERAL ==
+    $this->routes->get("/", "GeneralController@index", $middleware = false);
 
-    public function run() {
-        try {
-            $this->router->dispatch();
-        } catch (Exception $e) {
-            // Handle any other exceptions that are not caught by Router
-            echo $e->getMessage();
-        }
-    }
+    // == ADMIN ==
+    $this->routes->get("/admin", "AdminController@index", $middleware = true);
+    $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
+    $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
+    $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+
+    // == FILES ==
+    $this->routes->get("/{main_folder}/{sub_folder}/{nested_folder}/{file_name}", "FileController@load", $middleware = false);
+
+
+
+    // $this->routes->get("/about", "AboutController@index");
+
+    // // Definisikan rute POST
+    // $this->routes->post("/contact", "ContactController@submit");
+
+    // Tangkap URL dan metode HTTP
+    $url = $_SERVER['REQUEST_URI'];
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    // Resolve rute
+    $this->routes->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+  }
 }
