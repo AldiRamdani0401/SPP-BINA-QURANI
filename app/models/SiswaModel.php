@@ -1,81 +1,84 @@
 <?php
 
-class SiswaModel extends Model
+require_once BASE_PATH . "/core/Database.php";
+
+class SiswaModel
 {
-  public function getAllDataSiswa($filterBy = null, $orderBy = 'nomor_induk_siswa', $limit = 10, $offset = null): array
+  private $db;
+
+  // Constructor untuk inisialisasi database
+  public function __construct($database)
   {
-    // Query untuk menghitung total data siswa
-    $countSql = "SELECT COUNT(*) as total FROM tb_siswa";
+    $this->db = $database;
+  }
 
-    // Menambahkan filter ke query total jika ada
-    if ($filterBy) {
-      $countSql .= " WHERE " . $filterBy;
-    }
+  // Fungsi untuk mendapatkan semua data siswa (dengan pagination)
+  public function getAllDataSiswa($limit = 10, $offset = 0)
+  {
+    $sql = "SELECT * FROM siswa LIMIT :limit OFFSET :offset";
+    $params = [
+      'limit' => $limit,
+      'offset' => $offset
+    ];
 
-    $countResult = $this->db->query(query: $countSql);
-    $totalCount = $countResult->fetch_assoc()['total'];
+    $data = $this->db->query($sql, $params);
 
-    if($totalCount < 2) {
-      $limit = 1;
-    }
+    // Menghitung total data siswa
+    $totalSql = "SELECT COUNT(*) as total FROM siswa";
+    $totalResult = $this->db->query($totalSql);
 
-    error_log("TOTAL : $totalCount");
-
-    // Membangun query dasar
-    $sql = "SELECT
-                nomor_induk_siswa, nama_lengkap, photo_siswa,
-                kelas, jenis_kelamin, tempat_lahir, tanggal_lahir,
-                nama_ayah, nama_ibu, rt, rw, desa, kecamatan, kabupaten,
-                provinsi, kode_pos, di_buat, di_perbarui
-            FROM tb_siswa";
-
-    // Menambahkan filter jika ada
-    if ($filterBy) {
-      $sql .= " WHERE " . $filterBy;
-    }
-
-    // Menambahkan pengurutan
-    if ($orderBy) {
-      $sql .= " ORDER BY " . $orderBy;
-    }
-
-    if ($limit >= 10 && $offset != null) {
-      $sql .= " LIMIT ? OFFSET ?";
-    } else {
-      $sql .= " LIMIT ? ";
-    }
-    error_log($sql);
-    // Menyiapkan dan mengeksekusi query
-    $stmt = $this->db->prepare(query: $sql);
-
-    if ($limit >= 10 && $offset != null) {
-      $stmt->bind_param("ii", $limit,$offset);
-    } else {
-      $stmt->bind_param("i", $limit);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $siswaData = $result->fetch_all(mode: MYSQLI_ASSOC);
-
-    // Mengembalikan hasil data siswa beserta total count
     return [
-      'total' => $totalCount, // Total data siswa
-      'data' => $siswaData,   // Data siswa hasil query pagination
+      'data' => $data,
+      'total' => $totalResult[0]['total'] ?? 0
     ];
   }
 
-
-  public function getDataSiswaById($id): array|bool|null
+  // Fungsi untuk mendapatkan data siswa berdasarkan ID
+  public function getSiswaById($id)
   {
-    $sql = "SELECT * FROM tb_siswa WHERE id = ?";
-    $stmt = $this->db->prepare($sql);
+    $sql = "SELECT * FROM siswa WHERE id = :id";
+    $params = ['id' => $id];
+    return $this->db->query($sql, $params)[0] ?? null;
+  }
 
-    $stmt->bind_param("i", $id);
+  // Fungsi untuk menambahkan data siswa
+  public function addSiswa($data)
+  {
+    $sql = "INSERT INTO siswa (nama_lengkap, nomor_induk, kelas, tanggal_lahir, jenis_kelamin)
+                VALUES (:nama_lengkap, :nomor_induk, :kelas, :tanggal_lahir, :jenis_kelamin)";
+    $params = [
+      'nama_lengkap' => $data['nama_lengkap'],
+      'nomor_induk' => $data['nomor_induk'],
+      'kelas' => $data['kelas'],
+      'tanggal_lahir' => $data['tanggal_lahir'],
+      'jenis_kelamin' => $data['jenis_kelamin']
+    ];
+    return $this->db->execute($sql, $params);
+  }
 
-    $stmt->execute();
-    $result = $stmt->get_result();
+  // Fungsi untuk mengupdate data siswa berdasarkan ID
+  public function updateSiswa($id, $data)
+  {
+    $sql = "UPDATE siswa
+                SET nama_lengkap = :nama_lengkap, nomor_induk = :nomor_induk, kelas = :kelas,
+                    tanggal_lahir = :tanggal_lahir, jenis_kelamin = :jenis_kelamin
+                WHERE id = :id";
+    $params = [
+      'id' => $id,
+      'nama_lengkap' => $data['nama_lengkap'],
+      'nomor_induk' => $data['nomor_induk'],
+      'kelas' => $data['kelas'],
+      'tanggal_lahir' => $data['tanggal_lahir'],
+      'jenis_kelamin' => $data['jenis_kelamin']
+    ];
+    return $this->db->execute($sql, $params);
+  }
 
-    return $result->fetch_assoc();
+  // Fungsi untuk menghapus data siswa berdasarkan ID
+  public function deleteSiswa($id)
+  {
+    $sql = "DELETE FROM siswa WHERE id = :id";
+    $params = ['id' => $id];
+    return $this->db->execute($sql, $params);
   }
 }

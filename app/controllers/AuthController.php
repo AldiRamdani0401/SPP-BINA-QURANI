@@ -1,80 +1,64 @@
 <?php
-require __DIR__ . "/../core/Controller.php";
-require __DIR__ . "/../core/Session.php";
 
-// Models
-require __DIR__ . "/../models/UserModel.php";
-
-class AuthController extends Controller
+class AuthController
 {
-  public function login(): void
+  public function login()
   {
-    $this->render(
-      role: '',
-      view: '/login',
-      data: [
-        "title" => "Login",
-      ]);
-  }
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+      // Database
+      $servername = "localhost";
+      $port = 9090;
+      $username = "root";
+      $password = "root";
+      $dbname = "db_spp_bina_qurani";
 
-  public function loginAction(): void
-  {
-    // Check if the request method is POST
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      // Retrieve and sanitize input data
-      $email = filter_input(type: INPUT_POST, var_name: 'email', filter: FILTER_SANITIZE_EMAIL);
-      $password = filter_input(type: INPUT_POST, var_name: 'password', filter: FILTER_SANITIZE_STRING);
+      $conn = new mysqli($servername, $username, $password, $dbname, $port);
 
-      // Validate input (basic example)
-      if (empty($email) || empty($password)) {
-        echo "Email and password are required.";
-        return;
+      if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
       }
 
-      // Fetch user by email
-      $userModel = new UserModel();
-      $user = $userModel->getUserByParams(params: ['email' => $email]); // Use associative array for params
+      $email = $_POST['email'];
+      $password = $_POST['password'];
 
-      if ($user && $password == $user[0]['password']) { // Adjust if using associative array
-        // Successful login
-        $session = new Session(key: 'aldiganteng');
+      $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+      $stmt->bind_param("ss", $email, $password);
+      $stmt->execute();
+      $result = $stmt->get_result();
 
-        // // Generate a token
-        $userData = [
-          'key1' => $user[0]['id'],
-          'key2' => $user[0]['email'],
-          'key3' => $user[0]['fullname'],
-          'key4' => $user[0]['role'],
-        ];
+      if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        require_once BASE_PATH . "/security/Session.php";
+        // GET & SET Session
+        $userRole = Sessions::generate([$user['id'], $user['role']]);
+        if ($userRole === 'admin') {
+            // Set storage_key di session
+            $_SESSION['storage_key'] = '112233';
 
-        // Set session variable
-        $token = $session->generateToken(data: $userData);
-        $session->set(key: 'access-token', value: $token);
+            // Set storage_key di cookie
+            setcookie("storage_key", "112233", time() + (86400 * 30), "/");
 
-        header(header: "Location: /" . $user[0]['role']); // Redirect to a protected area
-        exit();
+            // Redirect ke /admin
+            header("Location: /admin");
+            exit;
+
+        } else if ($user['role'] === 'user') {
+          // header("Location: /admin");
+        } else {
+          return false;
+        }
       } else {
-        echo "Invalid email or password.";
+        return header("Location: /?error=1");
       }
+
+      $stmt->close();
+      $conn->close();
+
     } else {
-      // If not a POST request, redirect to login
-      header(header: "Location: /login");
-      exit();
+      echo "forbidden";
+      return false;
     }
+    // $path = BASE_PATH . "/views/general/index.php";
+    // require_once $path;
   }
 }
-
-
-// $session = new Session('your-secret-key');
-
-// // Set session variable
-// $session->set('user_id', 123);
-
-// // Generate a token
-// $userData = ['user_id' => 123, 'username' => 'exampleUser'];
-// $token = $session->generateToken($userData);
-// echo "Generated Token: " . $token . PHP_EOL;
-
-// // Decode the token
-// $decodedData = $session->decodeToken($token);
-// print_r($decodedData);
