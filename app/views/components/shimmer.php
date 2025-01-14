@@ -1,3 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPP Bina Qur'ani</title>
+  <link rel="icon" type="image/png" href="http://localhost:100/images/logo/logo" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="
+  https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.all.min.js
+  "></script>
+  <link href="
+  https://cdn.jsdelivr.net/npm/sweetalert2@11.15.10/dist/sweetalert2.min.css
+  " rel="stylesheet">
+</head>
 <!-- Shimmer -->
 <style>
   .shimmer {
@@ -32,19 +49,22 @@
   }
 </style>
 
-<div class="shimmer" id="shimmer">
+<main class="shimmer" id="shimmer">
   <div class="flex flex-row justify-center items-center gap-2 px-2">
 
   <img src="http://localhost:100/images/logo/_/logo" alt="logo bina qur'ani" class="h-52">
   <div class="flex flex-col text-white text-left">
     <span class="font-semibold text-4xl">Portal Web SPP</span>
-    <span class="text-3xl">Bina Qur'ani Karawang</span>
+    <span class="text-3xl">Bina Qur'ani Karawang <?= $user['role']?></span>
   </div>
   </div>
-</div>
-
+</main>
+</body>
 <script>
+const role = "<?= $user['role']?>";
   setTimeout(function() {
-    document.getElementById('shimmer').style.display = 'none';
+    window.location.href = `/${role}`;
   }, 2000);
 </script>
+<!-- <script src="http://localhost:100/files/js/coba"></script> -->
+</html>

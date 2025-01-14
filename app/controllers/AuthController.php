@@ -38,8 +38,9 @@ class AuthController
             // Set storage_key di cookie
             setcookie("storage_key", "112233", time() + (86400 * 30), "/");
 
+            require BASE_PATH . "/views/components/shimmer.php";
             // Redirect ke /admin
-            header("Location: /admin");
+            // header("Location: /admin");
             exit;
 
         } else if ($user['role'] === 'user') {
