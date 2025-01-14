@@ -631,16 +631,45 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       const ibu = dt_ibu.find((data) => data.nama_lengkap == siswa.detail.nama_ibu);
       // ** NIK
       const editInputNikIbu = document.getElementById('edit-nik-ibu');
-      editInputNikIbu.value = ayah.nomor_identitas_kependudukan;
-      // // ** Nama Lengkap Ibu
+      editInputNikIbu.value = ibu.nomor_identitas_kependudukan;
+      // ** Nama Lengkap Ibu
       const editInputNamaIbu = document.getElementById('edit-nama-lengkap-ibu');
       editInputNamaIbu.value = ibu.nama_lengkap;
-      // // ** Email Ibu
+      // ** Email Ibu
       const editInputEmailIbu = document.getElementById('edit-email-ibu');
       editInputEmailIbu.value = ibu.email;
-      // // ** Nomor Telepon Ayah
-      // const editInputTeleponAyah = document.getElementById('edit-nomor-telepon-ayah');
-      // editInputTeleponAyah.value = ayah.nomor_telepon;
+      // ** Nomor Telepon Ibu
+      const editInputTeleponIbu = document.getElementById('edit-nomor-telepon-ibu');
+      editInputTeleponIbu.value = ibu.nomor_telepon;
+      // Data Alamat
+      // ** Provinsi
+      const editInputProvinsi = document.getElementById('edit-provinsi');
+      editInputProvinsi.value = siswa.detail.provinsi;
+      // ** Kabupaten
+      const editInputKabupaten = document.getElementById('edit-kabupaten');
+      editInputKabupaten.value = siswa.detail.kabupaten;
+      // ** Kabupaten
+      const editInputKecamatan = document.getElementById('edit-kecamatan');
+      editInputKecamatan.value = siswa.detail.kecamatan;
+      // ** Desa
+      const editInputDesa = document.getElementById('edit-desa');
+      editInputDesa.value = siswa.detail.desa;
+      // ** RT
+      const editInputRT = document.getElementById('edit-rt');
+      editInputRT.value = siswa.detail.rt;
+      // ** RW
+      const editInputRW = document.getElementById('edit-rw');
+      editInputRW.value = siswa.detail.rw;
+      // ** Kode Post
+      const editInputKodePost = document.getElementById('edit-kode-post');
+      editInputKodePost.value = siswa.detail.kode_pos;
+      // ** Photo Profile
+      // priview image
+      const editPhotoProfile = document.getElementById('edit-preview-image');
+      editPhotoProfile.src = siswa.detail.photo_siswa;
+      // input photo profile
+      const editInputPhotoProfile = document.getElementById('edit-photo-profile');
+      editInputPhotoProfile.src = siswa.detail.photo_siswa;
   }
 
   // DOM Load Content

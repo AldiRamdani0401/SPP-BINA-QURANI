@@ -20,7 +20,7 @@ if ($conn->connect_error) {
 }
 
 ?>
-<header class="flex flex-row bg-lime-800 py-1 justify-between shadow-2xl">
+<header class="flex flex-row bg-lime-700 py-1 justify-between shadow-2xl">
     <!-- Container 1: Logo -->
     <a href="/admin" class="select-pointer">
       <div class="flex flex-row justify-center items-center gap-2 px-2">
