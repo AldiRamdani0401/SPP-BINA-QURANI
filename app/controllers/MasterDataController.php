@@ -145,10 +145,16 @@ class MasterDataController
         }
     }
 
+    public function updateDataSiswa()
+    {
+        echo '<pre>';
+        var_dump($_POST);
+        echo '</pre>';
+    }
+
     public function orangTuaSiswa()
     {
-        echo "Master Data Orang Tua Siswa";
-        // $path = BASE_PATH . "/views/admin/index.php";
-        // require_once $path;
+        $path = BASE_PATH . "/views/admin/master-data/orang-tua-siswa/index.php";
+        require_once $path;
     }
 }

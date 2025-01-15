@@ -26,265 +26,222 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 <!-- Form Tambah Data Siswa -->
 <div class="flex flex-col gap-4 py-2 px-4 bg-white w-fit  h-fit rounded-xl shadow-xl">
   <div class="">
-    <h1 class="text-2xl text-slate-700 px-2 py-2 font-bold">Form Tambah Data Siswa</h1>
+    <h1 class="text-2xl text-slate-700 px-2 py-2 font-bold">Form Tambah Data Orang Tua</h1>
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Form Modal -->
   <form id="form-modal" method="POST" action="/master-data/siswa/create" enctype="multipart/form-data"
     class="flex flex-col gap-5 justify-between">
     <div class="flex flex-row gap-3 justify-between">
-      <!-- Container 1 : Data Diri Siswa -->
-      <div class="group flex flex-col w-64 gap-2 border py-2 px-3 rounded-md shadow-lg">
+      <!-- Container 1 : Data Orang Tua Siswa -->
+      <div class="group flex flex-col h-fit w-fit gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
         <!-- Title Card -->
         <div class="">
-          <div class="text-lg font-bold">Data Diri Siswa</div>
-          <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-blue-500 group-focus-within:bg-blue-500">
-        </div>
-        <!-- Nama Lengkap -->
-        <div class="group flex flex-col gap-1">
-          <label for="nama-lengkap" id="label-nama-lengkap" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Nama Lengkap Siswa :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nama-lengkap" name="nama-lengkap"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Nama Lengkap" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)" title="Nama Lengkap Siswa wajib diisi." required>
-        </div>
-        <!-- Nomor Induk Siswa -->
-        <div class="flex flex-col gap-1">
-          <label for="nomor-induk-siswa" id="label-nomor-induk-siswa" class="font-medium text-slate-700">
-            <span>NISN : </span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nomor-induk-siswa" inputmode="numeric"
-            name="nomor-induk-siswa"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            maxlength="10"
-            placeholder="Nomor Induk Siswa" title="Hanya menerima angka 0-9 (wajib: 10 digit)" required
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Tempat Lahir -->
-        <div class="group flex flex-col gap-1">
-          <label for="tempat-lahir" id="label-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Tempat Lahir :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="tempat-lahir" name="tempat-lahir"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 " required
-            placeholder="Tempat Lahir" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Tanggal Lahir -->
-        <div class="group flex flex-col gap-1">
-          <label for="tanggal-lahir" id="label-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Tanggal Lahir :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="date" id="tanggal-lahir" name="tanggal-lahir"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 ">
-        </div>
-        <!-- Jenis Kelamin -->
-        <div class="group flex flex-col gap-1">
-          <label for="jenis-kelamin" id="label-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Jenis Kelamin :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <select id="jenis-kelamin" name="jenis-kelamin"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
-            <option disabled selected value="">Pilih Jenis Kelamin</option>
-            <option value="L">👦🏻 Laki-Laki</option>
-            <option value="P">👧🏻 Perempuan</option>
-          </select>
-        </div>
-        <!-- Kelas -->
-        <div class="group flex flex-col gap-1">
-          <label for="kelas" id="label-kelas" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Kelas :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <select id="kelas" name="kelas"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
-            <option disabled selected value="">Pilih Kelas</option>
-          </select>
-        </div>
-      </div>
-      <!-- Container 2 : Data Orang Tua Siswa -->
-      <div class="group flex flex-col w-64 gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
-        <!-- Title Card -->
-        <div class="">
-          <div class="text-lg font-bold">Data Orang Tua</div>
+          <div class="text-lg font-bold">Data Diri</div>
           <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-green-500 group-focus-within:bg-blue-500">
         </div>
-        <!-- NIK Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="nik-ayah" id="label-nik-ayah" class="font-medium text-slate-700">
-            <span>NIK Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nik-ayah" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nik-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="NIK Ayah / Wali" title="Hanya menerima angka 0-9"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Nama Lengkap Ayah -->
-        <div class="group flex flex-col gap-1">
-          <label for="nama-lengkap-ayah" id="label-nama-lengkap-ayah" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Nama Lengkap Ayah / Wali :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nama-lengkap-ayah" name="nama-lengkap-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Nama Lengkap Ayah" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Email Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="email-ayah" id="label-email-ayah" class="font-medium text-slate-700">
-            <span>Email Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="email" id="email-ayah" name="email-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Masukkan email yang valid">
-        </div>
-        <!-- Nomor Telepon Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="nomor-telepon-ayah" id="label-nomor-telepon-ayah" class="font-medium text-slate-700">
-            <span>Nomor Telepon Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="tel" id="nomor-telepon-ayah" name="nomor-telepon-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
-            placeholder="08XX-XXXX-XXXX" pattern="08[0-9]{8,11}" maxlength="13"
-            title="Nomor telepon harus dimulai dengan '08' diikuti 8 hingga 11 digit angka."
-            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-        </div>
-        <!-- NIK Ibu -->
-        <div class="flex flex-col gap-1">
-          <label for="nik-ibu" id="label-nik-ibu" class="font-medium text-slate-700">
-            <span>NIK Ibu / Wali :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nik-ibu" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nik-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="NIK Ibu / Wali" title="Hanya menerima angka 0-9"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Nama Lengkap Ibu -->
-        <div class="group flex flex-col gap-1">
-          <label for="nama-lengkap-ibu" id="label-nama-lengkap-ibu" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Nama Lengkap Ibu / Wali :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="nama-lengkap-ibu" name="nama-lengkap-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Nama Lengkap Ibu" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Email Ibu -->
-        <div class="flex flex-col gap-1">
-          <label for="email-ibu" id="label-email-ibu" class="font-medium text-slate-700">
-            <span>Email Ibu :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="email" id="email-ibu" name="email-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Masukkan email yang valid">
-        </div>
-        <!-- Nomor Telepon Ibu -->
-        <div class="flex flex-col gap-1">
-          <label for="nomor-telepon-ibu" id="label-nomor-telepon-ibu" class="font-medium text-slate-700">
-            <span>Nomor Telepon Ibu :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="tel" id="nomor-telepon-ibu" name="nomor-telepon-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
-            placeholder="08XX-XXXX-XXXX" pattern="08[0-9]{8,11}" maxlength="13"
-            title="Nomor telepon harus dimulai dengan '08' diikuti 8 hingga 11 digit angka."
-            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-        </div>
+        <!-- Sub Container -->
+         <div class="flex flex-row gap-5">
+            <!-- Content 1 -->
+           <div class="flex flex-col">
+            <!-- NIK -->
+            <div class="flex flex-col gap-1">
+              <label for="nik" id="label-nik" class="font-medium text-slate-700 text-nowrap">
+                <span>Nomor Identitas Kependudukan (NIK) :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="nik" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nomor-identitas-kependudukan"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="NIK sesuai KTP" title="Pastikan sesuai KTP"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            </div>
+            <!-- Nama Lengkap -->
+            <div class="group flex flex-col gap-1">
+              <label for="nama-lengkap-ayah" id="label-nama-lengkap-ayah" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+                <span>Nama Lengkap :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="nama-lengkap" name="nama-lengkap"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Nama Lengkap sesuai KTP" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+            <!-- Tempat Lahir -->
+            <div class="group flex flex-col gap-1">
+              <label for="edit-tempat-lahir" id="label-edit-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+                <span>Tempat Lahir :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="edit-tempat-lahir" name="tempat-lahir"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 " required
+                placeholder="Tempat Lahir" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+            <!-- Tanggal Lahir -->
+            <div class="group flex flex-col gap-1">
+              <label for="edit-tanggal-lahir" id="label-edit-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+                <span>Tanggal Lahir :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="date" id="edit-tanggal-lahir" name="tanggal-lahir"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 ">
+            </div>
+            <!-- Jenis Kelamin -->
+            <div class="group flex flex-col gap-1">
+              <label for="edit-jenis-kelamin" id="label-edit-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+                <span>Jenis Kelamin :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <select id="edit-jenis-kelamin" name="jenis-kelamin"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
+                <option disabled selected value="">Pilih Jenis Kelamin</option>
+                <option value="L">👦🏻 Laki-Laki</option>
+                <option value="P">👧🏻 Perempuan</option>
+              </select>
+            </div>
+           </div>
+            <!-- Content 2 -->
+           <div class="flex flex-col">
+             <!-- Hubungan -->
+             <div class="group flex flex-col gap-1">
+               <label for="edit-jenis-kelamin" id="label-edit-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+                 <span>Hubungan :</span>
+                 <span id="empty" class="text-red-500 text-lg">*</span>
+               </label>
+               <select id="edit-jenis-kelamin" name="jenis-kelamin"
+                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
+                 <option disabled selected value="">Pilih Jenis Kelamin</option>
+                 <option value="Ayah">👦🏻 Ayah</option>
+                 <option value="Ibu">👧🏻 Ibu</option>
+               </select>
+             </div>
+             <!-- Email -->
+             <div class="flex flex-col gap-1">
+               <label for="email" id="label-email" class="font-medium text-slate-700">
+                 <span>Email :</span>
+                 <span id="empty" class="text-red-500 text-lg">*</span>
+               </label>
+               <input type="email" id="email" name="email"
+                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                 placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                 title="Masukkan email yang valid">
+             </div>
+             <!-- Nomor Telepon -->
+             <div class="flex flex-col gap-1">
+               <label for="nomor-telepon" id="label-nomor-telepon" class="font-medium text-slate-700">
+                 <span>Nomor Telepon :</span>
+                 <span id="empty" class="text-red-500 text-lg">*</span>
+               </label>
+               <input type="tel"
+                 id="nomor-telepon"
+                 name="nomor-telepon"
+                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
+                 placeholder="08XX-XXXX-XXXX"
+                 pattern="08[0-9]{8,11}"
+                 maxlength="13"
+                 title="Nomor telepon harus dimulai dengan '08' diikuti 8 hingga 11 digit angka."
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
+             </div>
+             <!-- Pekerjaan -->
+             <div class="flex flex-col gap-1">
+               <label for="pekerjaan" id="label-pekerjaan" class="font-medium text-slate-700">
+                 <span>Pekerjaan :</span>
+                 <span id="empty" class="text-red-500 text-lg">*</span>
+               </label>
+               <input type="text" id="pekerjaan" name="pekerjaan"
+                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                 placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                 title="Masukkan pekerjaan yang valid">
+             </div>
+           </div>
+         </div>
       </div>
       <!-- Container 3 : Alamat -->
-      <div class="group flex flex-col w-64 gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
+      <div class="group flex flex-col w-fit gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
         <!-- Title Card -->
         <div class="">
           <div class="text-lg font-bold">Alamat</div>
           <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-yellow-400 group-focus-within:bg-blue-500">
         </div>
-        <!-- Provinsi -->
-        <div class="flex flex-col gap-1">
-          <label for="provinsi" id="label-provinsi" class="font-medium text-slate-700">
-            <span>Provinsi :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="provinsi" name="provinsi"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Provinsi" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Kabupaten -->
-        <div class="flex flex-col gap-1">
-          <label for="kabupaten" id="label-kabupaten" class="font-medium text-slate-700">
-            <span>Kabupaten :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="kabupaten" name="kabupaten"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Kabupaten" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Kecamatan -->
-        <div class="flex flex-col gap-1">
-          <label for="kecamatan" id="label-kecamatan" class="font-medium text-slate-700">
-            <span>Kecamatan :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="kecamatan" name="kecamatan"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Kecamatan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- Desa / Kelurahan -->
-        <div class="flex flex-col gap-1">
-          <label for="desa" id="label-desa" class="font-medium text-slate-700">
-            <span>Desa / Kelurahan :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="desa" name="desa"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
-            placeholder="Desa / Kelurahan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
-        </div>
-        <!-- RT -->
-        <div class="flex flex-col gap-1">
-          <label for="rt" id="label-rt" class="font-medium text-slate-700">
-            <span>RT :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="rt" inputmode="numeric" name="rt"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Rukun Tetangga / RT" title="Hanya menerima angka 0-9"
-            maxlength="3"
-            requrired
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- RW -->
-        <div class="flex flex-col gap-1">
-          <label for="rw" id="label-rw" class="font-medium text-slate-700">
-            <span>RW :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="rw" inputmode="numeric" name="rw"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Rukun Warga / RW" title="Hanya menerima angka 0-9"
-            maxlength="3"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Kode Post -->
-        <div class="flex flex-col gap-1">
-          <label for="kode-post" id="label-kode-post" class="font-medium text-slate-700">
-            <span>Kode Post :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="kode-post" inputmode="numeric" name="kode-post"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Kode Post" title="Hanya menerima angka 0-9" maxlength="6"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        <div class="flex flex-row gap-5">
+          <div class="flex flex-col">
+            <!-- Provinsi -->
+            <div class="flex flex-col gap-1">
+              <label for="provinsi" id="label-provinsi" class="font-medium text-slate-700">
+                <span>Provinsi :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="provinsi" name="provinsi"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Provinsi" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+            <!-- Kabupaten -->
+            <div class="flex flex-col gap-1">
+              <label for="kabupaten" id="label-kabupaten" class="font-medium text-slate-700">
+                <span>Kabupaten :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="kabupaten" name="kabupaten"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Kabupaten" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+            <!-- Kecamatan -->
+            <div class="flex flex-col gap-1">
+              <label for="kecamatan" id="label-kecamatan" class="font-medium text-slate-700">
+                <span>Kecamatan :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="kecamatan" name="kecamatan"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Kecamatan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+            <!-- Desa / Kelurahan -->
+            <div class="flex flex-col gap-1">
+              <label for="desa" id="label-desa" class="font-medium text-slate-700">
+                <span>Desa / Kelurahan :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="desa" name="desa"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
+                placeholder="Desa / Kelurahan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <!-- RT -->
+            <div class="flex flex-col gap-1">
+              <label for="rt" id="label-rt" class="font-medium text-slate-700">
+                <span>RT :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="rt" inputmode="numeric" name="rt"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Rukun Tetangga / RT" title="Hanya menerima angka 0-9"
+                maxlength="3"
+                requrired
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            </div>
+            <!-- RW -->
+            <div class="flex flex-col gap-1">
+              <label for="rw" id="label-rw" class="font-medium text-slate-700">
+                <span>RW :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="rw" inputmode="numeric" name="rw"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Rukun Warga / RW" title="Hanya menerima angka 0-9"
+                maxlength="3"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            </div>
+            <!-- Kode Post -->
+            <div class="flex flex-col gap-1">
+              <label for="kode-post" id="label-kode-post" class="font-medium text-slate-700">
+                <span>Kode Post :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input type="text" id="kode-post" inputmode="numeric" name="kode-post"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+                placeholder="Kode Post" title="Hanya menerima angka 0-9" maxlength="6"
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            </div>
+          </div>
         </div>
       </div>
       <!-- Container 4 : Photo Profile -->
@@ -296,7 +253,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         </div>
         <!-- Preview -->
         <output id="preview-container" name="x" class="h-60 w-full">
-          <img src="http://localhost:100/images/logo/_/default-image" id="preview-image"
+          <img src="/images/logo/_/default-image" id="preview-image"
             class="h-full w-full border rounded-md object-cover" alt="default image">
         </output>
         <input type="file" id="photo-profile" name="photo-profile" accept="image/*" class="mt-2 border rounded-r-md"
@@ -422,14 +379,14 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     timer = setTimeout(() => {
       if (inputId == 'nik-ayah') {
         result = md_ayah.find((data) => data.nomor_identitas_kependudukan == value);
-                      document.getElementById('nama-lengkap-ayah').value = result?.nama_lengkap ?? '';
-                      document.getElementById('email-ayah').value = result?.email ?? '';
-                      document.getElementById('nomor-telepon-ayah').value = result?.nomor_telepon ?? '';
+        document.getElementById('nama-lengkap-ayah').value = result?.nama_lengkap ?? '';
+        document.getElementById('email-ayah').value = result?.email ?? '';
+        document.getElementById('nomor-telepon-ayah').value = result?.nomor_telepon ?? '';
       } else {
         result = md_ibu.find((data) => data.nomor_identitas_kependudukan == value);
-                      document.getElementById('nama-lengkap-ibu').value = result?.nama_lengkap ?? '';
-                      document.getElementById('email-ibu').value = result?.email ?? '';
-                      document.getElementById('nomor-telepon-ibu').value = result?.nomor_telepon ?? '';
+        document.getElementById('nama-lengkap-ibu').value = result?.nama_lengkap ?? '';
+        document.getElementById('email-ibu').value = result?.email ?? '';
+        document.getElementById('nomor-telepon-ibu').value = result?.nomor_telepon ?? '';
       }
       const nikElement = document.getElementById(inputId == 'nik-ayah' ? 'label-nik-ayah' : 'label-nik-ibu' );
       const namaLengkapElement = document.getElementById(inputId == 'nik-ayah' ? 'label-nama-lengkap-ayah' : 'label-nama-lengkap-ibu' );
@@ -638,7 +595,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       reader.readAsDataURL(file); // Membaca file sebagai data URL
     } else {
       // Jika tidak ada file, kembalikan ke gambar default
-      previewImage.src = "http://localhost:100/assets/images/default-image.png";
+      previewImage.src = "/images/logo/_/default-image";
     }
   };
 
@@ -670,7 +627,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   // ** Form Event
   document.getElementById('form-modal').addEventListener('reset', () => {
     const previewImage = document.getElementById('preview-image');
-    previewImage.src = "http://localhost:100/assets/images/default-image.png"; // Gambar default
+    previewImage.src = "/images/logo/_/default-image"; // Gambar default
     handlerResetLabels();
   });
   // ** Nama Lengkap Siswa : Input
