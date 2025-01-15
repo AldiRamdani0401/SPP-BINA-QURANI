@@ -26,7 +26,7 @@ $belumBayar = $result->fetch_assoc()['COUNT(*)'];
 <!-- Content -->
 <div class="flex flex-col w-[80%] gap-2 bg-slate-50 p-2">
   <!-- Container 1 : Banner -->
-  <div class="flex flex-row justify-center bg-slate-400 shadow-8xl w-full">
+  <div class="flex flex-row justify-center bg-slate-200 shadow-8xl w-full">
     <!-- CS Image -->
     <img src="http://localhost:100/images/logo/_/cs-dashboard" class="h-40 pt-2" alt="cs">
     <!-- Admin & Date -->
@@ -317,11 +317,11 @@ $belumBayar = $result->fetch_assoc()['COUNT(*)'];
       window.requestAnimationFrame(step);
     }
 
-    animateValue("total-siswa", 0, <?= $totalSiswa ?>, 2800);
-    animateValue("sudah-bayar", 0, <?= $sudahBayar ?>, 2800);
-    animateValue("belum-bayar", 0, <?= $belumBayar ?>, 2800);
-    animateValue("menunggu-verifikasi", 0, <?= $totalSiswa ?>, 2800);
-    animateValue("permohonan-tunggakan", 0, <?= $totalSiswa ?>, 2800);
+    animateValue("total-siswa", 0, <?= $totalSiswa ?>, 800);
+    animateValue("sudah-bayar", 0, <?= $sudahBayar ?>, 800);
+    animateValue("belum-bayar", 0, <?= $belumBayar ?>, 800);
+    animateValue("menunggu-verifikasi", 0, <?= $totalSiswa ?>, 800);
+    animateValue("permohonan-tunggakan", 0, <?= $totalSiswa ?>, 800);
   });
 
   // Fungsi untuk mendapatkan nama hari

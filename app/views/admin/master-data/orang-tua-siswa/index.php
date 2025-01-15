@@ -13,11 +13,18 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+// Load Data Orang Tua
+$stmt = $conn->prepare("SELECT nomor_identitas_kependudukan, nama_lengkap, email, nomor_telepon, hubungan, pekerjaan, tempat_lahir, tanggal_lahir, jenis_kelamin, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo FROM tb_orang_tua_siswa");
+$stmt->execute();
+$result = $stmt->get_result();
+$dataOrangTua = $result->fetch_all(MYSQLI_ASSOC);
+
 // Load Data Siswa
-$stmt = $conn->prepare("SELECT nomor_induk_siswa, nama_lengkap, kelas, jenis_kelamin, nama_ayah, nama_ibu, tempat_lahir, tanggal_lahir, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo_siswa FROM tb_siswa");
+$stmt = $conn->prepare("SELECT nomor_induk_siswa, nama_lengkap, nama_ayah, nama_ibu, tempat_lahir, tanggal_lahir, jenis_kelamin, kelas, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo_siswa FROM tb_siswa");
 $stmt->execute();
 $result = $stmt->get_result();
 $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <style>
@@ -39,9 +46,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 <div class="flex flex-col w-[80%] bg-slate-100">
   <!-- Container 1 : Banner -->
   <div class="flex flex-col justify-center w-full shadow-xl">
-    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white ">Master Data - Data Siswa</h1>
+    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white ">Master Data - Data Orang Tua Siswa</h1>
     <!-- Breadcrumb -->
-    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Master Data / Data Siswa</h2>
+    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Master Data / Data Orang Tua Siswa</h2>
   </div>
   <!-- Container 2 : Table -->
   <div class="w-full h-[70%] mt-5 px-2">
@@ -60,7 +67,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
           <div class="flex flex-row gap-2 text-sm rounded-sm">
             <select name="group-by" id="group-by" class="rounded-sm">
             </select>
-            <div id="cont-group-by-values" class="hidden flex flex-row gap-2">
+            <div id="cont-group-by-values" class="hidden  flex flex-row gap-2">
               <select name="group-by-values" id="group-by-values" class="rounded-sm">
               </select>
               <button id="btn-reset-group-by" class="bg-red-500 text-white px-2 rounded-md">reset</button>
@@ -96,12 +103,12 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
         <thead class="sticky top-[59px] shadow-sm">
           <tr class="bg-lime-100 text-sm font-medium">
             <td class="border py-1">No</td>
-            <td class="border py-1">Nomor Induk Siswa</td>
+            <td class="border py-1">Nomor Identitas Kependudukan</td>
             <td class="border py-1">Nama Lengkap</td>
-            <td class="border py-1">Kelas</td>
+            <td class="border py-1">Pekerjaan</td>
             <td class="border py-1">Jenis Kelamin</td>
-            <td class="border py-1">Nama Ayah</td>
-            <td class="border py-1">Nama Ibu</td>
+            <td class="border py-1">Nomor Telepon</td>
+            <td class="border py-1">Email</td>
             <td class="border py-1">Tempat Lahir</td>
             <td class="border py-1">Tanggal Lahir</td>
             <td class="border py-1">Action</td>
@@ -128,31 +135,53 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   <!-- Container 3 : Modal-Tambah -->
   <div id="container-modal-tambah" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 top-0">
     <!-- Container: Form Modal -->
-     <?php include "form.php"?>
+     <?php include "tambah.php"?>
   </div>
   <!-- Container 4 : Modal-Detail -->
-  <div id="container-modal-detail" class="flex hidden flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 left-0 right-0 top-0">
+  <div id="container-modal-detail" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
      <?php include "detail.php"?>
   </div>
   <!-- Container 5 : Modal-Edit -->
   <div id="container-modal-edit" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
-     <?php include "edit.php"?>
+     <?php //include "edit.php"?>
   </div>
 <script>
   // States
-  const siswa = {
-    main_datas: <?= json_encode($dataSiswa) ?>,
+  const md_siswa = <?= json_encode($dataSiswa)?>;
+
+  const orangTua = {
+    main_datas: <?= json_encode($dataOrangTua) ?>,
     render: [],
     filtered_data: [],
     detail: [],
     index: 0,
     limit: 10,
     load_data: 0,
-    total_data: <?= json_encode(count($dataSiswa)) ?>,
+    total_data: <?= json_encode(count($dataOrangTua)) ?>,
     current: 1,
-    total_page: 0
+    total_page: 0,
+    // Data Relation
+    anak: function () {
+          return md_siswa.find(
+            (data) =>
+              data.nama_ayah === this.detail.nama_lengkap ||
+              data.nama_ibu === this.detail.nama_lengkap
+          );
+        },
+    pasangan: function (pasangan, dataAnak) {
+          console.log(pasangan, dataAnak);
+          return this.main_datas.find(
+            (data) => {
+              if (data.nama_lengkap !== pasangan) {
+                if (data.nama_lengkap === dataAnak.nama_ayah || data.nama_lengkap === dataAnak.nama_ibu){
+                  return data;
+                }
+              }
+            }
+          );
+        },
   };
 
   const search = {
@@ -163,14 +192,14 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 
   // Handlers
   function initialValues() {
-    const datas = chunkArray(siswa.main_datas, siswa.limit);
-    siswa.index = 0;
-    siswa.render = datas[0];
-    siswa.limit = 10;
-    siswa.load_data = datas[0].length;
-    siswa.total_data = siswa.main_datas.length;
-    siswa.current = 1;
-    siswa.total_page = datas.length;
+    const datas = chunkArray(orangTua.main_datas, orangTua.limit);
+    orangTua.index = 0;
+    orangTua.render = datas[0];
+    orangTua.limit = 10;
+    orangTua.load_data = datas[0].length;
+    orangTua.total_data = orangTua.main_datas.length;
+    orangTua.current = 1;
+    orangTua.total_page = datas.length;
     setLimitOption();
   }
 
@@ -200,9 +229,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   // ** Limit
   const limitElement = document.getElementById('limit');
   function setLimitOption() {
-    console.log('custom data 1', siswa.filtered_data);
+    console.log('custom data 1', orangTua.filtered_data);
     limitElement.innerHTML = '';
-    const totalData = siswa.filtered_data.length > 0 ? siswa.total_data : siswa.main_datas.length;
+    const totalData = orangTua.filtered_data.length > 0 ? orangTua.total_data : orangTua.main_datas.length;
     console.log('total data', totalData);
 
     for (let i = 10; i <= totalData; i += 10) {
@@ -213,16 +242,16 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     }
     // ** Limit Handler
     limitElement.addEventListener("change", (e) => {
-      siswa.limit = parseInt(e.target.value);
-      siswa.render = [];
-      // console.log('custom data', siswa.filtered_data.flat());
-      // console.log('limit', siswa.limit);
-      const datas = siswa.filtered_data?.length > 0 ? (siswa.filtered_data = chunkArray(siswa.filtered_data.flat(), siswa.limit), siswa.filtered_data) : chunkArray(siswa.main_datas, siswa.limit);
-      siswa.render = datas[0];
-      siswa.index = 0;
-      siswa.current = 1;
-      siswa.load_data = siswa.limit;
-      siswa.total_page = datas.length;
+      orangTua.limit = parseInt(e.target.value);
+      orangTua.render = [];
+      // console.log('custom data', orangTua.filtered_data.flat());
+      // console.log('limit', orangTua.limit);
+      const datas = orangTua.filtered_data?.length > 0 ? (orangTua.filtered_data = chunkArray(orangTua.filtered_data.flat(), orangTua.limit), orangTua.filtered_data) : chunkArray(orangTua.main_datas, orangTua.limit);
+      orangTua.render = datas[0];
+      orangTua.index = 0;
+      orangTua.current = 1;
+      orangTua.load_data = orangTua.limit;
+      orangTua.total_page = datas.length;
       renderTable();
     });
   }
@@ -237,8 +266,8 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     disableOption.setAttribute('selected', true);
     groupByElement.appendChild(disableOption);
 
-    const keys = ['kelas', 'jenis_kelamin', 'tempat_lahir'];
-    const optionLabels = ['Kelas', 'Jenis Kelamin', 'Tempat Lahir'];
+    const keys = ['jenis_kelamin', 'tempat_lahir'];
+    const optionLabels = ['Jenis Kelamin', 'Tempat Lahir'];
 
     for (let i = 0; i < keys.length; i++) {
       const option = document.createElement('option');
@@ -318,9 +347,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   function renderLoadData() {
     const element = document.getElementById('load-data');
     element.innerHTML = `
-      <span id="load-data">${siswa.load_data}</span>
+      <span id="load-data">${orangTua.load_data}</span>
       <span class="font-semibold ">of</span>
-      <span>${siswa.total_data}</span>
+      <span>${orangTua.total_data}</span>
     `;
   }
 
@@ -328,33 +357,33 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     const element = document.getElementById('load-page');
     element.innerHTML = `
       <span class="bg-white px-1 text-sm rounded-sm">
-        <span class="font-semibold">Page:</span> ${siswa.current}
-        <span class="font-semibold">of</span> ${siswa.total_page}
+        <span class="font-semibold">Page:</span> ${orangTua.current}
+        <span class="font-semibold">of</span> ${orangTua.total_page}
       </span>
     `;
   }
 
   function nextPageHandle() {
-    console.log('filtered', siswa.filtered_data);
-    const datas = siswa.filtered_data.length > 0 ? siswa.filtered_data : chunkArray(siswa.main_datas, siswa.limit);
+    console.log('filtered', orangTua.filtered_data);
+    const datas = orangTua.filtered_data.length > 0 ? orangTua.filtered_data : chunkArray(orangTua.main_datas, orangTua.limit);
     console.log(datas);
-    console.log(siswa.current);
-    if (siswa.index + 1 >= datas.length || (siswa.filtered_data.length > 0 && (siswa.filtered_data && siswa.index + 1 >= siswa.filtered_data.length))) return false;
-    ++siswa.index;
-    ++siswa.current;
-    siswa.render = siswa.filtered_data.length > 0 ? siswa.filtered_data[siswa.index] : datas[siswa.index];
-    siswa.load_data = parseInt(siswa.load_data) + siswa.render.length;
+    console.log(orangTua.current);
+    if (orangTua.index + 1 >= datas.length || (orangTua.filtered_data.length > 0 && (orangTua.filtered_data && orangTua.index + 1 >= orangTua.filtered_data.length))) return false;
+    ++orangTua.index;
+    ++orangTua.current;
+    orangTua.render = orangTua.filtered_data.length > 0 ? orangTua.filtered_data[orangTua.index] : datas[orangTua.index];
+    orangTua.load_data = parseInt(orangTua.load_data) + orangTua.render.length;
     console.log('jalan');
     renderTable();
   }
 
   function prevPageHandle() {
-    const datas = chunkArray(siswa.main_datas, siswa.limit);
-    if (siswa.index == 0) return false;
-    --siswa.index;
-    --siswa.current;
-    siswa.render = siswa.filtered_data.length > 0 ? siswa.filtered_data[siswa.index] : datas[siswa.index];
-    siswa.load_data = siswa.index !== 0 ? siswa.load_data - siswa.render.length : siswa.limit;
+    const datas = chunkArray(orangTua.main_datas, orangTua.limit);
+    if (orangTua.index == 0) return false;
+    --orangTua.index;
+    --orangTua.current;
+    orangTua.render = orangTua.filtered_data.length > 0 ? orangTua.filtered_data[orangTua.index] : datas[orangTua.index];
+    orangTua.load_data = orangTua.index !== 0 ? orangTua.load_data - orangTua.render.length : orangTua.limit;
     renderTable();
   }
 
@@ -429,21 +458,21 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 
   function renderTable() {
     tableBodyElement.innerHTML = "";
-    siswa.render?.map((data, index) => {
+    orangTua.render?.map((data, index) => {
       const row = document.createElement('tr');
       row.className = 'group bg-lime-50 text-sm hover:bg-blue-50';
       row.innerHTML = `
-              <td class="border group-hover:font-medium">${siswa.index == 0 ? index + 1 : (siswa.index * siswa.limit) + index + 1}</td>
-              <td class="border group-hover:font-medium">${data.nomor_induk_siswa}</td>
+              <td class="border group-hover:font-medium">${orangTua.index == 0 ? index + 1 : (orangTua.index * orangTua.limit) + index + 1}</td>
+              <td class="border group-hover:font-medium">${data.nomor_identitas_kependudukan}</td>
               <td class="border group-hover:font-medium">${data.nama_lengkap}</td>
-              <td class="border group-hover:font-medium">${data.kelas}</td>
+              <td class="border group-hover:font-medium">${data.pekerjaan}</td>
               <td class="border group-hover:font-medium">${data.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan'}</td>
-              <td class="border group-hover:font-medium">${data.nama_ayah}</td>
-              <td class="border group-hover:font-medium">${data.nama_ibu}</td>
+              <td class="border group-hover:font-medium">${data.nomor_telepon}</td>
+              <td class="border group-hover:font-medium">${data.email}</td>
               <td class="border group-hover:font-medium">${data.tempat_lahir}</td>
               <td class="border group-hover:font-medium">${data.tanggal_lahir}</td>
               <td class="border h-full flex flex-row justify-center items-center py-1 gap-2">
-                <button class="px-2 bg-lime-600 text-white rounded-md hover:bg-lime-800" onclick="loadModalDetail(${data.nomor_induk_siswa})"> Detail</button>
+                <button class="px-2 bg-lime-600 text-white rounded-md hover:bg-lime-800" onclick="loadModalDetail(${data.nomor_identitas_kependudukan})"> Detail</button>
               </td>
             `;
       tableBodyElement.appendChild(row);
@@ -497,76 +526,8 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     });
   }
   // ** Modals Detail : Open
-  function loadModalDetail(nomorIndukSiswa) {
-    siswa.detail = siswa.main_datas.find((data) => parseInt(data.nomor_induk_siswa) === nomorIndukSiswa);
-    // Get & Set Elements
-    // ** Nama Lengkap Siswa
-    const namaLengkapSiswaElement = document.getElementById('nama-lengkap-value');
-    namaLengkapSiswaElement.innerText = siswa.detail.nama_lengkap;
-    // ** NISN
-    const nomorIndukSiswaElement = document.getElementById('nomor-induk-siswa-value');
-    nomorIndukSiswaElement.innerText = siswa.detail.nomor_induk_siswa;
-    // ** Tempat Lahir
-    const tempatLahirElement = document.getElementById('tempat-lahir-value');
-    tempatLahirElement.innerText = siswa.detail.tempat_lahir;
-    // ** Tanggal Lahir
-    const tanggalLahir = document.getElementById('tanggal-lahir-value');
-    tanggalLahir.innerText = Handler_Format_Date(siswa.detail.tanggal_lahir); // format: 15 Oktober 2025
-    // ** Tanggal Lahir
-    const jenisKelamin = document.getElementById('jenis-kelamin-value');
-    jenisKelamin.innerText = siswa.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
-    // ** Kelas
-    const kelas = document.getElementById('kelas-value');
-    kelas.innerText = siswa.detail.kelas;
-    // ** (Data Ayah: NIK, Nama Lengkap, Email, Nomor Telepon)
-    const nikAyah = document.getElementById('nik-ayah-value');
-    const namaAyah = document.getElementById('nama-lengkap-ayah-value');
-    const nomorTeleponAyah = document.getElementById('nomor-telepon-ayah-value');
-    const emailAyah = document.getElementById('email-ayah-value');
-    md_ayah.find((data) => {
-      if (data.nama_lengkap == siswa.detail.nama_ayah){
-        nikAyah.innerText = data.nomor_identitas_kependudukan;
-        namaAyah.innerText = data.nama_lengkap;
-        nomorTeleponAyah.innerText = data.nomor_telepon;
-        emailAyah.innerText = data.email;
-      }
-    });
-    // ** (Data Ibu: NIK, Nama Lengkap, Email, Nomor Telepon)
-    const nikIbu = document.getElementById('nik-ibu-value');
-    const namaIbu = document.getElementById('nama-lengkap-ibu-value');
-    const nomorTeleponIbu = document.getElementById('nomor-telepon-ibu-value');
-    const emailIbu = document.getElementById('email-ibu-value');
-    md_ibu.find((data) => {
-      if (data.nama_lengkap == siswa.detail.nama_ibu){
-        nikIbu.innerText = data.nomor_identitas_kependudukan;
-        namaIbu.innerText = data.nama_lengkap;
-        nomorTeleponIbu.innerText = data.nomor_telepon;
-        emailIbu.innerText = data.email;
-      }
-    });
-  // ** Provinsi
-  const provinsi = document.getElementById('provinsi-value');
-  provinsi.innerText = siswa.detail.provinsi;
-  // ** Kabupaten
-  const kabupaten = document.getElementById('kabupaten-value');
-  kabupaten.innerText = siswa.detail.kabupaten;
-  // ** Kecamatan
-  const kecamatan = document.getElementById('kecamatan-value');
-  kecamatan.innerText = siswa.detail.kecamatan;
-  // ** Desa / Kelurahan
-  const desa = document.getElementById('desa-value');
-  // ** RT / RW
-  const rt = document.getElementById('rt-value');
-  rt.innerText = siswa.detail.rt;
-  const rw = document.getElementById('rw-value');
-  rw.innerText = siswa.detail.rw;
-  // ** Kode Post
-  const kodePost = document.getElementById('kode-post-value');
-  kodePost.innerText = siswa.detail.kode_pos;
-  // ** Photo Profile Siswa
-  const photoProfileSiswa = document.getElementById('detail-photo-profile');
-  photoProfileSiswa.src = siswa.detail.photo_siswa ?? '/images/students/_/default-image';
-
+  function loadModalDetail(nik) {
+    // Container
     const elements = document.getElementById('container-modal-detail');
       elements.classList.remove('hidden');
       elements.classList.add('absolute');
@@ -574,6 +535,96 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     if (swalMask) {
       elements.removeChild(swalMask);
     }
+
+    // Get Detail Data
+    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === nik);
+    console.log(orangTua.detail);
+
+    // Get Data Anak
+    const dataAnak = orangTua.anak();
+    const dataPasangan = orangTua.pasangan(orangTua.detail.nama_lengkap, dataAnak);
+    console.log(dataPasangan);
+
+    // Get & Set Elements
+    // ** Nama Lengkap Orang Tua
+    const namaLengkapOrangTuaElement = document.getElementById('nama-lengkap-value');
+    namaLengkapOrangTuaElement.innerText = orangTua.detail.nama_lengkap;
+    // ** NIK
+    const nikOrangTuaElement = document.getElementById('nik-orangtua-value');
+    nikOrangTuaElement.innerText = orangTua.detail.nomor_identitas_kependudukan;
+    // ** Tempat Lahir
+    const tempatLahirElement = document.getElementById('tempat-lahir-value');
+    tempatLahirElement.innerText = orangTua.detail.tempat_lahir;
+    // ** Tanggal Lahir
+    const tanggalLahir = document.getElementById('tanggal-lahir-value');
+    tanggalLahir.innerText = Handler_Format_Date(orangTua.detail.tanggal_lahir); // format: 15 Oktober 2025
+    // ** Jenis Kelamin
+    const jenisKelamin = document.getElementById('jenis-kelamin-value');
+    jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    // ** Nomor Telepon
+    const nomorTelepon = document.getElementById('nomor-telepon-value');
+    nomorTelepon.innerText = orangTua.detail.nomor_telepon;
+    // ** Email
+    const email = document.getElementById('email-value');
+    email.innerText = orangTua.detail.email;
+    // ** Pekerjaan
+    const pekerjaan = document.getElementById('pekerjaan-value');
+    pekerjaan.innerText = orangTua.detail.pekerjaan;
+
+    // ** (Data Pasangan: NIK, Nama Lengkap, Email, Nomor Telepon)
+    const labelPasangan = document.getElementById('label-pasangan');
+    labelPasangan.innerText = orangTua.detail.hubungan === "Ayah" ? 'Istri' : 'Suami';
+    const nikPasangan = document.getElementById('nik-pasangan-value');
+    nikPasangan.innerText = dataPasangan.nomor_identitas_kependudukan;
+    const namaPasangan = document.getElementById('nama-lengkap-pasangan-value');
+    namaPasangan.innerText = dataPasangan.nama_lengkap;
+    const tempatLahirPasangan = document.getElementById('tempat-lahir-pasangan-value');
+    tempatLahirPasangan.innerText = dataPasangan.tempat_lahir;
+    const tanggalLahirPasangan = document.getElementById('tanggal-lahir-pasangan-value');
+    tanggalLahirPasangan.innerText = Handler_Format_Date(dataPasangan.tanggal_lahir);
+    const jenisKelaminPasangan = document.getElementById('jenis-kelamin-pasangan-value');
+    jenisKelaminPasangan.innerText = dataPasangan.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';;
+    const nomorTeleponPasangan = document.getElementById('nomor-telepon-pasangan-value');
+    nomorTeleponPasangan.innerText = dataPasangan.nomor_telepon;
+    const emailPasangan = document.getElementById('email-pasangan-value');
+        emailPasangan.innerText = dataPasangan.email;
+    const pekerjaanPasangan = document.getElementById('pekerjaan-pasangan-value');
+        pekerjaanPasangan.innerText = dataPasangan.pekerjaan;
+    // ** (Data Anak: NISN, Nama Lengkap, Kelas, Tempat Lahir, Tanggal Lahir)
+    const nisnSiswa = document.getElementById('nisn-anak-value');
+      nisnSiswa.innerText = dataAnak.nomor_induk_siswa;
+    const namaLengkapAnak = document.getElementById('nama-lengkap-anak-value');
+      namaLengkapAnak.innerText = dataAnak.nama_lengkap;
+    const jenisKelaminAnak = document.getElementById('jenis-kelamin-anak-value');
+      jenisKelaminAnak.innerText = dataAnak.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    const kelasAnak = document.getElementById('kelas-anak-value');
+      kelasAnak.innerText = dataAnak.kelas;
+    const tempatLahirAnak = document.getElementById('tempat-lahir-anak-value');
+      tempatLahirAnak.innerText = dataAnak.tempat_lahir;
+    const tanggalLahirAnak = document.getElementById('tanggal-lahir-anak-value');
+      tanggalLahirAnak.innerText = Handler_Format_Date(dataAnak.tanggal_lahir);
+  // ** Provinsi
+  const provinsi = document.getElementById('provinsi-value');
+  provinsi.innerText = orangTua.detail.provinsi;
+  // ** Kabupaten
+  const kabupaten = document.getElementById('kabupaten-value');
+  kabupaten.innerText = orangTua.detail.kabupaten;
+  // ** Kecamatan
+  const kecamatan = document.getElementById('kecamatan-value');
+  kecamatan.innerText = orangTua.detail.kecamatan;
+  // ** Desa / Kelurahan
+  const desa = document.getElementById('desa-value');
+  // ** RT / RW
+  const rt = document.getElementById('rt-value');
+  rt.innerText = orangTua.detail.rt;
+  const rw = document.getElementById('rw-value');
+  rw.innerText = orangTua.detail.rw;
+  // ** Kode Post
+  const kodePost = document.getElementById('kode-post-value');
+  kodePost.innerText = orangTua.detail.kode_pos;
+  // ** Photo Profile Siswa
+  const photoProfile = document.getElementById('detail-photo-profile');
+  photoProfile.src = orangTua.detail.photo;
   }
   // ** Modals Detail : Close
   function closeModalDetail() {
@@ -688,6 +739,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     getBtnPagination();
     getInputSearch();
     // test
-    siswa.detail = siswa.main_datas.find((data) => parseInt(data.nomor_induk_siswa) === 112101);
+    // loadModalDetail(3275010101990001);
+    loadModalTambah();
   });
 </script>
