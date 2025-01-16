@@ -169,8 +169,7 @@ class MasterDataController
     // Biaya SPP
     public function spp()
     {
-        echo 'Biaya SPP';
-        // $path = BASE_PATH . "/views/admin/master-data/kelas/index.php";
-        // require_once $path;
+        $path = BASE_PATH . "/views/admin/master-data/biaya-spp/index.php";
+        require_once $path;
     }
 }
