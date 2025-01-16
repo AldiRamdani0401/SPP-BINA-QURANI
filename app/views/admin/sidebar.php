@@ -55,22 +55,22 @@
               </svg><span>Data Orang Tua Siswa</span></a>
           </li>
           <li>
-            <button
+            <a href="/admin/master-data/kelas"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path
                   d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783" />
               </svg>
-              <span>Data Kelas</span></button>
+              <span>Data Kelas</span></a>
           </li>
           <li>
-            <button
+            <a href="/admin/master-data/biaya-spp"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
-              <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 24 24" {...props}>
+              <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm1-11v2h1a3 3 0 0 1 0 6h-1v1a1 1 0 0 1-2 0v-1H8a1 1 0 0 1 0-2h3v-2h-1a3 3 0 0 1 0-6h1V6a1 1 0 0 1 2 0v1h3a1 1 0 0 1 0 2h-3zm-2 0h-1a1 1 0 1 0 0 2h1V9zm2 6h1a1 1 0 0 0 0-2h-1v2z" />
               </svg>
-              <span>Data Biaya SPP</span></button>
+              <span>Data Biaya SPP</span></a>
           </li>
           <li>
             <button

@@ -152,9 +152,25 @@ class MasterDataController
         echo '</pre>';
     }
 
+    // Orang Tua Siswa
     public function orangTuaSiswa()
     {
         $path = BASE_PATH . "/views/admin/master-data/orang-tua-siswa/index.php";
         require_once $path;
+    }
+
+    // Kelas
+    public function kelas()
+    {
+        $path = BASE_PATH . "/views/admin/master-data/kelas/index.php";
+        require_once $path;
+    }
+
+    // Biaya SPP
+    public function spp()
+    {
+        echo 'Biaya SPP';
+        // $path = BASE_PATH . "/views/admin/master-data/kelas/index.php";
+        // require_once $path;
     }
 }

@@ -23,10 +23,16 @@ class App
 
     // == ADMIN ==
     $this->routes->get("/admin", "AdminController@index", $middleware = true);
+    // ** siswa **
     $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
     $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
     $this->routes->post("/master-data/siswa/{siswa_id}/update", "MasterDataController@updateDataSiswa", $middleware = true);
+    // ** orang tua siswa **
     $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+    // ** kelas **
+    $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);
+    // ** biaya spp **
+    $this->routes->get("/admin/master-data/biaya-spp", "MasterDataController@spp", $middleware = true);
 
     // == FILES ==
     $this->routes->get("/{main_folder}/{sub_folder}/{nested_folder}/{file_name}", "FileController@load", $middleware = false);
