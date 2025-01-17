@@ -1,7 +1,7 @@
 <?php
 require BASE_PATH . "/helpers/files/Helper_Images.php";
 
-class MasterDataController
+class PengaturanSppController
 {
     // Database
     private $servername = "localhost";
@@ -34,10 +34,20 @@ class MasterDataController
     private $kodePos;
     private $photoProfile;
 
-    public function siswa()
+    // Biaya SPP
+    public function biayaSpp()
     {
-        $path = BASE_PATH . "/views/admin/master-data/siswa/index.php";
-        require_once $path;
+        echo 'Biaya Spp';
+    //   $path = BASE_PATH . "/views/admin/pembayaran-spp/verifikasi/index.php";
+    //   require_once $path;
+    }
+
+    // Kategori SPP
+    public function kategoriSpp()
+    {
+        echo 'Kategori Spp';
+    //   $path = BASE_PATH . "/views/admin/pengaturan-spp/kategori/index.php";
+    //   require_once $path;
     }
 
     public function createDataSiswa()
@@ -150,40 +160,5 @@ class MasterDataController
         echo '<pre>';
         var_dump($_POST);
         echo '</pre>';
-    }
-
-    // Orang Tua Siswa
-    public function orangTuaSiswa()
-    {
-        $path = BASE_PATH . "/views/admin/master-data/orang-tua-siswa/index.php";
-        require_once $path;
-    }
-
-    // Kelas
-    public function kelas()
-    {
-        $path = BASE_PATH . "/views/admin/master-data/kelas/index.php";
-        require_once $path;
-    }
-
-    // Biaya SPP
-    public function spp()
-    {
-        $path = BASE_PATH . "/views/admin/master-data/biaya-spp/index.php";
-        require_once $path;
-    }
-
-    // Pembayaran
-    public function pembayaran()
-    {
-        $path = BASE_PATH . "/views/admin/master-data/pembayaran/index.php";
-        require_once $path;
-    }
-
-    // Admin
-    public function admin()
-    {
-        $path = BASE_PATH . "/views/admin/master-data/admin/index.php";
-        require_once $path;
     }
 }

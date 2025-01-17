@@ -73,23 +73,23 @@
               <span>Data Biaya SPP</span></a>
           </li>
           <li>
-            <button
+            <a href="/admin/master-data/pembayaran"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M6 2h9a1 1 0 0 1 .7.3l4 4a1 1 0 0 1 .3.7v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm9 2.41V7h2.59L15 4.41zM18 9h-3a2 2 0 0 1-2-2V4H6v16h12V9zm-2 7a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm0-4a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm-5-4a1 1 0 0 1-1 1H9a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1z" />
               </svg>
-              <span>Data Pembayaran</span></button>
+              <span>Data Pembayaran</span></a>
           </li>
           <li>
-            <button
+            <a href="/admin/master-data/admin"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                 <path
                   d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492z" />
               </svg>
-              <span>Data Admin</span></button>
+              <span>Data Admin</span></a>
           </li>
         </ul>
       </div>
@@ -115,16 +115,16 @@
       <div id="dropdown-pembayaran-spp" class="hidden">
         <ul class="bg-slate-500">
           <li>
-            <button
+            <a href="/admin/pembayaran-spp/verifikasi"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path
                   d="M0 5a5 5 0 0 0 4.027 4.905 6.5 6.5 0 0 1 .544-2.073C3.695 7.536 3.132 6.864 3 5.91h-.5v-.426h.466V5.05q-.001-.07.004-.135H2.5v-.427h.511C3.236 3.24 4.213 2.5 5.681 2.5c.316 0 .59.031.819.085v.733a3.5 3.5 0 0 0-.815-.082c-.919 0-1.538.466-1.734 1.252h1.917v.427h-1.98q-.004.07-.003.147v.422h1.983v.427H3.93c.118.602.468 1.03 1.005 1.229a6.5 6.5 0 0 1 4.97-3.113A5.002 5.002 0 0 0 0 5m16 5.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m-7.75 1.322c.069.835.746 1.485 1.964 1.562V14h.54v-.62c1.259-.086 1.996-.74 1.996-1.69 0-.865-.563-1.31-1.57-1.54l-.426-.1V8.374c.54.06.884.347.966.745h.948c-.07-.804-.779-1.433-1.914-1.502V7h-.54v.629c-1.076.103-1.808.732-1.808 1.622 0 .787.544 1.288 1.45 1.493l.358.085v1.78c-.554-.08-.92-.376-1.003-.787zm1.96-1.895c-.532-.12-.82-.364-.82-.732 0-.41.311-.719.824-.809v1.54h-.005zm.622 1.044c.645.145.943.38.943.796 0 .474-.37.8-1.02.86v-1.674z" />
               </svg>
-              <span>Rekapitulasi</span></button>
+              <span>Verifikasi</span></a>
           </li>
           <li>
-            <button
+            <a href="/admin/pembayaran-spp/tunggakan"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path
@@ -132,7 +132,7 @@
                 <path
                   d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
               </svg>
-              </svg><span>Tunggakan</span></button>
+              </svg><span>Tunggakan</span></a>
           </li>
         </ul>
       </div>
@@ -158,17 +158,19 @@
       <!-- ** Dropdown Pengaturan SPP ** -->
       <div id="dropdown-pengaturan-spp" class="hidden">
         <ul class="bg-slate-500">
+          <!-- Biaya SPP -->
           <li>
-            <button
+            <a href="/admin/pengaturan-spp/biaya-spp"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path
                   d="M0 5a5 5 0 0 0 4.027 4.905 6.5 6.5 0 0 1 .544-2.073C3.695 7.536 3.132 6.864 3 5.91h-.5v-.426h.466V5.05q-.001-.07.004-.135H2.5v-.427h.511C3.236 3.24 4.213 2.5 5.681 2.5c.316 0 .59.031.819.085v.733a3.5 3.5 0 0 0-.815-.082c-.919 0-1.538.466-1.734 1.252h1.917v.427h-1.98q-.004.07-.003.147v.422h1.983v.427H3.93c.118.602.468 1.03 1.005 1.229a6.5 6.5 0 0 1 4.97-3.113A5.002 5.002 0 0 0 0 5m16 5.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m-7.75 1.322c.069.835.746 1.485 1.964 1.562V14h.54v-.62c1.259-.086 1.996-.74 1.996-1.69 0-.865-.563-1.31-1.57-1.54l-.426-.1V8.374c.54.06.884.347.966.745h.948c-.07-.804-.779-1.433-1.914-1.502V7h-.54v.629c-1.076.103-1.808.732-1.808 1.622 0 .787.544 1.288 1.45 1.493l.358.085v1.78c-.554-.08-.92-.376-1.003-.787zm1.96-1.895c-.532-.12-.82-.364-.82-.732 0-.41.311-.719.824-.809v1.54h-.005zm.622 1.044c.645.145.943.38.943.796 0 .474-.37.8-1.02.86v-1.674z" />
               </svg>
-              <span>Biaya SPP</span></button>
+              <span>Biaya SPP</span></a>
           </li>
+          <!-- Kategori SPP -->
           <li>
-            <button
+            <a href="/admin/pengaturan-spp/kategori-spp"
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
               <svg width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
                 <path
@@ -176,8 +178,9 @@
                 <path
                   d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
               </svg>
-              <span>Kategori SPP</span></button>
+              <span>Kategori SPP</span></a>
           </li>
+          <!-- Status SPP -->
           <li>
             <button
               class="flex flex-row items-center gap-2 py-2 pl-5 text-left text-white border-t-[1px] border-[#03130741] w-full hover:text-slate-800 hover:bg-slate-200 hover:font-semibold">
