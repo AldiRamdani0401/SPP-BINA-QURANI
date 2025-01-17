@@ -1,5 +1,8 @@
-app/**/old/
-*/old/
+<<<<<<< HEAD
 
-public/assets/images/siswa
-public/assets/images/ali.png
+=======
+*old
+>>>>>>> 7e1ddd7 (fix: edit form data siswa)
+websocket-server.js
+*.json
+node_modules

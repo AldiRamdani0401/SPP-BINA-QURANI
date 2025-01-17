@@ -1,30 +1,97 @@
 <?php
 
-require "core/Router.php";
-require __DIR__ . "/../app/handlers/ErrorHandler.php";
+require_once 'Routes.php';
 
-class App {
-    protected $router;
+class App
+{
+  private $routes;
 
-    public function __construct() {
-        $errorHandler = new ErrorHandler();
-        $this->router = new Router(errorHandler: $errorHandler);
-    }
+  public function __construct()
+  {
+    $this->routes = new Routes();
+    $this->initializeRoutes();
+  }
 
-    public function get($route, $controller, $action, $middleware = []) {
-        $this->router->get($route, $controller, $action, $middleware);
-    }
+  /** INITIAL ROUTES
+   *
+  **/
+  private function initializeRoutes()
+  {
+    /* ======= AUTH =========== */
+      $this->routes->post("/login", "AuthController@login", $middleware = false);
+    /* ======= End of AUTH ===== */
 
-    public function post($route, $controller, $action, $middleware = []) {
-        $this->router->post($route, $controller, $action, $middleware);
-    }
+    /* ======= GENERAL =========== */
+      $this->routes->get("/", "GeneralController@index", $middleware = false);
+    /* ======= End of GENERAL ===== */
 
-    public function run() {
-        try {
-            $this->router->dispatch();
-        } catch (Exception $e) {
-            // Handle any other exceptions that are not caught by Router
-            echo $e->getMessage();
-        }
-    }
+    /* ======= ADMIN =========== */
+    /* @@@ DASHBOARD @@@ */
+      $this->routes->get("/admin", "AdminController@index", $middleware = true);
+    /* @@@ MASTER DATA @@@ */
+        /* >>> siswa <<< */
+        $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
+        $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
+        $this->routes->post("/master-data/siswa/{siswa_id}/update", "MasterDataController@updateDataSiswa", $middleware = true);
+        /* >>> orang tua siswa <<< */
+        $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+        /* >>> kelas <<< */
+        $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);
+        /* >>> biaya spp <<< */
+        $this->routes->get("/admin/master-data/biaya-spp", "MasterDataController@spp", $middleware = true);
+        /* >>> pembayaran <<< */
+        $this->routes->get("/admin/master-data/pembayaran", "MasterDataController@pembayaran", $middleware = true);
+        /* >>> admin <<< */
+        $this->routes->get("/admin/master-data/admin", "MasterDataController@admin", $middleware = true);
+    /* @@@ End of MASTER DATA @@@ */
+
+    /* @@@ PEMBAYARAN SPP @@@ */
+        /* >>> verifikasi <<< */
+        $this->routes->get("/admin/pembayaran-spp/verifikasi", "PembayaranSppController@verifikasi", $middleware = true);
+        /* >>> tunggakan <<< */
+        $this->routes->get("/admin/pembayaran-spp/tunggakan", "PembayaranSppController@tunggakan", $middleware = true);
+    /* @@@ End of PEMBAYARAN SPP @@@ */
+
+    /* @@@ PENGATURAN SPP @@@ */
+        /* >>> biaya spp <<< */
+        $this->routes->get("/admin/pengaturan-spp/biaya-spp", "PengaturanSppController@biayaSpp", $middleware = true);
+        /* >>> kategori spp <<< */
+        $this->routes->get("/admin/pengaturan-spp/kategori-spp", "PengaturanSppController@kategoriSpp", $middleware = true);
+        /* >>> status spp <<< */
+        $this->routes->get("/admin/pengaturan-spp/status-spp", "PengaturanSppController@statusSpp", $middleware = true);
+    /* @@@ End of PENGATURAN SPP @@@ */
+
+    /* @@@ MANAJEMEN AKUN @@@ */
+        /* >>> pengguna <<< */
+        $this->routes->get("/admin/pengaturan-spp/biaya-spp", "PengaturanSppController@biayaSpp", $middleware = true);
+        /* >>> profile <<< */
+    /* @@@ End of MANAJEMEN AKUN @@@ */
+
+    /* @@@ LAPORAN & STATISTIK @@@ */
+        /* >>> pembayaran <<< */
+        $this->routes->get("/admin/pengaturan-spp/biaya-spp", "PengaturanSppController@biayaSpp", $middleware = true);
+        /* >>> tunggakan <<< */
+    /* @@@ End of LAPORAN & STATISTIK @@@ */
+
+    /* @@@ PENGATURAN APLIKASI @@@ */
+        /* >>> notifikasi <<< */
+        $this->routes->get("/admin/pengaturan-spp/biaya-spp", "PengaturanSppController@biayaSpp", $middleware = true);
+    /* @@@ End of PENGATURAN APLIKASI @@@ */
+    /* ======= End of ADMIN ==== */
+
+    /* ======= SYSTEM =========== */
+    /* @@@ STORAGES @@@ */
+      /* >>> FILES <<< */
+      $this->routes->get("/{main_folder}/{sub_folder}/{nested_folder}/{file_name}", "FileController@load", $middleware = false);
+      /* >>> FILES <<< */
+    /* @@@ End of STORAGES @@@ */
+    /* ======= End of SYSTEM ==== */
+
+    /** Get URL & HTTP Method **/
+    $url = $_SERVER['REQUEST_URI'];
+    $method = $_SERVER['REQUEST_METHOD'];
+
+    /** Resolve Route **/
+    $this->routes->resolve($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
+  }
 }

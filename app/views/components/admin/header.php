@@ -31,8 +31,8 @@
     <div class="no-select sticky top-0 z-20">
       <?php require __DIR__ . "/../../components/admin/navbar.php" ?>
     </div>
-      <div class="flex flex-1">
-        <aside class="no-select h-full w-72 fixed p-0" style="background:#8FA06A;">
+      <div class="flex min-w-screen flex-1">
+        <aside class="no-select h-full w-72 fixed p-0 z-10" style="background:#8FA06A;">
           <?php require __DIR__ . "/../../components/admin/sidebar.php" ?>
         </aside>
         <div id="admin-content" class="flex-1 z-10">

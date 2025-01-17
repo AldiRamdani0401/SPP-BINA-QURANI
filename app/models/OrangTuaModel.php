@@ -5,11 +5,11 @@ class OrangTuaModel extends Model
   public function getAllDataOrangTua(): array
   {
     $sql = "SELECT
-        id, nama_lengkap,nomor_identitas_kependudukan,tempat_lahir
-        ,tanggal_lahir,jenis_kelamin,photo,rt,rw,desa,kecamatan
-        ,kabupaten,provinsi,kode_pos,di_buat,di_perbarui,email
-        ,nomor_telepon,hubungan,pekerjaan
+        nomor_identitas_kependudukan, nama_lengkap, photo, tempat_lahir,
+        email, nomor_telepon, tanggal_lahir, jenis_kelamin, rt, rw, desa,
+        kecamatan, kabupaten, provinsi, kode_pos, hubungan, pekerjaan, di_buat, di_perbarui
       FROM tb_orang_tua_siswa";
+
     $result = $this->db->query(query: $sql);
     return $result->fetch_all(mode: MYSQLI_ASSOC); // Mengambil semua baris hasil sebagai array associative
   }
