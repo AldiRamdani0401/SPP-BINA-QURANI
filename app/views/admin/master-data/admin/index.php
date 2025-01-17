@@ -46,9 +46,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 <div class="flex flex-col w-[80%] bg-slate-100">
   <!-- Container 1 : Banner -->
   <div class="flex flex-col justify-center w-full shadow-xl">
-    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white ">Master Data - Data Biaya SPP</h1>
+    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white ">Master Data - Data Admin</h1>
     <!-- Breadcrumb -->
-    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Master Data / Data Biaya SPP</h2>
+    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Master Data / Data Admin</h2>
   </div>
   <!-- Container 2 : Table -->
   <div class="w-full h-[70%] mt-5 px-2">

@@ -5,5 +5,4 @@
 </footer>
 </body>
 <!-- <script src="http://localhost:100/files/js/coba"></script> -->
-
 </html>

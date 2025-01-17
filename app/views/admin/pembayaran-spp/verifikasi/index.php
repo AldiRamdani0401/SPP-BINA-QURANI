@@ -43,18 +43,87 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 
 </style>
 <!-- Content -->
-<div class="flex flex-col w-[80%] bg-slate-100">
+<div class="flex flex-col w-[80%] bg-slate-50">
   <!-- Container 1 : Banner -->
   <div class="flex flex-col justify-center w-full shadow-xl">
-    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white ">Master Data - Data Biaya SPP</h1>
+    <h1 class="text-xl px-3 py-1 font-bold bg-[#001A6E] text-white">Pembayaran SPP - Verifikasi</h1>
     <!-- Breadcrumb -->
-    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Master Data / Data Biaya SPP</h2>
+    <h2 class="px-3 bg-slate-100 text-sm font-medium border">Pembayaran SPP / <span class="text-blue-600">Verifikasi</span></h2>
   </div>
   <!-- Container 2 : Table -->
-  <div class="w-full h-[70%] mt-5 px-2">
-    <div class="flex flex-col w-full h-full shadow-2xl overflow-auto">
+  <div class="w-full h-[80%] mt-5 px-2">
+    <!-- Tab -->
+    <div class="flex flex-row gap-2">
+      <button class="px-2 py-1 bg-blue-600 text-slate-50 font-bold rounded-t-md">Menunggu Verifikasi Pembayaran</button>
+      <button class="px-2 py-1 bg-slate-200 font-medium hover:bg-white text-slate-400 hover:text-blue-600 rounded-t-md">Telah Verifikasi Pembayaran</button>
+      <button class="px-2 py-1 bg-slate-200 font-medium hover:bg-white text-slate-400 hover:text-blue-600 rounded-t-md">Tolak Verifikasi Pembayaran </button>
+    </div>
+    <div class="flex flex-col w-full h-full shadow-2xl bg-slate-100 overflow-auto rounded-r-md">
       <!-- Toolbar -->
-      <div class="flex flex-row px-3 py-4 justify-between bg-slate-400 sticky top-[0px] rounded-t-md">
+       <!-- Tools : Document -->
+      <div class="flex flex-row px-3 py-2 justify-between items-center bg-slate-400 sticky top-[0px] shadow-2xl">
+        <!-- Sub-Container 1: Limit & GroupBy -->
+        <div class="flex flex-col gap-1">
+          <!-- Download -->
+           <h1 class="text-xs font-medium bg-white text-slate-700 px-1 w-fit rounded-sm">Download :</h1>
+           <div class="flex flex-row items-center h-8">
+             <!-- CSV -->
+            <button class="flex flex-row items-center gap-1 h-full px-1 bg-lime-300 text-sm font-medium hover:text-white hover:bg-lime-700 rounded-s-md">
+              <span>CSV</span>
+              <svg
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.517 14.841a1.13 1.13 0 0 0 .401.823q.195.162.478.252.284.091.665.091.507 0 .859-.158.354-.158.539-.44.187-.284.187-.656 0-.336-.134-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.566-.21l-.621-.144a1 1 0 0 1-.404-.176.37.37 0 0 1-.144-.299q0-.234.185-.384.188-.152.512-.152.214 0 .37.068a.6.6 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.2-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.439 0-.776.15-.337.149-.527.421-.19.273-.19.639 0 .302.122.524.124.223.352.367.228.143.539.213l.618.144q.31.073.463.193a.39.39 0 0 1 .152.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.167.07-.413.07-.175 0-.32-.04a.8.8 0 0 1-.248-.115.58.58 0 0 1-.255-.384zM.806 13.693q0-.373.102-.633a.87.87 0 0 1 .302-.399.8.8 0 0 1 .475-.137q.225 0 .398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.4 1.4 0 0 0-.489-.272 1.8 1.8 0 0 0-.606-.097q-.534 0-.911.223-.375.222-.572.632-.195.41-.196.979v.498q0 .568.193.976.197.407.572.626.375.217.914.217.439 0 .785-.164t.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.8.8 0 0 1-.118.363.7.7 0 0 1-.272.25.9.9 0 0 1-.401.087.85.85 0 0 1-.478-.132.83.83 0 0 1-.299-.392 1.7 1.7 0 0 1-.102-.627zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879z"
+                />
+              </svg>
+            </button>
+            <!-- PDF -->
+            <button class="flex flex-row items-center gap-1 h-full px-1 bg-red-300 text-sm font-medium hover:text-white hover:bg-red-700">
+              <span>PDF</span>
+              <svg
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.517 14.841a1.13 1.13 0 0 0 .401.823q.195.162.478.252.284.091.665.091.507 0 .859-.158.354-.158.539-.44.187-.284.187-.656 0-.336-.134-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.566-.21l-.621-.144a1 1 0 0 1-.404-.176.37.37 0 0 1-.144-.299q0-.234.185-.384.188-.152.512-.152.214 0 .37.068a.6.6 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.2-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.439 0-.776.15-.337.149-.527.421-.19.273-.19.639 0 .302.122.524.124.223.352.367.228.143.539.213l.618.144q.31.073.463.193a.39.39 0 0 1 .152.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.167.07-.413.07-.175 0-.32-.04a.8.8 0 0 1-.248-.115.58.58 0 0 1-.255-.384zM.806 13.693q0-.373.102-.633a.87.87 0 0 1 .302-.399.8.8 0 0 1 .475-.137q.225 0 .398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.4 1.4 0 0 0-.489-.272 1.8 1.8 0 0 0-.606-.097q-.534 0-.911.223-.375.222-.572.632-.195.41-.196.979v.498q0 .568.193.976.197.407.572.626.375.217.914.217.439 0 .785-.164t.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.8.8 0 0 1-.118.363.7.7 0 0 1-.272.25.9.9 0 0 1-.401.087.85.85 0 0 1-.478-.132.83.83 0 0 1-.299-.392 1.7 1.7 0 0 1-.102-.627zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879z"
+                />
+              </svg>
+            </button>
+            <!-- WORD -->
+            <button class="flex flex-row items-center gap-1 h-full px-1 bg-blue-300 text-sm font-medium rounded-e-md hover:text-white hover:bg-blue-700">
+              <span>WORD</span>
+              <svg
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.517 14.841a1.13 1.13 0 0 0 .401.823q.195.162.478.252.284.091.665.091.507 0 .859-.158.354-.158.539-.44.187-.284.187-.656 0-.336-.134-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.566-.21l-.621-.144a1 1 0 0 1-.404-.176.37.37 0 0 1-.144-.299q0-.234.185-.384.188-.152.512-.152.214 0 .37.068a.6.6 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.2-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.439 0-.776.15-.337.149-.527.421-.19.273-.19.639 0 .302.122.524.124.223.352.367.228.143.539.213l.618.144q.31.073.463.193a.39.39 0 0 1 .152.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.167.07-.413.07-.175 0-.32-.04a.8.8 0 0 1-.248-.115.58.58 0 0 1-.255-.384zM.806 13.693q0-.373.102-.633a.87.87 0 0 1 .302-.399.8.8 0 0 1 .475-.137q.225 0 .398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.4 1.4 0 0 0-.489-.272 1.8 1.8 0 0 0-.606-.097q-.534 0-.911.223-.375.222-.572.632-.195.41-.196.979v.498q0 .568.193.976.197.407.572.626.375.217.914.217.439 0 .785-.164t.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.8.8 0 0 1-.118.363.7.7 0 0 1-.272.25.9.9 0 0 1-.401.087.85.85 0 0 1-.478-.132.83.83 0 0 1-.299-.392 1.7 1.7 0 0 1-.102-.627zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879z"
+                />
+              </svg>
+            </button>
+           </div>
+        </div>
+        <!-- Range Tanggal -->
+        <div class="flex flex-row gap-2 px-2 items-center h-7 bg-slate-50 rounded-sm border">
+          <span class="font-medium">Tanggal</span>
+          <input type="date" class="rounded-sm px-2 h-full text-slate-800">
+          <span class="font-medium">s/d</span>
+          <input type="date" class="rounded-sm px-2 h-full text-slate-800">
+        </div>
+      </div>
+      <!-- Tools : Table -->
+      <div class="flex flex-row px-3 py-2 justify-between bg-slate-300 sticky top-[0px]">
         <!-- Sub-Container 1: Limit & GroupBy -->
         <div class="flex flex-row gap-2">
           <!-- Limit -->
@@ -96,7 +165,6 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
           <!-- Button Reset: Search -->
           <!-- <button id="btn-reset-group-by" class="bg-red-500 text-white px-2 rounded-md">reset</button> -->
         </div>
-        <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah</button>
       </div>
       <!-- Table -->
       <table class="text-center h-full">
@@ -470,7 +538,6 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     const element = document.getElementById('input-search');
     element.addEventListener('keyup', (e) => debouncedInputSearchHandle(e));
   }
-
 
   // === Table Data
   const tableBodyElement = document.getElementById('table-body');
