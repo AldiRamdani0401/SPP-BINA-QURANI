@@ -496,7 +496,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   function closeModalTambah() {
     const targetElement = document.getElementById('container-modal-tambah');
     Swal.fire({
-      title: "Batal Tambah Data Siswa,<br> Anda Yakin?",
+      title: "Batal Tambah Data Orang Tua,<br> Anda Yakin?",
       showConfirmButton: false,
       showDenyButton: true,
       showCancelButton: true,
@@ -561,6 +561,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     // ** Jenis Kelamin
     const jenisKelamin = document.getElementById('jenis-kelamin-value');
     jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    // ** Hubungan
+    // const jenisKelamin = document.getElementById('jenis-kelamin-value');
+    // jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
     // ** Nomor Telepon
     const nomorTelepon = document.getElementById('nomor-telepon-value');
     nomorTelepon.innerText = orangTua.detail.nomor_telepon;

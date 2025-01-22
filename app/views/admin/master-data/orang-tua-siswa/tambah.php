@@ -30,7 +30,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Form Modal -->
-  <form id="form-modal" method="POST" action="/master-data/siswa/create" enctype="multipart/form-data"
+  <form id="form-modal" method="POST" action="/master-data/orang-tua/create" enctype="multipart/form-data"
     class="flex flex-col gap-5 justify-between">
     <div class="flex flex-row gap-3 justify-between">
       <!-- Container 1 : Data Orang Tua Siswa -->
@@ -53,44 +53,46 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
               <input type="text" id="nik" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nomor-identitas-kependudukan"
                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
                 placeholder="NIK sesuai KTP" title="Pastikan sesuai KTP"
-                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                maxLength="16"
+                required>
             </div>
             <!-- Nama Lengkap -->
             <div class="group flex flex-col gap-1">
-              <label for="nama-lengkap-ayah" id="label-nama-lengkap-ayah" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="nama-lengkap" id="label-nama-lengkap" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Nama Lengkap :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
               <input type="text" id="nama-lengkap" name="nama-lengkap"
                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-                placeholder="Nama Lengkap sesuai KTP" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+                placeholder="Nama Lengkap sesuai KTP" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)" required>
             </div>
             <!-- Tempat Lahir -->
             <div class="group flex flex-col gap-1">
-              <label for="edit-tempat-lahir" id="label-edit-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="tempat-lahir" id="label-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Tempat Lahir :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
-              <input type="text" id="edit-tempat-lahir" name="tempat-lahir"
+              <input type="text" id="tempat-lahir" name="tempat-lahir"
                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 " required
                 placeholder="Tempat Lahir" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
             </div>
             <!-- Tanggal Lahir -->
             <div class="group flex flex-col gap-1">
-              <label for="edit-tanggal-lahir" id="label-edit-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="tanggal-lahir" id="label-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Tanggal Lahir :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
-              <input type="date" id="edit-tanggal-lahir" name="tanggal-lahir"
+              <input type="date" id="tanggal-lahir" name="tanggal-lahir"
                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 ">
             </div>
             <!-- Jenis Kelamin -->
             <div class="group flex flex-col gap-1">
-              <label for="edit-jenis-kelamin" id="label-edit-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="jenis-kelamin" id="label-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Jenis Kelamin :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
-              <select id="edit-jenis-kelamin" name="jenis-kelamin"
+              <select id="jenis-kelamin" name="jenis-kelamin"
                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
                 <option disabled selected value="">Pilih Jenis Kelamin</option>
                 <option value="L">👦🏻 Laki-Laki</option>
@@ -100,30 +102,36 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
            </div>
             <!-- Content 2 -->
            <div class="flex flex-col">
-             <!-- Hubungan -->
+             <!-- Hubungan : -->
              <div class="group flex flex-col gap-1">
-               <label for="edit-jenis-kelamin" id="label-edit-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+               <label for="hubungan" id="label-hubungan" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                  <span>Hubungan :</span>
                  <span id="empty" class="text-red-500 text-lg">*</span>
                </label>
-               <select id="edit-jenis-kelamin" name="jenis-kelamin"
+               <select id="hubungan" name="hubungan"
                  class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
-                 <option disabled selected value="">Pilih Jenis Kelamin</option>
+                 <option disabled selected value="">Pilih Hubungan</option>
                  <option value="Ayah">👦🏻 Ayah</option>
                  <option value="Ibu">👧🏻 Ibu</option>
                </select>
              </div>
-             <!-- Email -->
-             <div class="flex flex-col gap-1">
-               <label for="email" id="label-email" class="font-medium text-slate-700">
-                 <span>Email :</span>
-                 <span id="empty" class="text-red-500 text-lg">*</span>
-               </label>
-               <input type="email" id="email" name="email"
-                 class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-                 placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                 title="Masukkan email yang valid">
-             </div>
+            <!-- Email -->
+            <div class="flex flex-col gap-1">
+              <label for="email" id="label-email" class="font-medium text-slate-700">
+                <span>Email :</span>
+                <span id="empty" class="text-red-500 text-lg">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
+                placeholder="example@example.com"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                title="Masukkan email yang valid"
+                oninput="validateEmailInput(this)"
+              >
+            </div>
              <!-- Nomor Telepon -->
              <div class="flex flex-col gap-1">
                <label for="nomor-telepon" id="label-nomor-telepon" class="font-medium text-slate-700">
@@ -278,231 +286,177 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   const md_ayah = <?= json_encode($dataAyah) ?>;
   const md_ibu = <?= json_encode($dataIbu) ?>;
 
-  // Kelas
-  const md_kelas = <?= json_encode($dataKelas) ?>;
-  function setKelasOption () {
-    const kelasSelectElement = document.getElementById('kelas');
-    md_kelas.forEach(value => {
-      const option = document.createElement('option');
-      option.value = value.nama_kelas;
-      option.text = value.nama_kelas;
-      kelasSelectElement.appendChild(option);
-    });
-  }
-
   // == Handlers
-  function handleCheckInputValue(value, target) {
-    // Hapus elemen lama jika ada
-    const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
-    if (existingMessage) {
-      existingMessage.remove();
-    }
+// == Handlers
+function handleCheckInputValue(value, target, inputElement = null, invalidMSG = "") {
+  console.log(value);
+  console.log(target);
+  console.log(inputElement);
 
-    // Buat elemen baru
-    const span = document.createElement("span");
-    if (value === "") {
-      span.className = "text-red-500 text-lg";
-      span.textContent = "*";
-      span.id = "empty";
-    } else {
-      span.className = "font-bold text-green-500";
-      span.innerHTML = "&#10003;";
-      span.id = "no-empty";
-    }
-
-    // Tambahkan elemen baru ke target
-    target.appendChild(span);
+  // Hapus elemen lama jika ada
+  const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
+  if (existingMessage) {
+    existingMessage.remove();
   }
+
+  // Buat elemen baru
+  const span = document.createElement("span");
+  if (value === "") {
+    span.className = "text-red-500 text-lg";
+    span.textContent = "*";
+    span.id = "empty";
+
+    // Tandai input sebagai invalid
+    inputElement?.classList.add("bg-red-200");
+    inputElement?.setCustomValidity(invalidMSG); // Pesan kesalahan
+  } else {
+    span.className = "font-bold text-green-500";
+    span.innerHTML = "&#10003;";
+    span.id = "no-empty";
+
+    // Tandai input sebagai valid
+    inputElement?.classList.remove("bg-red-200");
+    inputElement?.classList.add("bg-green-200");
+    inputElement?.setCustomValidity(""); // Reset pesan kesalahan
+  }
+
+  // Tambahkan elemen baru ke target
+  target.appendChild(span);
+}
 
   let timer; // Variabel timer di luar fungsi untuk menjaga state debounce
-  // ** Nama Lengkap Siswa
-  function handleInputNamaLengkapSiswa(e) {
+  // ** NIK
+  function handleInputNIK(e) {
     const value = e.target.value;
+    const inputElement = e.target;
+    const element = document.getElementById('label-nik');
+    let result;
+    clearTimeout(timer); // Hapus timer sebelumnya
+    timer = setTimeout(() => {
+      result = md_ayah.find((data) => data.nomor_identitas_kependudukan === value) || md_ibu.find((data) => data.nomor_identitas_kependudukan === value);
+      if (result) {
+        handleCheckInputValue("", element, inputElement, "Data dengan NIK tersebut Sudah Ada!");
+      } else {
+        if (value.length == 16 && value !== "") {
+          handleCheckInputValue(value, element, inputElement, "");
+        } else if (value.length < 16 && value !== "") {
+          console.log(value);
+          handleCheckInputValue("", element, inputElement, "Format NIK Tidak Valid! (WAJIB: 16 Digit)");
+        } else {
+          handleCheckInputValue("", element, inputElement, "NIK Wajib di isi!");
+        }
+      }
+    }, 1000); // Waktu debounce 1 detik
+  }
+    // ** Nama Lengkap
+  function handleInputNamaLengkap(e) {
+    const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-nama-lengkap');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
-  }
-  // ** Nomor Induk Siswa
-  function handleInputNomorIndukSiswa(e) {
-    const value = e.target.value;
-    const element = document.getElementById('label-nomor-induk-siswa');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Nama Lengkap Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
     }, 500);
   }
   // ** Tempat Lahir
   function handleInputTempatLahir(e) {
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-tempat-lahir');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Tempat Lahir Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
     }, 500);
   }
   // ** Tanggal Lahir
   function handleSelectTanggalLahir(e) {
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-tanggal-lahir');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Tanggal Lahir Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
     }, 500);
   }
   // ** Jenis Kelamin
   function handleJenisKelamin(e) {
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-jenis-kelamin');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Jenis Kelamin Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
     }, 500);
   }
-  // ** Kelas
-  function handleSelectKelas(e) {
+  // ** Hubungan
+  function handleHubungan(e) {
     const value = e.target.value;
-    const element = document.getElementById('label-kelas');
+    const inputElement = e.target;
+    const element = document.getElementById('label-hubungan');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Hubungan Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
     }, 500);
   }
-  // ** NIK
-  function handleInputNIK(e) {
+  // ** Email
+  function validateEmailInput(inputElement) {
+    const validCharacters = /^[a-z0-9._%+-]*@[a-z0-9.-]*$/i;
+
+    // Simpan posisi kursor
+    const cursorPosition = inputElement.selectionStart;
+
+    if (!validCharacters.test(inputElement.value)) {
+      // Hapus karakter tidak valid terakhir
+      inputElement.value = inputElement.value.replace(/[^a-z0-9._%+-@]/gi, "");
+    }
+  }
+
+  function handleEmail(e) {
     const value = e.target.value;
-    const inputId = e.target.id;
-    const element = document.getElementById(inputId);
-    let result;
-    clearTimeout(timer); // Hapus timer sebelumnya
+    const inputElement = e.target;
+    const element = document.getElementById('label-email');
+    clearTimeout(timer);
     timer = setTimeout(() => {
-      if (inputId == 'nik-ayah') {
-        result = md_ayah.find((data) => data.nomor_identitas_kependudukan == value);
-        document.getElementById('nama-lengkap-ayah').value = result?.nama_lengkap ?? '';
-        document.getElementById('email-ayah').value = result?.email ?? '';
-        document.getElementById('nomor-telepon-ayah').value = result?.nomor_telepon ?? '';
-      } else {
-        result = md_ibu.find((data) => data.nomor_identitas_kependudukan == value);
-        document.getElementById('nama-lengkap-ibu').value = result?.nama_lengkap ?? '';
-        document.getElementById('email-ibu').value = result?.email ?? '';
-        document.getElementById('nomor-telepon-ibu').value = result?.nomor_telepon ?? '';
-      }
-      const nikElement = document.getElementById(inputId == 'nik-ayah' ? 'label-nik-ayah' : 'label-nik-ibu' );
-      const namaLengkapElement = document.getElementById(inputId == 'nik-ayah' ? 'label-nama-lengkap-ayah' : 'label-nama-lengkap-ibu' );
-      const emailElement = document.getElementById(inputId == 'nik-ayah' ? 'label-email-ayah' : 'label-email-ibu' );
-      const nomorTeleponElement = document.getElementById(inputId == 'nik-ayah' ? 'label-nomor-telepon-ayah' : 'label-nomor-telepon-ibu' );
+      result = md_ayah.find((data) => data.email === value) || md_ibu.find((data) => data.email === value);
       if (result) {
-        handleCheckInputValue(value, nikElement);
-        handleCheckInputValue(result?.nama_lengkap, namaLengkapElement);
-        handleCheckInputValue(result?.email, emailElement);
-        handleCheckInputValue(result?.nomor_telepon, nomorTeleponElement);
+        console.log('email sudah ada', value)
+        handleCheckInputValue("", element, inputElement, "Email tersebut Sudah Ada!");
       } else {
-        handleCheckInputValue("", nikElement);
-        handleCheckInputValue("", namaLengkapElement);
-        handleCheckInputValue("", emailElement);
-        handleCheckInputValue("", nomorTeleponElement);
-      }
-    }, 1000); // Waktu debounce 1 detik
-  }
-  // ** Nama Lengkap Ayah
-  let namaLengkapAyah;
-  function handleNamaLengkapAyah(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-nama-lengkap-ayah');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof namaLengkapAyah === "undefined"){
-        namaLengkapAyah = value;
-      } else {
-        if (namaLengkapAyah !== "undefined" && namaLengkapAyah === value ) {
-          handleCheckInputValue(value, element);
+        if (value !== "") {
+          if (value.length > 8 && value.includes("@") && value.indexOf("@") > 0 && value.indexOf("@") < value.length - 1) {
+            handleCheckInputValue(value, element, inputElement, ""); // Email valid
+          } else {
+            handleCheckInputValue("", element, inputElement, "Format Email Tidak Valid! (contoh: example@example.com)"); // Email tidak valid
+          }
         } else {
-          handleCheckInputValue("", element);
+          handleCheckInputValue("", element, inputElement, "Email Wajib diisi!"); // Email kosong
         }
       }
-    }, 500);
+    }, 1000);
   }
-  // ** Email Ayah
-  let emailAyah;
-  function handleEmailAyah(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-email-ayah');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof emailAyah === "undefined"){
-        emailAyah = value;
-      } else {
-        if (emailAyah !== "undefined" && emailAyah === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Telepon Ayah
-  let teleponAyah;
-  function handleNomorTeleponAyah(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-nomor-telepon-ayah');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof teleponAyah === "undefined"){
-        teleponAyah = value;
-      } else {
-        if (teleponAyah !== "undefined" && teleponAyah === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Nama Lengkap Ibu
-  let namaLengkapIbu;
-  function handleNamaLengkapIbu(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-nama-lengkap-ibu');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof namaLengkapIbu === "undefined"){
-        namaLengkapIbu = value;
-      } else {
-        if (namaLengkapIbu !== "undefined" && namaLengkapIbu === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Email Ibu
-  let emailIbu;
-  function handleEmailIbu(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-email-ibu');
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof emailIbu === "undefined"){
-        emailIbu = value;
-      } else {
-        if (emailIbu !== "undefined" && emailIbu === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Nomor Telepon Ibu
-  let nomorTeleponIbu;
-  function handleNomorTeleponIbu(e){
+  // ** Nomor Telepon
+  let nomorTelepon;
+  function handleNomorTelepon(e){
     const value = e.target.value;
     const element = document.getElementById('label-nomor-telepon-ibu');
     clearTimeout(timer);
@@ -621,8 +575,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     });
   }
 
-
-
   // Load Elements
   // ** Form Event
   document.getElementById('form-modal').addEventListener('reset', () => {
@@ -632,10 +584,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   });
   // ** Nama Lengkap Siswa : Input
   const inputNamaLengkapSiswa = document.getElementById('nama-lengkap');
-  inputNamaLengkapSiswa.addEventListener('keyup', (e) => handleInputNamaLengkapSiswa(e));
-  // ** Nomor Induk Siswa : Input
-  const inputNomorIndukSiswa = document.getElementById('nomor-induk-siswa');
-  inputNomorIndukSiswa.addEventListener('keyup', (e) => handleInputNomorIndukSiswa(e));
+  inputNamaLengkapSiswa.addEventListener('keyup', (e) => handleInputNamaLengkap(e));
+  // ** NIK : Input
+  const inputNIK = document.getElementById('nik');
+  inputNIK.addEventListener('keyup', (e) => handleInputNIK(e));
   // ** Tempat Lahir : Input
   const inputTempatLahir = document.getElementById('tempat-lahir');
   inputTempatLahir.addEventListener('keyup', (e) => handleInputTempatLahir(e));
@@ -645,39 +597,42 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   // ** Jenis Kelamin : Select
   const selectJenisKelamin = document.getElementById('jenis-kelamin');
   selectJenisKelamin.addEventListener('change', (e) => handleJenisKelamin(e));
-  // ** Kelas : Select
-  const selectKelas = document.getElementById('kelas');
-  selectKelas.addEventListener('change', (e) => handleSelectKelas(e));
+  // ** Hubungan : Select
+  const selectHubungan = document.getElementById('hubungan');
+  selectHubungan.addEventListener('change', (e) => handleHubungan(e));
+  // ** Email : Input
+  const inputEmail = document.getElementById('email');
+  inputEmail.addEventListener('change', (e) => handleEmail(e));
   // ** NIK Ayah : Input
-  const inputNikAyahElement = document.getElementById('nik-ayah');
-  inputNikAyahElement.addEventListener('keyup', (e) => handleInputNIK(e));
+  // const inputNikAyahElement = document.getElementById('nik-ayah');
+  // inputNikAyahElement.addEventListener('keyup', (e) => handleInputNIK(e));
   // ** Nama Lengkap Ayah : Input
-  const inputNamaLengkapAyah = document.getElementById('nama-lengkap-ayah');
-  inputNamaLengkapAyah.addEventListener('focus', (e) => handleNamaLengkapAyah(e));
-  inputNamaLengkapAyah.addEventListener('keyup', (e) => handleNamaLengkapAyah(e));
+  // const inputNamaLengkapAyah = document.getElementById('nama-lengkap');
+  // inputNamaLengkapAyah.addEventListener('focus', (e) => handleNamaLengkapAyah(e));
+  // inputNamaLengkapAyah.addEventListener('keyup', (e) => handleNamaLengkapAyah(e));
   // ** Email Ayah : Input
-  const inputEmailAyah = document.getElementById('email-ayah');
-  inputEmailAyah.addEventListener('focus', (e) => handleEmailAyah(e));
-  inputEmailAyah.addEventListener('keyup', (e) => handleEmailAyah(e));
+  // const inputEmailAyah = document.getElementById('email-ayah');
+  // inputEmailAyah.addEventListener('focus', (e) => handleEmailAyah(e));
+  // inputEmailAyah.addEventListener('keyup', (e) => handleEmailAyah(e));
   // ** Nomor Telepon Ayah : Input
-  const inputNomorTeleponAyah = document.getElementById('nomor-telepon-ayah');
-  inputNomorTeleponAyah.addEventListener('focus', (e) => handleNomorTeleponAyah(e));
-  inputNomorTeleponAyah.addEventListener('keyup', (e) => handleNomorTeleponAyah(e));
+  // const inputNomorTeleponAyah = document.getElementById('nomor-telepon-ayah');
+  // inputNomorTeleponAyah.addEventListener('focus', (e) => handleNomorTeleponAyah(e));
+  // inputNomorTeleponAyah.addEventListener('keyup', (e) => handleNomorTeleponAyah(e));
   // ** NIK Ibu : Input
-  const inputNikIbuElement = document.getElementById('nik-ibu');
-  inputNikIbuElement.addEventListener('keyup', (e) => handleInputNIK(e));
-  // ** Nama Lengkap Ibu : Input
-  const inputNamaLengkapIbu = document.getElementById('nama-lengkap-ibu');
-  inputNamaLengkapIbu.addEventListener('focus', (e) => handleNamaLengkapIbu(e));
-  inputNamaLengkapIbu.addEventListener('keyup', (e) => handleNamaLengkapIbu(e));
+  // const inputNikIbuElement = document.getElementById('nik-ibu');
+  // inputNikIbuElement.addEventListener('keyup', (e) => handleInputNIK(e));
+  // // ** Nama Lengkap Ibu : Input
+  // const inputNamaLengkapIbu = document.getElementById('nama-lengkap-ibu');
+  // inputNamaLengkapIbu.addEventListener('focus', (e) => handleNamaLengkapIbu(e));
+  // inputNamaLengkapIbu.addEventListener('keyup', (e) => handleNamaLengkapIbu(e));
   // ** Email Ibu : Input
-  const inputEmailIbu = document.getElementById('email-ibu');
-  inputEmailIbu.addEventListener('focus', (e) => handleEmailIbu(e));
-  inputEmailIbu.addEventListener('keyup', (e) => handleEmailIbu(e));
+  // const inputEmailIbu = document.getElementById('email-ibu');
+  // inputEmailIbu.addEventListener('focus', (e) => handleEmailIbu(e));
+  // inputEmailIbu.addEventListener('keyup', (e) => handleEmailIbu(e));
   // ** Nomor Telepon Ibu : Input
-  const inputNomorTeleponIbu = document.getElementById('nomor-telepon-ibu');
-  inputNomorTeleponIbu.addEventListener('focus', (e) => handleNomorTeleponIbu(e));
-  inputNomorTeleponIbu.addEventListener('keyup', (e) => handleNomorTeleponIbu(e));
+  // const inputNomorTeleponIbu = document.getElementById('nomor-telepon-ibu');
+  // inputNomorTeleponIbu.addEventListener('focus', (e) => handleNomorTelepon(e));
+  // inputNomorTeleponIbu.addEventListener('keyup', (e) => handleNomorTelepon(e));
   // ** Provinsi : Input
   const inputProvinsi = document.getElementById('provinsi');
   inputProvinsi.addEventListener('keyup', (e) => handleProvinsi(e));
@@ -702,6 +657,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 
   // INITIAL
   // ** Kelas  : Select
-  setKelasOption();
-  console.log(document.getElementById('jenis-kelamin').value);
+  // setKelasOption();
+  // console.log(document.getElementById('jenis-kelamin').value);
 </script>
