@@ -29,12 +29,15 @@ class App
     /* @@@ DASHBOARD @@@ */
       $this->routes->get("/admin", "AdminController@index", $middleware = true);
     /* @@@ MASTER DATA @@@ */
-        /* >>> siswa <<< */
-        $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
-        $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
-        $this->routes->post("/master-data/siswa/{siswa_id}/update", "MasterDataController@updateDataSiswa", $middleware = true);
-        /* >>> orang tua siswa <<< */
-        $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+        /* ### SISWA ### */
+          $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
+          $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
+          $this->routes->post("/master-data/siswa/{siswa_id}/update", "MasterDataController@updateDataSiswa", $middleware = true);
+        /* ### End of SISWA ### */
+        /* ### ORANG TUA SISWA ### */
+          $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+          $this->routes->post("/master-data/orang-tua/create", "MasterDataController@createDataOrangTuaSiswa", $middleware = true);
+        /* ### End of ORANG TUA SISWA ### */
         /* >>> kelas <<< */
         $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);
         /* >>> biaya spp <<< */

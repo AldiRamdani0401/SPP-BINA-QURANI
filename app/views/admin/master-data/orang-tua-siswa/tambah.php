@@ -156,7 +156,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                </label>
                <input type="text" id="pekerjaan" name="pekerjaan"
                  class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-                 placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                 placeholder="Nama Pekerjaan" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                  title="Masukkan pekerjaan yang valid">
              </div>
            </div>
@@ -287,42 +287,42 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   const md_ibu = <?= json_encode($dataIbu) ?>;
 
   // == Handlers
-// == Handlers
-function handleCheckInputValue(value, target, inputElement = null, invalidMSG = "") {
-  console.log(value);
-  console.log(target);
-  console.log(inputElement);
+  function handleCheckInputValue(value, target, inputElement = null, invalidMSG = "") {
+    console.log(value);
+    console.log(target);
+    console.log(inputElement);
 
-  // Hapus elemen lama jika ada
-  const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
-  if (existingMessage) {
-    existingMessage.remove();
+    // Hapus elemen lama jika ada
+    const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
+    if (existingMessage) {
+      existingMessage.remove();
+    }
+
+    // Buat elemen baru
+    const span = document.createElement("span");
+    if (value === "") {
+      span.className = "text-red-500 text-lg";
+      span.textContent = "*";
+      span.id = "empty";
+
+      // Tandai input sebagai invalid
+      inputElement?.classList.add("bg-red-200");
+      inputElement?.classList.remove("bg-green-200");
+      inputElement?.setCustomValidity(invalidMSG); // Pesan kesalahan
+    } else {
+      span.className = "font-bold text-green-500";
+      span.innerHTML = "&#10003;";
+      span.id = "no-empty";
+
+      // Tandai input sebagai valid
+      inputElement?.classList.remove("bg-red-200");
+      inputElement?.classList.add("bg-green-200");
+      inputElement?.setCustomValidity(""); // Reset pesan kesalahan
+    }
+
+    // Tambahkan elemen baru ke target
+    target.appendChild(span);
   }
-
-  // Buat elemen baru
-  const span = document.createElement("span");
-  if (value === "") {
-    span.className = "text-red-500 text-lg";
-    span.textContent = "*";
-    span.id = "empty";
-
-    // Tandai input sebagai invalid
-    inputElement?.classList.add("bg-red-200");
-    inputElement?.setCustomValidity(invalidMSG); // Pesan kesalahan
-  } else {
-    span.className = "font-bold text-green-500";
-    span.innerHTML = "&#10003;";
-    span.id = "no-empty";
-
-    // Tandai input sebagai valid
-    inputElement?.classList.remove("bg-red-200");
-    inputElement?.classList.add("bg-green-200");
-    inputElement?.setCustomValidity(""); // Reset pesan kesalahan
-  }
-
-  // Tambahkan elemen baru ke target
-  target.appendChild(span);
-}
 
   let timer; // Variabel timer di luar fungsi untuk menjaga state debounce
   // ** NIK
@@ -458,83 +458,141 @@ function handleCheckInputValue(value, target, inputElement = null, invalidMSG = 
   let nomorTelepon;
   function handleNomorTelepon(e){
     const value = e.target.value;
-    const element = document.getElementById('label-nomor-telepon-ibu');
+    const inputElement = e.target;
+    const element = document.getElementById('label-nomor-telepon');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof nomorTeleponIbu === "undefined"){
-        nomorTeleponIbu = value;
+      console.log(md_ayah)
+      result = md_ayah.find((data) => data.nomor_telepon === value) || md_ibu.find((data) => data.nomor_telepon === value);
+      if (result) {
+        console.log('Nomor telepon sudah ada', value)
+        handleCheckInputValue("", element, inputElement, "Nomor Telepon tersebut Sudah Ada!");
       } else {
-        if (nomorTeleponIbu !== "undefined" && nomorTeleponIbu === value ) {
-          handleCheckInputValue(value, element);
+        if (value !== "") {
+          if (value.length > 10) {
+            handleCheckInputValue(value, element, inputElement, ""); // Nomor Telepon valid
+          } else {
+            handleCheckInputValue("", element, inputElement, "Format Nomor Telepon Tidak Valid! (Minimal: 10 digit)"); // Nomor Telepon tidak valid
+          }
         } else {
-          handleCheckInputValue("", element);
+          handleCheckInputValue("", element, inputElement, "Nomor Telepon Wajib diisi!"); // Nomor Telepon kosong
         }
       }
-    }, 500);
+    }, 1000);
+  }
+  // ** Pekerjaan
+  let pekerjaan;
+  function handlePekerjaan(e){
+    const value = e.target.value;
+    const inputElement = e.target;
+    const element = document.getElementById('label-pekerjaan');
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      console.log(md_ayah)
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Pekerjaan Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** Provinsi
   function handleProvinsi(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-provinsi');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Provinsi Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** Kabupaten
   function handleKabupaten(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-kabupaten');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Kabupaten Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** Kecamatan
   function handleKecamatan(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-kecamatan');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Kecamatan Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** Desa
   function handleDesa(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-desa');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Desa Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** RT
   function handleRT(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-rt');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "RT Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** RW
   function handleRW(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-rw');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "RW Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** KodePost
   function handleKodePost(e){
     const value = e.target.value;
+    const inputElement = e.target;
     const element = document.getElementById('label-kode-post');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
+      if (value == '') {
+        handleCheckInputValue(value, element, inputElement, "Kode Post Tidak Boleh Kosong!");
+      } else {
+        handleCheckInputValue(value, element, inputElement, '');
+      }
+    }, 1000);
   }
   // ** Photo Profile: Preview
   function updatePreview(event) {
@@ -555,8 +613,22 @@ function handleCheckInputValue(value, target, inputElement = null, invalidMSG = 
 
   // ** RESET HANDLERS
   function handlerResetLabels() {
-    const labelElements = document.querySelectorAll('label[id^="label-"]'); // Mengambil semua label dengan ID yang diawali "label-"
+    const form = document.getElementById('form-modal');
 
+    // Remove Input
+    const inputElements = form.getElementsByTagName('input');
+    Array.from(inputElements).forEach((input) => {
+      input.classList.remove('bg-green-200');
+      input.classList.remove('bg-red-200');
+    });
+
+    // Remove Select
+    const selectElements = form.getElementsByTagName('select');
+    Array.from(selectElements).forEach((select) => {
+      select.classList.remove('bg-green-200');
+    });
+
+    const labelElements = document.querySelectorAll('label[id^="label-"]'); // Mengambil semua label dengan ID yang diawali "label-"
     // Iterasi melalui NodeList
     labelElements.forEach((element) => {
         const spanElement = element.querySelector('span[id="no-empty"]'); // Mencari span dengan ID "no-empty"
@@ -603,36 +675,12 @@ function handleCheckInputValue(value, target, inputElement = null, invalidMSG = 
   // ** Email : Input
   const inputEmail = document.getElementById('email');
   inputEmail.addEventListener('change', (e) => handleEmail(e));
-  // ** NIK Ayah : Input
-  // const inputNikAyahElement = document.getElementById('nik-ayah');
-  // inputNikAyahElement.addEventListener('keyup', (e) => handleInputNIK(e));
-  // ** Nama Lengkap Ayah : Input
-  // const inputNamaLengkapAyah = document.getElementById('nama-lengkap');
-  // inputNamaLengkapAyah.addEventListener('focus', (e) => handleNamaLengkapAyah(e));
-  // inputNamaLengkapAyah.addEventListener('keyup', (e) => handleNamaLengkapAyah(e));
-  // ** Email Ayah : Input
-  // const inputEmailAyah = document.getElementById('email-ayah');
-  // inputEmailAyah.addEventListener('focus', (e) => handleEmailAyah(e));
-  // inputEmailAyah.addEventListener('keyup', (e) => handleEmailAyah(e));
-  // ** Nomor Telepon Ayah : Input
-  // const inputNomorTeleponAyah = document.getElementById('nomor-telepon-ayah');
-  // inputNomorTeleponAyah.addEventListener('focus', (e) => handleNomorTeleponAyah(e));
-  // inputNomorTeleponAyah.addEventListener('keyup', (e) => handleNomorTeleponAyah(e));
-  // ** NIK Ibu : Input
-  // const inputNikIbuElement = document.getElementById('nik-ibu');
-  // inputNikIbuElement.addEventListener('keyup', (e) => handleInputNIK(e));
-  // // ** Nama Lengkap Ibu : Input
-  // const inputNamaLengkapIbu = document.getElementById('nama-lengkap-ibu');
-  // inputNamaLengkapIbu.addEventListener('focus', (e) => handleNamaLengkapIbu(e));
-  // inputNamaLengkapIbu.addEventListener('keyup', (e) => handleNamaLengkapIbu(e));
-  // ** Email Ibu : Input
-  // const inputEmailIbu = document.getElementById('email-ibu');
-  // inputEmailIbu.addEventListener('focus', (e) => handleEmailIbu(e));
-  // inputEmailIbu.addEventListener('keyup', (e) => handleEmailIbu(e));
-  // ** Nomor Telepon Ibu : Input
-  // const inputNomorTeleponIbu = document.getElementById('nomor-telepon-ibu');
-  // inputNomorTeleponIbu.addEventListener('focus', (e) => handleNomorTelepon(e));
-  // inputNomorTeleponIbu.addEventListener('keyup', (e) => handleNomorTelepon(e));
+  // ** Nomor Telepon : Input
+  const inputNomorTelepon = document.getElementById('nomor-telepon');
+  inputNomorTelepon.addEventListener('change', (e) => handleNomorTelepon(e));
+  // ** Pekerjaan : Input
+  const inputPekerjaan = document.getElementById('pekerjaan');
+  inputPekerjaan.addEventListener('change', (e) => handlePekerjaan(e));
   // ** Provinsi : Input
   const inputProvinsi = document.getElementById('provinsi');
   inputProvinsi.addEventListener('keyup', (e) => handleProvinsi(e));
