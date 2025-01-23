@@ -1,12 +1,7 @@
 <?php
-// Load Data Kelas
-$stmt = $conn->prepare("SELECT id, nama_kelas FROM tb_kelas");
-$stmt->execute();
-$result = $stmt->get_result();
-$dataKelas = $result->fetch_all(MYSQLI_ASSOC);
-
 // Load Data Ayah
-$stmt = $conn->prepare("SELECT nama_lengkap, nomor_identitas_kependudukan, email, nomor_telepon  FROM tb_orang_tua_siswa WHERE hubungan = ?");
+$stmt = $conn->prepare("SELECT nama_lengkap, nomor_identitas_kependudukan, tempat_lahir, tanggal_lahir, jenis_kelamin, email, nomor_telepon, hubungan, pekerjaan, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo  FROM tb_orang_tua_siswa WHERE hubungan = ?");
+
 $ayah = "Ayah";
 $stmt->bind_param("s", $ayah);
 $stmt->execute();
@@ -14,7 +9,8 @@ $result = $stmt->get_result();
 $dataAyah = $result->fetch_all(MYSQLI_ASSOC);
 
 // Load Data Ibu
-$stmt = $conn->prepare("SELECT nama_lengkap, nomor_identitas_kependudukan, email, nomor_telepon  FROM tb_orang_tua_siswa WHERE hubungan = ?");
+$stmt = $conn->prepare("SELECT nama_lengkap, nomor_identitas_kependudukan, tempat_lahir, tanggal_lahir, jenis_kelamin, email, nomor_telepon, hubungan, pekerjaan, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo  FROM tb_orang_tua_siswa WHERE hubungan = ?");
+
 $ibu = "Ibu";
 $stmt->bind_param("s", $ibu);
 $stmt->execute();
@@ -23,10 +19,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 
-<!-- Form Tambah Data Siswa -->
+<!-- Form Edit Data Orang Tua -->
 <div class="flex flex-col gap-4 py-2 px-4 bg-white w-fit  h-fit rounded-xl shadow-xl">
   <div class="">
-    <h1 class="text-2xl text-slate-700 px-2 py-2 font-bold">Form Edit Data Siswa</h1>
+    <h1 class="text-2xl text-slate-700 px-2 py-2 font-bold">Form Edit Data Orang Tua</h1>
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Form Modal -->
@@ -37,7 +33,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       <div class="group flex flex-col w-64 gap-2 border py-2 px-3 rounded-md shadow-lg">
         <!-- Title Card -->
         <div class="">
-          <div class="text-lg font-bold">Data Diri Siswa</div>
+          <div class="text-lg font-bold">Data Diri</div>
           <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-blue-500 group-focus-within:bg-blue-500">
         </div>
         <!-- Nama Lengkap -->
@@ -50,17 +46,17 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
             placeholder="Nama Lengkap" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)" title="Nama Lengkap Siswa wajib diisi." required>
         </div>
-        <!-- Nomor Induk Siswa -->
+        <!-- NIK -->
         <div class="flex flex-col gap-1">
-          <label for="edit-nomor-induk-siswa" id="label-edit-nomor-induk-siswa" class="font-medium text-slate-700">
-            <span>NISN : </span>
+          <label for="edit-nik" id="label-edit-nik" class="font-medium text-slate-700">
+            <span>NIK : </span>
             <span id="empty" class="text-red-500 text-lg">*</span>
           </label>
-          <input type="text" id="edit-nomor-induk-siswa" inputmode="numeric"
-            name="nomor-induk-siswa"
+          <input type="text" id="edit-nik" inputmode="numeric"
+            name="nomor-identitas-kependudukan"
             class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
             maxlength="10"
-            placeholder="Nomor Induk Siswa" title="Hanya menerima angka 0-9 (wajib: 10 digit)" required
+            placeholder="NIK sesuai KTP" title="Hanya menerima angka 0-9 (wajib: 10 digit)" required
             onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         </div>
         <!-- Tempat Lahir -->
@@ -95,116 +91,74 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             <option value="P">👧🏻 Perempuan</option>
           </select>
         </div>
-        <!-- Kelas -->
-        <div class="group flex flex-col gap-1">
-          <label for="edit-kelas" id="label-edit-kelas" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Kelas :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <select id="edit-kelas" name="kelas"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
-            <option disabled selected value="">Pilih Kelas</option>
-          </select>
-        </div>
       </div>
-      <!-- Container 2 : Data Orang Tua Siswa -->
-      <div class="group flex flex-col w-64 gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
+      <!-- Container 2 : Data Diri Siswa -->
+      <div class="group flex flex-col w-64 gap-2 border py-2 px-3 rounded-md shadow-lg">
         <!-- Title Card -->
         <div class="">
-          <div class="text-lg font-bold">Data Orang Tua</div>
-          <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-green-500 group-focus-within:bg-blue-500">
+          <div class="text-lg font-bold">Data Diri</div>
+          <hr class="py-[1.5px] bg-slate-400 rounded-full group-hover:bg-blue-500 group-focus-within:bg-blue-500">
         </div>
-        <!-- NIK Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-nik-ayah" id="label-edit-nik-ayah" class="font-medium text-slate-700">
-            <span>NIK Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="edit-nik-ayah" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nik-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="NIK Ayah / Wali" title="Hanya menerima angka 0-9"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Nama Lengkap Ayah -->
+        <!-- Hubungan -->
         <div class="group flex flex-col gap-1">
-          <label for="edit-nama-lengkap-ayah" id="label-edit-nama-lengkap-ayah" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Nama Lengkap Ayah / Wali :</span>
+          <label for="edit-hubungan" id="label-edit-hubungan" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+            <span>Hubungan :</span>
             <span id="empty" class="text-red-500 text-lg">*</span>
           </label>
-          <input type="text" id="edit-nama-lengkap-ayah" name="nama-lengkap-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Nama Lengkap Ayah" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+          <select id="edit-hubungan" name="hubungan"
+            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300">
+            <option disabled selected value="">Pilih Hubungan</option>
+            <option value="Ayah">👦🏻 Ayah</option>
+            <option value="Ibu">👧🏻 Ibu</option>
+            <option value="Wali">👴🏻👵🏻 Wali</option>
+          </select>
         </div>
-        <!-- Email Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-email-ayah" id="label-edit-email-ayah" class="font-medium text-slate-700">
-            <span>Email Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="email" id="edit-email-ayah" name="email-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Masukkan email yang valid">
-        </div>
-        <!-- Nomor Telepon Ayah -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-nomor-telepon-ayah" id="label-edit-nomor-telepon-ayah" class="font-medium text-slate-700">
-            <span>Nomor Telepon Ayah :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="tel" id="edit-nomor-telepon-ayah" name="nomor-telepon-ayah"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
-            placeholder="08XX-XXXX-XXXX" pattern="08[0-9]{8,11}" maxlength="13"
-            title="Nomor telepon harus dimulai dengan '08' diikuti 8 hingga 11 digit angka."
-            oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
-        </div>
-        <!-- NIK Ibu -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-nik-ibu" id="label-edit-nik-ibu" class="font-medium text-slate-700">
-            <span>NIK Ibu / Wali :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="edit-nik-ibu" inputmode="numeric" pattern="[0-9\s]{13,19}" name="nik-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="NIK Ibu / Wali" title="Hanya menerima angka 0-9"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- Nama Lengkap Ibu -->
+        <!-- Pekerjaan -->
         <div class="group flex flex-col gap-1">
-          <label for="edit-nama-lengkap-ibu" id="label-edit-nama-lengkap-ibu" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
-            <span>Nama Lengkap Ibu / Wali :</span>
+          <label for="edit-pekerjaan" id="label-edit-pekerjaan" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+            <span>Pekerjaan :</span>
             <span id="empty" class="text-red-500 text-lg">*</span>
           </label>
-          <input type="text" id="edit-nama-lengkap-ibu" name="nama-lengkap-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Nama Lengkap Ibu" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
+          <input type="text" id="edit-pekerjaan" name="pekerjaan"
+            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 " required
+            placeholder="Pekerjaan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
         </div>
-        <!-- Email Ibu -->
+        <!-- Email -->
         <div class="flex flex-col gap-1">
-          <label for="edit-email-ibu" id="label-edit-email-ibu" class="font-medium text-slate-700">
-            <span>Email Ibu :</span>
+          <label for="edit-email" id="label-edit-email" class="font-medium text-slate-700">
+            <span>Email :</span>
             <span id="empty" class="text-red-500 text-lg">*</span>
           </label>
-          <input type="email" id="edit-email-ibu" name="email-ibu"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="example@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Masukkan email yang valid">
-        </div>
-        <!-- Nomor Telepon Ibu -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-nomor-telepon-ibu" id="label-edit-nomor-telepon-ibu" class="font-medium text-slate-700">
-            <span>Nomor Telepon Ibu :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="tel" id="edit-nomor-telepon-ibu" name="nomor-telepon-ibu"
+          <input
+            type="email"
+            id="edit-email"
+            name="email"
             class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
-            placeholder="08XX-XXXX-XXXX" pattern="08[0-9]{8,11}" maxlength="13"
+            placeholder="example@example.com"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            title="Masukkan email yang valid"
+            oninput="validateEmailInput(this)"
+          >
+        </div>
+        <!-- Nomor Telepon -->
+        <div class="flex flex-col gap-1">
+          <label for="edit-nomor-telepon" id="label-edit-nomor-telepon" class="font-medium text-slate-700">
+            <span>Nomor Telepon :</span>
+            <span id="empty" class="text-red-500 text-lg">*</span>
+          </label>
+          <input type="tel"
+            id="edit-nomor-telepon"
+            name="nomor-telepon"
+            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
+            placeholder="08XX-XXXX-XXXX"
+            pattern="08[0-9]{8,11}"
+            maxlength="13"
             title="Nomor telepon harus dimulai dengan '08' diikuti 8 hingga 11 digit angka."
             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required />
         </div>
       </div>
       <!-- Container 3 : Alamat -->
-      <div class="group flex flex-col w-64 gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg">
+      <div class="group flex flex-col w-64 gap-2 border pt-2 pb-3 px-3 rounded-md shadow-lg h-fit">
         <!-- Title Card -->
         <div class="">
           <div class="text-lg font-bold">Alamat</div>
@@ -250,30 +204,33 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
             placeholder="Desa / Kelurahan" onkeypress="return /^[a-zA-Z\s]*$/.test(event.key)">
         </div>
-        <!-- RT -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-rt" id="edit-label-rt" class="font-medium text-slate-700">
-            <span>RT :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="edit-rt" inputmode="numeric" name="rt"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Rukun Tetangga / RT" title="Hanya menerima angka 0-9"
-            maxlength="3"
-            requrired
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-        </div>
-        <!-- RW -->
-        <div class="flex flex-col gap-1">
-          <label for="edit-rw" id="edit-label-rw" class="font-medium text-slate-700">
-            <span>RW :</span>
-            <span id="empty" class="text-red-500 text-lg">*</span>
-          </label>
-          <input type="text" id="edit-rw" inputmode="numeric" name="rw"
-            class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
-            placeholder="Rukun Warga / RW" title="Hanya menerima angka 0-9"
-            maxlength="3"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        <!-- RT & RW -->
+        <div class="flex flex-row w-full gap-1">
+          <!-- RT -->
+          <div class="flex flex-col gap-1 w-1/2">
+            <label for="edit-rt" id="edit-label-rt" class="font-medium text-slate-700">
+              <span>RT :</span>
+              <span id="empty" class="text-red-500 text-lg">*</span>
+            </label>
+            <input type="text" id="edit-rt" inputmode="numeric" name="rt"
+              class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300"
+              placeholder="Rukun Tetangga / RT" title="Hanya menerima angka 0-9"
+              maxlength="3"
+              requrired
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+          </div>
+          <!-- RW -->
+          <div class="flex flex-col gap-1 w-1/2">
+            <label for="edit-rw" id="edit-label-rw" class="font-medium text-slate-700">
+              <span>RW :</span>
+              <span id="empty" class="text-red-500 text-lg">*</span>
+            </label>
+            <input type="text" id="edit-rw" inputmode="numeric" name="rw"
+              class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
+              placeholder="Rukun Warga / RW" title="Hanya menerima angka 0-9"
+              maxlength="3"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+          </div>
         </div>
         <!-- Kode Post -->
         <div class="flex flex-col gap-1">
@@ -321,18 +278,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   const dt_ayah = <?= json_encode($dataAyah) ?>;
   const dt_ibu = <?= json_encode($dataIbu) ?>;
 
-  // Kelas
-  const dt_kelas = <?= json_encode($dataKelas) ?>;
-  function setKelasOption () {
-    const kelasSelectElement = document.getElementById('edit-kelas');
-    dt_kelas.forEach(value => {
-      const option = document.createElement('option');
-      option.value = value.nama_kelas;
-      option.text = value.nama_kelas;
-      kelasSelectElement.appendChild(option);
-    });
-  }
-
   // == Handlers
   function handleCheckInputValue(value, target) {
     // Hapus elemen lama jika ada
@@ -367,10 +312,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       handleCheckInputValue(value, element);
     }, 500);
   }
-  // ** Nomor Induk Siswa
-  function handleInputNomorIndukSiswa(e) {
+  // ** NIK
+  function handleNIK(e) {
     const value = e.target.value;
-    const element = document.getElementById('label-edit-nomor-induk-siswa');
+    const element = document.getElementById('label-edit-nik');
     clearTimeout(editTimer);
     editTimer = setTimeout(() => {
       handleCheckInputValue(value, element);
@@ -403,15 +348,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       handleCheckInputValue(value, element);
     }, 500);
   }
-  // ** Kelas
-  function handleSelectKelas(e) {
-    const value = e.target.value;
-    const element = document.getElementById('label-kelas');
-    clearTimeout(editTimer);
-    editTimer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-    }, 500);
-  }
+
   // ** NIK
   function handleInputNIK(e) {
     const value = e.target.value;
@@ -448,25 +385,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       }
     }, 1000); // Waktu debounce 1 detik
   }
-  // ** Nama Lengkap Ayah
-  let editNamaLengkapAyah;
-  function handleNamaLengkapAyah(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-edit-nama-lengkap-ayah');
-    clearTimeout(editTimer);
-    editTimer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof editNamaLengkapAyah === "undefined"){
-        editNamaLengkapAyah = value;
-      } else {
-        if (editNamaLengkapAyah !== "undefined" && editNamaLengkapAyah === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
   // ** Email Ayah
   let editEmailAyah;
   function handleEmailAyah(e){
@@ -498,63 +416,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         editTeleponAyah = value;
       } else {
         if (editTeleponAyah !== "undefined" && editTeleponAyah === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Nama Lengkap Ibu
-  let editNamaLengkapIbu;
-  function handleNamaLengkapIbu(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-edit-nama-lengkap-ibu');
-    clearTimeout(editTimer);
-    editTimer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof editNamaLengkapIbu === "undefined"){
-        editNamaLengkapIbu = value;
-      } else {
-        if (editNamaLengkapIbu !== "undefined" && editNamaLengkapIbu === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Email Ibu
-  let editEmailIbu;
-  function handleEmailIbu(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-edit-email-ibu');
-    clearTimeout(editTimer);
-    editTimer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof editEmailIbu === "undefined"){
-        editEmailIbu = value;
-      } else {
-        if (editEmailIbu !== "undefined" && editEmailIbu === value ) {
-          handleCheckInputValue(value, element);
-        } else {
-          handleCheckInputValue("", element);
-        }
-      }
-    }, 500);
-  }
-  // ** Nomor Telepon Ibu
-  let editNomorTeleponIbu;
-  function handleNomorTeleponIbu(e){
-    const value = e.target.value;
-    const element = document.getElementById('label-edit-nomor-telepon-ibu');
-    clearTimeout(editTimer);
-    editTimer = setTimeout(() => {
-      handleCheckInputValue(value, element);
-      if (typeof editNomorTeleponIbu === "undefined"){
-        editNomorTeleponIbu = value;
-      } else {
-        if (editNomorTeleponIbu !== "undefined" && editNomorTeleponIbu === value ) {
           handleCheckInputValue(value, element);
         } else {
           handleCheckInputValue("", element);
@@ -674,9 +535,9 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   // ** Nama Lengkap Siswa : Input
   const editInputNamaLengkapSiswa = document.getElementById('edit-nama-lengkap');
   editInputNamaLengkapSiswa.addEventListener('keyup', (e) => handleInputNamaLengkapSiswa(e));
-  // ** Nomor Induk Siswa : Input
-  const editInputNomorIndukSiswa = document.getElementById('edit-nomor-induk-siswa');
-  editInputNomorIndukSiswa.addEventListener('keyup', (e) => handleInputNomorIndukSiswa(e));
+  // ** NIK : Input
+  const editInputNIK = document.getElementById('edit-nik');
+  editInputNIK.addEventListener('keyup', (e) => handleNIK(e));
   // ** Tempat Lahir : Input
   const editInputTempatLahir = document.getElementById('edit-tempat-lahir');
   editInputTempatLahir.addEventListener('keyup', (e) => handleInputTempatLahir(e));
@@ -686,39 +547,14 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   // ** Jenis Kelamin : Select
   const editSelectJenisKelamin = document.getElementById('edit-jenis-kelamin');
   editSelectJenisKelamin.addEventListener('change', (e) => handleJenisKelamin(e));
-  // ** Kelas : Select
-  const editSelectKelas = document.getElementById('edit-kelas');
-  editSelectKelas.addEventListener('change', (e) => handleSelectKelas(e));
-  // ** NIK Ayah : Input
-  const editInputNikAyahElement = document.getElementById('edit-nik-ayah');
-  editInputNikAyahElement.addEventListener('keyup', (e) => handleInputNIK(e));
-  // ** Nama Lengkap Ayah : Input
-  const editInputNamaLengkapAyah = document.getElementById('edit-nama-lengkap-ayah');
-  editInputNamaLengkapAyah.addEventListener('focus', (e) => handleNamaLengkapAyah(e));
-  editInputNamaLengkapAyah.addEventListener('keyup', (e) => handleNamaLengkapAyah(e));
-  // ** Email Ayah : Input
-  const editInputEmailAyah = document.getElementById('edit-email-ayah');
-  editInputEmailAyah.addEventListener('focus', (e) => handleEmailAyah(e));
-  editInputEmailAyah.addEventListener('keyup', (e) => handleEmailAyah(e));
-  // ** Nomor Telepon Ayah : Input
-  const editInputNomorTeleponAyah = document.getElementById('edit-nomor-telepon-ayah');
-  editInputNomorTeleponAyah.addEventListener('focus', (e) => handleNomorTeleponAyah(e));
-  editInputNomorTeleponAyah.addEventListener('keyup', (e) => handleNomorTeleponAyah(e));
-  // ** NIK Ibu : Input
-  const editInputNikIbu = document.getElementById('edit-nik-ibu');
-  editInputNikIbu.addEventListener('keyup', (e) => handleInputNIK(e));
-  // ** Nama Lengkap Ibu : Input
-  const editInputNamaLengkapIbu = document.getElementById('edit-nama-lengkap-ibu');
-  editInputNamaLengkapIbu.addEventListener('focus', (e) => handleNamaLengkapIbu(e));
-  editInputNamaLengkapIbu.addEventListener('keyup', (e) => handleNamaLengkapIbu(e));
-  // ** Email Ibu : Input
-  const editInputEmailIbu = document.getElementById('edit-email-ibu');
-  editInputEmailIbu.addEventListener('focus', (e) => handleEmailIbu(e));
-  editInputEmailIbu.addEventListener('keyup', (e) => handleEmailIbu(e));
-  // ** Nomor Telepon Ibu : Input
-  const editInputNomorTeleponIbu = document.getElementById('edit-nomor-telepon-ibu');
-  editInputNomorTeleponIbu.addEventListener('focus', (e) => handleNomorTeleponIbu(e));
-  editInputNomorTeleponIbu.addEventListener('keyup', (e) => handleNomorTeleponIbu(e));
+  // ** Email : Input
+  const editInputEmail = document.getElementById('edit-email');
+  editInputEmail.addEventListener('focus', (e) => handleEmailAyah(e));
+  editInputEmail.addEventListener('keyup', (e) => handleEmailAyah(e));
+  // ** Nomor Telepon : Input
+  const editInputNomorTelepon = document.getElementById('edit-nomor-telepon');
+  editInputNomorTelepon.addEventListener('focus', (e) => handleNomorTeleponAyah(e));
+  editInputNomorTelepon.addEventListener('keyup', (e) => handleNomorTeleponAyah(e));
   // ** Provinsi : Input
   const editInputProvinsi = document.getElementById('edit-provinsi');
   editInputProvinsi.addEventListener('keyup', (e) => handleProvinsi(e));
@@ -743,40 +579,36 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 
   // Handle Reset Edit Form
   function handleResetEdit() {
-    editInputNamaLengkapSiswa.value = siswa.detail.nama_lengkap;
-    editInputNomorIndukSiswa.value = siswa.detail.nomor_induk_siswa;
-    editInputTempatLahir.value = siswa.detail.tempat_lahir;
-    editSelectTanggalLahir.value = siswa.detail.tanggal_lahir;
-    editSelectJenisKelamin.value = siswa.detail.jenis_kelamin;
-    editSelectKelas.value = siswa.detail.kelas;
-    // Set Data Ayah
-    const ayah = dt_ayah.find((data) => data.nama_lengkap == siswa.detail.nama_ayah);
-    editInputNikAyahElement.value = ayah.nomor_identitas_kependudukan;
-    editInputNamaLengkapAyah.value = ayah.nama_lengkap;
-    editInputEmailAyah.value = ayah.email;
-    editInputNomorTeleponAyah.value = ayah.nomor_telepon;
-    // Set Data Ibu
-    const ibu = dt_ibu.find((data) => data.nama_lengkap == siswa.detail.nama_ibu);
-    editInputNikIbu.value = ibu.nomor_identitas_kependudukan;
-    editInputNamaLengkapIbu.value = ibu.nama_lengkap;
-    editInputEmailIbu.value = ibu.email;
-    editInputNomorTeleponIbu.value = ibu.nomor_telepon;
+    // Get data NIK
+    const formEditModal = document.getElementById('form-edit-modal')
+    const nik = formEditModal.getAttribute('nik');
+    const result = dt_ayah.find((data) => {
+      if (data.nomor_identitas_kependudukan == nik) {
+        return data
+      }
+    }) || dt_ibu.find((data) => {
+      if (data.nomor_identitas_kependudukan == nik) {
+        return data
+      }
+    });
+    // Set Data Diri
+    editInputNamaLengkapSiswa.value = result.nama_lengkap;
+    editInputNIK.value = result.nomor_identitas_kependudukan;
+    editInputTempatLahir.value = result.tempat_lahir;
+    editSelectTanggalLahir.value = result.tanggal_lahir;
+    editSelectJenisKelamin.value = result.jenis_kelamin;
     // Set Data Alamat
-    editInputProvinsi.value = siswa.detail.provinsi;
-    editInputKabupaten.value = siswa.detail.kabupaten;
-    editInputKecamatan.value = siswa.detail.kecamatan;
-    editInputDesa.value = siswa.detail.desa;
-    editInputRT.value = siswa.detail.rt;
-    editInputRW.value = siswa.detail.rw;
-    editInputKodePost.value = siswa.detail.kode_pos;
+    editInputProvinsi.value = result.provinsi;
+    editInputKabupaten.value = result.kabupaten;
+    editInputKecamatan.value = result.kecamatan;
+    editInputDesa.value = result.desa;
+    editInputRT.value = result.rt;
+    editInputRW.value = result.rw;
+    editInputKodePost.value = result.kode_pos;
     // Photo Profile
     const previewImage = document.getElementById('edit-preview-image');
-    previewImage.src = siswa.detail.photo_siswa;
+    previewImage.src = result.photo;
+    const inputImage = document.getElementById('edit-photo-profile');
+    inputImage.value = "";
   }
-
-
-  // INITIAL
-  // ** Kelas  : Select
-  setKelasOption();
-
 </script>
