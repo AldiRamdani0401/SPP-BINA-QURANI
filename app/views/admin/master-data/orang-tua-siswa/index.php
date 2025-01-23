@@ -174,8 +174,8 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
           console.log(pasangan, dataAnak);
           return this.main_datas.find(
             (data) => {
-              if (data.nama_lengkap !== pasangan) {
-                if (data.nama_lengkap === dataAnak.nama_ayah || data.nama_lengkap === dataAnak.nama_ibu){
+              if (data?.nama_lengkap !== pasangan) {
+                if (data?.nama_lengkap === dataAnak?.nama_ayah || data?.nama_lengkap === dataAnak?.nama_ibu){
                   return data;
                 }
               }
@@ -496,7 +496,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   function closeModalTambah() {
     const targetElement = document.getElementById('container-modal-tambah');
     Swal.fire({
-      title: "Batal Tambah Data Siswa,<br> Anda Yakin?",
+      title: "Batal Tambah Data Orang Tua,<br> Anda Yakin?",
       showConfirmButton: false,
       showDenyButton: true,
       showCancelButton: true,
@@ -561,6 +561,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     // ** Jenis Kelamin
     const jenisKelamin = document.getElementById('jenis-kelamin-value');
     jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    // ** Hubungan
+    // const jenisKelamin = document.getElementById('jenis-kelamin-value');
+    // jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
     // ** Nomor Telepon
     const nomorTelepon = document.getElementById('nomor-telepon-value');
     nomorTelepon.innerText = orangTua.detail.nomor_telepon;
@@ -614,6 +617,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   kecamatan.innerText = orangTua.detail.kecamatan;
   // ** Desa / Kelurahan
   const desa = document.getElementById('desa-value');
+  desa.innerText = orangTua.detail.desa;
   // ** RT / RW
   const rt = document.getElementById('rt-value');
   rt.innerText = orangTua.detail.rt;
@@ -739,7 +743,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     getBtnPagination();
     getInputSearch();
     // test
-    // loadModalDetail(3275010101990001);
-    loadModalTambah();
+    // loadModalDetail(3275010101990004);
+    // loadModalTambah();
   });
 </script>
