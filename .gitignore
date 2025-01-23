@@ -1,6 +1,8 @@
+# Folder
 *old
-
-websocket-server.js
-*.json
 node_modules
 assets/
+
+# File
+websocket-server.js
+*.json
