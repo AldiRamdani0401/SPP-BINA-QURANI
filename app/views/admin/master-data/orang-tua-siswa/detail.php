@@ -74,7 +74,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Nama Lengkap</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nama-lengkap-value" class="w-full px-2">Aldi Ramdani</span>
+               <span id="nama-lengkap-value" class="w-full px-2">?</span>
            </div>
            <!-- NIK -->
            <div id="nik-orangtua" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -82,7 +82,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">NIK</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nik-orangtua-value" class="w-full px-2">11223344</span>
+               <span id="nik-orangtua-value" class="w-full px-2">?</span>
            </div>
            <!-- Tempat Lahir -->
            <div id="tempat-lahir" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -90,7 +90,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tempat Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tempat-lahir-value" class="w-full px-2">Karawang</span>
+               <span id="tempat-lahir-value" class="w-full px-2">?</span>
            </div>
            <!-- Tanggal Lahir -->
            <div id="tanggal-lahir" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -98,7 +98,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tanggal Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tanggal-lahir-value" class="w-full px-2">4 Januari 1998</span>
+               <span id="tanggal-lahir-value" class="w-full px-2">?</span>
            </div>
            <!-- Jenis Kelamin -->
            <div id="jenis-kelamin" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -106,7 +106,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Jenis Kelamin</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="jenis-kelamin-value" class="w-full px-2">Laki-Laki</span>
+               <span id="jenis-kelamin-value" class="w-full px-2">?</span>
            </div>
            <!-- Nomor Telepon -->
            <div id="nomor-telepon" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -114,7 +114,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Nomor Telepon</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nomor-telepon-value" class="w-full px-2">Laki-Laki</span>
+               <span id="nomor-telepon-value" class="w-full px-2">?</span>
            </div>
            <!-- Email -->
            <div id="email" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -122,7 +122,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Email</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="email-value" class="w-full px-2">Laki-Laki</span>
+               <span id="email-value" class="w-full px-2">?</span>
            </div>
            <!-- Pekerjaan -->
            <div id="pekerjaan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -130,7 +130,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Pekerjaan</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="pekerjaan-value" class="w-full px-2">1A</span>
+               <span id="pekerjaan-value" class="w-full px-2">?</span>
            </div>
          </div>
          <!-- Slide 2 : Data Keluarga -->
@@ -151,7 +151,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">NIK</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nik-pasangan-value" class="w-full px-2">1122334455</span>
+               <span id="nik-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Nama Lengkap Pasangan -->
            <div id="nama-lengkap-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -159,7 +159,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Nama Lengkap</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nama-lengkap-pasangan-value" class="w-full px-2">Aldi</span>
+               <span id="nama-lengkap-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Tempat Lahir Pasangan -->
            <div id="tempat-lahir-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -167,7 +167,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tempat Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tempat-lahir-pasangan-value" class="w-full px-2">Hilda@gmail.com</span>
+               <span id="tempat-lahir-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Tanggal Lahir Pasangan -->
            <div id="tanggal-lahir-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -175,7 +175,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tanggal Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tanggal-lahir-pasangan-value" class="w-full px-2">Hilda@gmail.com</span>
+               <span id="tanggal-lahir-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Jenis Kelamin Pasangan -->
            <div id="jenis-kelamin-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -183,7 +183,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Jenis Kelamin</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="jenis-kelamin-pasangan-value" class="w-full px-2">Hilda@gmail.com</span>
+               <span id="jenis-kelamin-pasangan-value" class="w-full px-2">?</span>
            </div>
             <!-- Nomor Telepon Pasangan -->
             <div id="nomor-telepon-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -191,7 +191,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Nomor Telepon</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nomor-telepon-pasangan-value" class="w-full px-2">0858112233</span>
+               <span id="nomor-telepon-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Email Pasangan -->
            <div id="email-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -199,7 +199,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Email</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="email-pasangan-value" class="w-full px-2">aldi@gmail.com</span>
+               <span id="email-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Pekerjaan Pasangan -->
            <div id="pekerjaan-pasangan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -207,7 +207,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Pekerjaan</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="pekerjaan-pasangan-value" class="w-full px-2">aldi@gmail.com</span>
+               <span id="pekerjaan-pasangan-value" class="w-full px-2">?</span>
            </div>
            <!-- Data Anak -->
            <div class="relative mt-2">
@@ -220,7 +220,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">NISN</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nisn-anak-value" class="w-full px-2">11223344</span>
+               <span id="nisn-anak-value" class="w-full px-2">?</span>
            </div>
            <!-- Nama Lengkap Anak -->
            <div id="nama-lengkap-anak" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -228,7 +228,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Nama Lengkap</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="nama-lengkap-anak-value" class="w-full px-2">Hilda</span>
+               <span id="nama-lengkap-anak-value" class="w-full px-2">?</span>
            </div>
            <!-- Jenis Kelamin Anak -->
            <div id="jenis-kelamin-anak" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -236,7 +236,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Jenis Kelamin</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="jenis-kelamin-anak-value" class="w-full px-2">Hilda</span>
+               <span id="jenis-kelamin-anak-value" class="w-full px-2">?</span>
            </div>
            <!-- Kelas -->
            <div id="kelas-anak" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -244,7 +244,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Kelas</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="kelas-anak-value" class="w-full px-2">0858112233</span>
+               <span id="kelas-anak-value" class="w-full px-2">?</span>
            </div>
            <!-- Tempat Lahir -->
            <div id="tempat-lahir-anak" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -252,7 +252,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tempat Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tempat-lahir-anak-value" class="w-full px-2">Hilda@gmail.com</span>
+               <span id="tempat-lahir-anak-value" class="w-full px-2">?</span>
            </div>
            <!-- Tanggal Lahir -->
            <div id="tanggal-lahir-anak" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -260,7 +260,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Tanggal Lahir</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="tanggal-lahir-anak-value" class="w-full px-2">Hilda@gmail.com</span>
+               <span id="tanggal-lahir-anak-value" class="w-full px-2">?</span>
            </div>
          </div>
          <!-- Slide 3 : Alamat -->
@@ -276,7 +276,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Provinsi</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="provinsi-value" class="w-full px-2">0858112233</span>
+               <span id="provinsi-value" class="w-full px-2">?</span>
            </div>
            <!-- Kabupaten -->
            <div id="kabupaten" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -284,7 +284,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Kabupaten</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="kabupaten-value" class="w-full px-2">0858112233</span>
+               <span id="kabupaten-value" class="w-full px-2">?</span>
            </div>
             <!-- Kecamatan -->
             <div id="kecamatan" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -292,7 +292,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Kecamatan</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="kecamatan-value" class="w-full px-2">0858112233</span>
+               <span id="kecamatan-value" class="w-full px-2">?</span>
            </div>
             <!-- Desa -->
             <div id="desa" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -300,7 +300,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Desa / Kelurahan</span>
                  <span class="font-medium">:</span>
                </div>
-               <span id="desa-value" class="w-full px-2">0858112233</span>
+               <span id="desa-value" class="w-full px-2">?</span>
            </div>
             <!-- RT / RW -->
             <div id="rt-rw" class="flex flex-row justify-between text-slate-700 text-[16px]">
@@ -309,9 +309,9 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">:</span>
                </div>
                <div class="flex flex-row w-full">
-                <span id="rt-value" class="px-1">001</span>
+                <span id="rt-value" class="px-1">?</span>
                 /
-                <span id="rw-value" class="px-1">002</span>
+                <span id="rw-value" class="px-1">?</span>
                </div>
            </div>
             <!-- Kode Post -->
@@ -320,7 +320,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                  <span class="font-medium">Kode Post</span>
                  <span class="font-medium">:</span>
                </div>
-              <span id="kode-post-value" class="w-full px-1">112233</span>
+              <span id="kode-post-value" class="w-full px-1">?</span>
            </div>
          </div>
        </div>
