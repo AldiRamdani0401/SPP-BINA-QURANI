@@ -145,7 +145,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   <!-- Container 5 : Modal-Edit -->
   <div id="container-modal-edit" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
-     <?php //include "edit.php"?>
+     <?php include "edit.php"?>
   </div>
 <script>
   // States
@@ -541,8 +541,8 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     console.log(orangTua.detail);
 
     // Get Data Anak
-    const dataAnak = orangTua.anak();
-    const dataPasangan = orangTua.pasangan(orangTua.detail.nama_lengkap, dataAnak);
+    const dataAnak = orangTua?.anak();
+    const dataPasangan = orangTua.pasangan(orangTua?.detail?.nama_lengkap, dataAnak);
     console.log(dataPasangan);
 
     // Get & Set Elements
@@ -574,61 +574,65 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     const pekerjaan = document.getElementById('pekerjaan-value');
     pekerjaan.innerText = orangTua.detail.pekerjaan;
 
-    // ** (Data Pasangan: NIK, Nama Lengkap, Email, Nomor Telepon)
-    const labelPasangan = document.getElementById('label-pasangan');
-    labelPasangan.innerText = orangTua.detail.hubungan === "Ayah" ? 'Istri' : 'Suami';
-    const nikPasangan = document.getElementById('nik-pasangan-value');
-    nikPasangan.innerText = dataPasangan.nomor_identitas_kependudukan;
-    const namaPasangan = document.getElementById('nama-lengkap-pasangan-value');
-    namaPasangan.innerText = dataPasangan.nama_lengkap;
-    const tempatLahirPasangan = document.getElementById('tempat-lahir-pasangan-value');
-    tempatLahirPasangan.innerText = dataPasangan.tempat_lahir;
-    const tanggalLahirPasangan = document.getElementById('tanggal-lahir-pasangan-value');
-    tanggalLahirPasangan.innerText = Handler_Format_Date(dataPasangan.tanggal_lahir);
-    const jenisKelaminPasangan = document.getElementById('jenis-kelamin-pasangan-value');
-    jenisKelaminPasangan.innerText = dataPasangan.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';;
-    const nomorTeleponPasangan = document.getElementById('nomor-telepon-pasangan-value');
-    nomorTeleponPasangan.innerText = dataPasangan.nomor_telepon;
-    const emailPasangan = document.getElementById('email-pasangan-value');
-        emailPasangan.innerText = dataPasangan.email;
-    const pekerjaanPasangan = document.getElementById('pekerjaan-pasangan-value');
-        pekerjaanPasangan.innerText = dataPasangan.pekerjaan;
-    // ** (Data Anak: NISN, Nama Lengkap, Kelas, Tempat Lahir, Tanggal Lahir)
-    const nisnSiswa = document.getElementById('nisn-anak-value');
-      nisnSiswa.innerText = dataAnak.nomor_induk_siswa;
-    const namaLengkapAnak = document.getElementById('nama-lengkap-anak-value');
-      namaLengkapAnak.innerText = dataAnak.nama_lengkap;
-    const jenisKelaminAnak = document.getElementById('jenis-kelamin-anak-value');
-      jenisKelaminAnak.innerText = dataAnak.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
-    const kelasAnak = document.getElementById('kelas-anak-value');
-      kelasAnak.innerText = dataAnak.kelas;
-    const tempatLahirAnak = document.getElementById('tempat-lahir-anak-value');
-      tempatLahirAnak.innerText = dataAnak.tempat_lahir;
-    const tanggalLahirAnak = document.getElementById('tanggal-lahir-anak-value');
-      tanggalLahirAnak.innerText = Handler_Format_Date(dataAnak.tanggal_lahir);
-  // ** Provinsi
-  const provinsi = document.getElementById('provinsi-value');
-  provinsi.innerText = orangTua.detail.provinsi;
-  // ** Kabupaten
-  const kabupaten = document.getElementById('kabupaten-value');
-  kabupaten.innerText = orangTua.detail.kabupaten;
-  // ** Kecamatan
-  const kecamatan = document.getElementById('kecamatan-value');
-  kecamatan.innerText = orangTua.detail.kecamatan;
-  // ** Desa / Kelurahan
-  const desa = document.getElementById('desa-value');
-  desa.innerText = orangTua.detail.desa;
-  // ** RT / RW
-  const rt = document.getElementById('rt-value');
-  rt.innerText = orangTua.detail.rt;
-  const rw = document.getElementById('rw-value');
-  rw.innerText = orangTua.detail.rw;
-  // ** Kode Post
-  const kodePost = document.getElementById('kode-post-value');
-  kodePost.innerText = orangTua.detail.kode_pos;
-  // ** Photo Profile Siswa
-  const photoProfile = document.getElementById('detail-photo-profile');
-  photoProfile.src = orangTua.detail.photo;
+    if (dataAnak && dataPasangan) {
+      // ** (Data Pasangan: NIK, Nama Lengkap, Email, Nomor Telepon)
+      const labelPasangan = document.getElementById('label-pasangan');
+      labelPasangan.innerText = orangTua.detail?.hubungan === "Ayah" ? 'Istri' : 'Suami';
+      const nikPasangan = document.getElementById('nik-pasangan-value');
+      nikPasangan.innerText = dataPasangan.nomor_identitas_kependudukan;
+      const namaPasangan = document.getElementById('nama-lengkap-pasangan-value');
+      namaPasangan.innerText = dataPasangan.nama_lengkap;
+      const tempatLahirPasangan = document.getElementById('tempat-lahir-pasangan-value');
+      tempatLahirPasangan.innerText = dataPasangan.tempat_lahir;
+      const tanggalLahirPasangan = document.getElementById('tanggal-lahir-pasangan-value');
+      tanggalLahirPasangan.innerText = Handler_Format_Date(dataPasangan.tanggal_lahir);
+      const jenisKelaminPasangan = document.getElementById('jenis-kelamin-pasangan-value');
+      jenisKelaminPasangan.innerText = dataPasangan?.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';;
+      const nomorTeleponPasangan = document.getElementById('nomor-telepon-pasangan-value');
+      nomorTeleponPasangan.innerText = dataPasangan.nomor_telepon;
+      const emailPasangan = document.getElementById('email-pasangan-value');
+          emailPasangan.innerText = dataPasangan.email;
+      const pekerjaanPasangan = document.getElementById('pekerjaan-pasangan-value');
+          pekerjaanPasangan.innerText = dataPasangan.pekerjaan;
+      // ** (Data Anak: NISN, Nama Lengkap, Kelas, Tempat Lahir, Tanggal Lahir)
+      const nisnSiswa = document.getElementById('nisn-anak-value');
+        nisnSiswa.innerText = dataAnak.nomor_induk_siswa;
+      const namaLengkapAnak = document.getElementById('nama-lengkap-anak-value');
+        namaLengkapAnak.innerText = dataAnak.nama_lengkap;
+      const jenisKelaminAnak = document.getElementById('jenis-kelamin-anak-value');
+        jenisKelaminAnak.innerText = dataAnak.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+      const kelasAnak = document.getElementById('kelas-anak-value');
+        kelasAnak.innerText = dataAnak.kelas;
+      const tempatLahirAnak = document.getElementById('tempat-lahir-anak-value');
+        tempatLahirAnak.innerText = dataAnak.tempat_lahir;
+      const tanggalLahirAnak = document.getElementById('tanggal-lahir-anak-value');
+        tanggalLahirAnak.innerText = Handler_Format_Date(dataAnak?.tanggal_lahir);
+    }
+
+    // ** Provinsi
+    const provinsi = document.getElementById('provinsi-value');
+    provinsi.innerText = orangTua.detail.provinsi;
+    // ** Kabupaten
+    const kabupaten = document.getElementById('kabupaten-value');
+    kabupaten.innerText = orangTua.detail.kabupaten;
+    // ** Kecamatan
+    const kecamatan = document.getElementById('kecamatan-value');
+    kecamatan.innerText = orangTua.detail.kecamatan;
+    // ** Desa / Kelurahan
+    const desa = document.getElementById('desa-value');
+    desa.innerText = orangTua.detail.desa;
+    // ** RT / RW
+    const rt = document.getElementById('rt-value');
+    rt.innerText = orangTua.detail.rt;
+    const rw = document.getElementById('rw-value');
+    rw.innerText = orangTua.detail.rw;
+    // ** Kode Post
+    const kodePost = document.getElementById('kode-post-value');
+    kodePost.innerText = orangTua.detail.kode_pos;
+    // ** Photo Profile
+    const photoProfile = document.getElementById('detail-photo-profile');
+    photoProfile.src = orangTua.detail.photo;
+    // photoProfile.src = "http://localhost:100/images/parents/_/parents_aldi";
   }
   // ** Modals Detail : Close
   function closeModalDetail() {
@@ -638,95 +642,112 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   }
 
   // ** Modals Edit : Open
-  function loadModalEdit() {
-    console.log(siswa.detail);
+  function loadModalEdit(nik) {
+    // Get Detail Data
+    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === nik);
+
+    console.log(orangTua.detail);
     const elements = document.getElementById('container-modal-edit');
           elements.classList.remove('hidden');
           elements.classList.add('absolute');
     const formEditModal = document.getElementById('form-edit-modal');
-          formEditModal.setAttribute('action', `/master-data/siswa/${siswa.detail.nomor_induk_siswa}/update`);
+          formEditModal.setAttribute('action', `/master-data/orang-tua-siswa/${orangTua.detail.nomor_identitas_kependudukan}/update`);
           formEditModal.setAttribute('method', 'post');
+          formEditModal.setAttribute('nik', orangTua.detail.nomor_identitas_kependudukan);
     const swalMask = document.getElementById('swal-mask');
     if (swalMask) {
       elements.removeChild(swalMask);
     }
 
-      // SET VALUE
+    // Handle Label
+    function handleCheckInputValue(value, target) {
+      // Hapus elemen lama jika ada
+      const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+
+      // Buat elemen baru
+      const span = document.createElement("span");
+      if (value === "") {
+        span.className = "text-red-500 text-lg";
+        span.textContent = "*";
+        span.id = "empty";
+      } else {
+        span.className = "font-bold text-green-500";
+        span.innerHTML = "&#10003;";
+        span.id = "no-empty";
+      }
+
+      // Tambahkan elemen baru ke target
+      target.appendChild(span);
+    }
+
+      // SET INPUT & LABEL VALUE
+      let tempValue = null;
+
       // Nama Lengkap
       const editInputNamaLengkap = document.getElementById('edit-nama-lengkap');
-      editInputNamaLengkap.value = siswa.detail.nama_lengkap;
-      // NISN
-      const editInputNomorIndukSiswa = document.getElementById('edit-nomor-induk-siswa');
-      editInputNomorIndukSiswa.value = siswa.detail.nomor_induk_siswa;
-      // Tempat Lahir
+      const labelEditInputNamaLengkap = document.getElementById('label-edit-nama-lengkap');
+      tempValue = orangTua.detail.nama_lengkap;
+      editInputNamaLengkap.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputNamaLengkap);
+      // NIK
+      const editInputNIK = document.getElementById('edit-nik');
+      const labelEditInputNIK = document.getElementById('label-edit-nik');
+      tempValue = orangTua.detail.nomor_identitas_kependudukan;
+      editInputNIK.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputNIK);
+      // Tempat Lahir === FIX IT
       const editInputTempatLahir = document.getElementById('edit-tempat-lahir');
-      editInputTempatLahir.value = siswa.detail.tempat_lahir;
+      editInputTempatLahir.value = orangTua.detail.tempat_lahir;
       // Tanggal Lahir
       const editInputTanggalLahir = document.getElementById('edit-tanggal-lahir');
-      editInputTanggalLahir.value = siswa.detail.tanggal_lahir;
+      editInputTanggalLahir.value = orangTua.detail.tanggal_lahir;
       // Jenis Kelamin
-      const editInputJenisKelamin = document.getElementById('edit-jenis-kelamin');
-      editInputJenisKelamin.value = siswa.detail.jenis_kelamin;
-      // Kelas
-      const editInputKelas = document.getElementById('edit-kelas');
-      editInputKelas.value = siswa.detail.kelas;
-      // Data Ayah
-      const ayah = dt_ayah.find((data) => data.nama_lengkap == siswa.detail.nama_ayah);
-      // ** NIK
-      const editInputNikAyah = document.getElementById('edit-nik-ayah');
-      editInputNikAyah.value = ayah.nomor_identitas_kependudukan;
-      // ** Nama Lengkap Ayah
-      const editInputNamaLengkapAyah = document.getElementById('edit-nama-lengkap-ayah');
-      editInputNamaLengkapAyah.value = ayah.nama_lengkap;
-      // ** Email Ayah
-      const editInputEmailAyah = document.getElementById('edit-email-ayah');
-      editInputEmailAyah.value = ayah.email;
-      // ** Nomor Telepon Ayah
-      const editInputTeleponAyah = document.getElementById('edit-nomor-telepon-ayah');
-      editInputTeleponAyah.value = ayah.nomor_telepon;
-      // Data Ibu
-      const ibu = dt_ibu.find((data) => data.nama_lengkap == siswa.detail.nama_ibu);
-      // ** NIK
-      const editInputNikIbu = document.getElementById('edit-nik-ibu');
-      editInputNikIbu.value = ibu.nomor_identitas_kependudukan;
-      // ** Nama Lengkap Ibu
-      const editInputNamaIbu = document.getElementById('edit-nama-lengkap-ibu');
-      editInputNamaIbu.value = ibu.nama_lengkap;
-      // ** Email Ibu
-      const editInputEmailIbu = document.getElementById('edit-email-ibu');
-      editInputEmailIbu.value = ibu.email;
-      // ** Nomor Telepon Ibu
-      const editInputTeleponIbu = document.getElementById('edit-nomor-telepon-ibu');
-      editInputTeleponIbu.value = ibu.nomor_telepon;
+      const editSelectJenisKelamin = document.getElementById('edit-jenis-kelamin');
+      editSelectJenisKelamin.value = orangTua.detail.jenis_kelamin;
+      // Hubungan
+      const editSelectHubungan = document.getElementById('edit-hubungan');
+      editSelectHubungan.value = orangTua.detail.hubungan;
+      // Pekerjaan
+      const editInputPekerjaan = document.getElementById('edit-pekerjaan');
+      editInputPekerjaan.value = orangTua.detail.pekerjaan;
+      // Email
+      const editInputEmail = document.getElementById('edit-email');
+      editInputEmail.value = orangTua.detail.email;
+      // Nomor Telepon
+      const editInputNomorTelepon = document.getElementById('edit-nomor-telepon');
+      editInputNomorTelepon.value = orangTua.detail.nomor_telepon;
       // Data Alamat
       // ** Provinsi
       const editInputProvinsi = document.getElementById('edit-provinsi');
-      editInputProvinsi.value = siswa.detail.provinsi;
+      editInputProvinsi.value = orangTua.detail.provinsi;
       // ** Kabupaten
       const editInputKabupaten = document.getElementById('edit-kabupaten');
-      editInputKabupaten.value = siswa.detail.kabupaten;
+      editInputKabupaten.value = orangTua.detail.kabupaten;
       // ** Kabupaten
       const editInputKecamatan = document.getElementById('edit-kecamatan');
-      editInputKecamatan.value = siswa.detail.kecamatan;
+      editInputKecamatan.value = orangTua.detail.kecamatan;
       // ** Desa
       const editInputDesa = document.getElementById('edit-desa');
-      editInputDesa.value = siswa.detail.desa;
+      editInputDesa.value = orangTua.detail.desa;
       // ** RT
       const editInputRT = document.getElementById('edit-rt');
-      editInputRT.value = siswa.detail.rt;
+      editInputRT.value = orangTua.detail.rt;
       // ** RW
       const editInputRW = document.getElementById('edit-rw');
-      editInputRW.value = siswa.detail.rw;
+      editInputRW.value = orangTua.detail.rw;
       // ** Kode Post
       const editInputKodePost = document.getElementById('edit-kode-post');
-      editInputKodePost.value = siswa.detail.kode_pos;
+      editInputKodePost.value = orangTua.detail.kode_pos;
       // ** Photo Profile
       // priview image
       const editPhotoProfile = document.getElementById('edit-preview-image');
-      editPhotoProfile.src = siswa.detail.photo_siswa;
+      editPhotoProfile.src = orangTua.detail.photo;
       // input photo profile
       const editInputPhotoProfile = document.getElementById('edit-photo-profile');
-      editInputPhotoProfile.src = siswa.detail.photo_siswa;
+      editInputPhotoProfile.src = orangTua.detail.photo;
   }
 
   // DOM Load Content
@@ -743,7 +764,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     getBtnPagination();
     getInputSearch();
     // test
-    // loadModalDetail(3275010101990004);
+    loadModalEdit(3275010101990004);
     // loadModalTambah();
   });
 </script>
