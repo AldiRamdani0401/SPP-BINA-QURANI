@@ -1,5 +1,6 @@
 <?php
 require BASE_PATH . "/helpers/files/Helper_Images.php";
+require BASE_PATH . "/helpers/files/Helper_Delete_Images.php";
 
 class MasterDataController
 {
@@ -249,6 +250,108 @@ class MasterDataController
                 echo 'error';
             }
         }
+
+        /* @@@ UPDATE : ORANG TUA SISWA @@@ */
+        public function updateDataOrangTuaSiswa() {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && strtolower($_POST['_method']) === 'put') {
+                // Ambil data dari form
+                $namaLengkap = $_POST['nama-lengkap'] ?? null;
+                $nik = $_POST['nomor-identitas-kependudukan'] ?? null;
+                $tempatLahir = $_POST['tempat-lahir'] ?? null;
+                $tanggalLahir = $_POST['tanggal-lahir'] ?? null;
+                $jenisKelamin = $_POST['jenis-kelamin'] ?? null;
+                $hubungan = $_POST['hubungan'] ?? null;
+                $pekerjaan = $_POST['pekerjaan'] ?? null;
+                $email = $_POST['email'] ?? null;
+                $nomorTelepon = $_POST['nomor-telepon'] ?? null;
+                $provinsi = $_POST['provinsi'] ?? null;
+                $kabupaten = $_POST['kabupaten'] ?? null;
+                $kecamatan = $_POST['kecamatan'] ?? null;
+                $desa = $_POST['desa'] ?? null;
+                $rt = $_POST['rt'] ?? null;
+                $rw = $_POST['rw'] ?? null;
+                $kodePos = $_POST['kode-post'] ?? null;
+
+                // Penanganan foto
+                $photo = null;
+                if (isset($_FILES['photo-profile']) && $_FILES['photo-profile']['error'] === UPLOAD_ERR_OK) {
+                    // Database Connect
+                    $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    // Hapus Image Lama
+                    $querySelectPhoto = "SELECT photo FROM tb_orang_tua_siswa WHERE nomor_identitas_kependudukan = ?";
+
+                    $stmtSelect = $conn->prepare($querySelectPhoto);
+                    $stmtSelect->bind_param('s', $nik);
+                    $stmtSelect->execute();
+                    $result = $stmtSelect->get_result();
+                    $row = $result->fetch_assoc();
+
+                    $newPhotoName = pathinfo($_FILES['photo-profile']['name'], PATHINFO_FILENAME);
+
+                    $oldPhotoName = basename($row['photo']);
+
+                    if ($newPhotoName != $oldPhotoName) {
+                        Helper_Delete_Images($oldPhotoName);
+                        $photo = Helper_Images('parents', null, $_FILES['photo-profile']);
+                    }
+                    $stmtSelect->close();
+                }
+
+                // Pastikan NIK ada
+                if (empty($nik)) {
+                    die('Error: NIK harus diisi untuk melakukan update.');
+                }
+
+                // Build query
+                $query = "UPDATE tb_orang_tua_siswa SET ";
+                $params = [];
+                if ($namaLengkap) { $query .= "nama_lengkap = ?, "; $params[] = $namaLengkap; }
+                if ($tempatLahir) { $query .= "tempat_lahir = ?, "; $params[] = $tempatLahir; }
+                if ($tanggalLahir) { $query .= "tanggal_lahir = ?, "; $params[] = $tanggalLahir; }
+                if ($jenisKelamin) { $query .= "jenis_kelamin = ?, "; $params[] = $jenisKelamin; }
+                if ($hubungan) { $query .= "hubungan = ?, "; $params[] = $hubungan; }
+                if ($pekerjaan) { $query .= "pekerjaan = ?, "; $params[] = $pekerjaan; }
+                if ($email) { $query .= "email = ?, "; $params[] = $email; }
+                if ($nomorTelepon) { $query .= "nomor_telepon = ?, "; $params[] = $nomorTelepon; }
+                if ($provinsi) { $query .= "provinsi = ?, "; $params[] = $provinsi; }
+                if ($kabupaten) { $query .= "kabupaten = ?, "; $params[] = $kabupaten; }
+                if ($kecamatan) { $query .= "kecamatan = ?, "; $params[] = $kecamatan; }
+                if ($desa) { $query .= "desa = ?, "; $params[] = $desa; }
+                if ($rt) { $query .= "rt = ?, "; $params[] = $rt; }
+                if ($rw) { $query .= "rw = ?, "; $params[] = $rw; }
+                if ($kodePos) { $query .= "kode_pos = ?, "; $params[] = $kodePos; }
+                if ($photo) { $query .= "photo = ?, "; $params[] = $photo; }
+
+                $query = rtrim($query, ', ') . " WHERE nomor_identitas_kependudukan = ?";
+                $params[] = $nik;
+
+                // Database Connect
+                $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Prepare statement
+                $stmt = $conn->prepare($query);
+                $types = str_repeat('s', count($params));
+                $stmt->bind_param($types, ...$params);
+
+                // Execute
+                if (!$stmt->execute()) {
+                    die("Error: " . $stmt->error);
+                }
+
+                $stmt->close();
+                $conn->close();
+                header("Location: /admin/master-data/orang-tua-siswa");
+            }
+        }
+
 
     /* ======= End of ORANG TUA SISWA ===== */
 

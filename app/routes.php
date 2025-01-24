@@ -29,6 +29,18 @@ class Routes
     }
 
     /**
+     * Method untuk menambahkan rute PUT.
+     *
+     * @param string $path URL path.
+     * @param string $action Controller dan method dalam format "Controller@method".
+     * @param bool $middleware Apakah middleware diaktifkan untuk rute ini.
+     */
+    public function put($path, $action, $middleware = false)
+    {
+        $this->addRoute('PUT', $path, $action, $middleware);
+    }
+
+    /**
      * Method untuk menambahkan rute ke array routes.
      *
      * @param string $method HTTP method.

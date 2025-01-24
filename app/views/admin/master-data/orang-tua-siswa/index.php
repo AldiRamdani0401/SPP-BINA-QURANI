@@ -651,8 +651,6 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
           elements.classList.remove('hidden');
           elements.classList.add('absolute');
     const formEditModal = document.getElementById('form-edit-modal');
-          formEditModal.setAttribute('action', `/master-data/orang-tua-siswa/${orangTua.detail.nomor_identitas_kependudukan}/update`);
-          formEditModal.setAttribute('method', 'post');
           formEditModal.setAttribute('nik', orangTua.detail.nomor_identitas_kependudukan);
     const swalMask = document.getElementById('swal-mask');
     if (swalMask) {
@@ -698,49 +696,92 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       tempValue = orangTua.detail.nomor_identitas_kependudukan;
       editInputNIK.value = tempValue;
       handleCheckInputValue(tempValue, labelEditInputNIK);
-      // Tempat Lahir === FIX IT
+      // Tempat Lahir
       const editInputTempatLahir = document.getElementById('edit-tempat-lahir');
-      editInputTempatLahir.value = orangTua.detail.tempat_lahir;
+      const labelEditInputTempatLahir = document.getElementById('label-edit-tempat-lahir');
+      tempValue = orangTua.detail.tempat_lahir;
+      editInputTempatLahir.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputTempatLahir);
       // Tanggal Lahir
       const editInputTanggalLahir = document.getElementById('edit-tanggal-lahir');
+      const labelEditInputTanggalLahir = document.getElementById('label-edit-tanggal-lahir');
+      tempValue = orangTua.detail.tanggal_lahir;
+      editInputTanggalLahir.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputTanggalLahir);
       editInputTanggalLahir.value = orangTua.detail.tanggal_lahir;
       // Jenis Kelamin
       const editSelectJenisKelamin = document.getElementById('edit-jenis-kelamin');
-      editSelectJenisKelamin.value = orangTua.detail.jenis_kelamin;
+      tempValue = orangTua.detail.jenis_kelamin;
+      editSelectJenisKelamin.value = tempValue;
+      const labelEditSelectJenisKelamin = document.getElementById('label-edit-jenis-kelamin');
+      handleCheckInputValue(tempValue, labelEditSelectJenisKelamin);
       // Hubungan
       const editSelectHubungan = document.getElementById('edit-hubungan');
-      editSelectHubungan.value = orangTua.detail.hubungan;
+      tempValue = orangTua.detail.hubungan;
+      editSelectHubungan.value = tempValue;
+      const labelEditSelectHubungan = document.getElementById('label-edit-hubungan');
+      handleCheckInputValue(tempValue, labelEditSelectHubungan);
       // Pekerjaan
       const editInputPekerjaan = document.getElementById('edit-pekerjaan');
-      editInputPekerjaan.value = orangTua.detail.pekerjaan;
+      tempValue = orangTua.detail.pekerjaan;
+      editInputPekerjaan.value = tempValue;
+      const labelEditInputPekerjaan = document.getElementById('label-edit-pekerjaan');
+      handleCheckInputValue(tempValue, labelEditInputPekerjaan);
       // Email
       const editInputEmail = document.getElementById('edit-email');
-      editInputEmail.value = orangTua.detail.email;
+      tempValue = orangTua.detail.email;
+      editInputEmail.value = tempValue;
+      const labelEditInputEmail = document.getElementById('label-edit-email');
+      handleCheckInputValue(tempValue, labelEditInputEmail);
       // Nomor Telepon
       const editInputNomorTelepon = document.getElementById('edit-nomor-telepon');
-      editInputNomorTelepon.value = orangTua.detail.nomor_telepon;
+      tempValue = orangTua.detail.nomor_telepon;
+      editInputNomorTelepon.value = tempValue;
+      const labelEditInputNomorTelepon = document.getElementById('label-edit-nomor-telepon');
+      handleCheckInputValue(tempValue, labelEditInputNomorTelepon);
       // Data Alamat
       // ** Provinsi
       const editInputProvinsi = document.getElementById('edit-provinsi');
-      editInputProvinsi.value = orangTua.detail.provinsi;
+      tempValue = orangTua.detail.provinsi;
+      editInputProvinsi.value = tempValue;
+      const labelEditInputProvinsi = document.getElementById('edit-label-provinsi');
+      handleCheckInputValue(tempValue, labelEditInputProvinsi);
       // ** Kabupaten
       const editInputKabupaten = document.getElementById('edit-kabupaten');
-      editInputKabupaten.value = orangTua.detail.kabupaten;
-      // ** Kabupaten
+      tempValue = orangTua.detail.kabupaten;
+      editInputKabupaten.value = tempValue;
+      const labelEditInputKabupaten = document.getElementById('edit-label-kabupaten');
+      handleCheckInputValue(tempValue, labelEditInputKabupaten);
+      // ** Kecamatan
       const editInputKecamatan = document.getElementById('edit-kecamatan');
-      editInputKecamatan.value = orangTua.detail.kecamatan;
+      tempValue = orangTua.detail.kecamatan;
+      editInputKecamatan.value = tempValue;
+      const labelEditInputKecamatan = document.getElementById('edit-label-kecamatan');
+      handleCheckInputValue(tempValue, labelEditInputKecamatan);
       // ** Desa
       const editInputDesa = document.getElementById('edit-desa');
-      editInputDesa.value = orangTua.detail.desa;
+      tempValue = orangTua.detail.desa;
+      editInputDesa.value = tempValue;
+      const labelEditInputDesa = document.getElementById('edit-label-desa');
+      handleCheckInputValue(tempValue, labelEditInputDesa);
       // ** RT
       const editInputRT = document.getElementById('edit-rt');
-      editInputRT.value = orangTua.detail.rt;
+      tempValue = orangTua.detail.rt;
+      editInputRT.value = tempValue;
+      const labelEditInputRT = document.getElementById('edit-label-rt');
+      handleCheckInputValue(tempValue, labelEditInputRT);
       // ** RW
       const editInputRW = document.getElementById('edit-rw');
-      editInputRW.value = orangTua.detail.rw;
+      tempValue = orangTua.detail.rw;
+      editInputRW.value = tempValue;
+      const labelEditInputRW = document.getElementById('edit-label-rw');
+      handleCheckInputValue(tempValue, labelEditInputRW);
       // ** Kode Post
       const editInputKodePost = document.getElementById('edit-kode-post');
-      editInputKodePost.value = orangTua.detail.kode_pos;
+      tempValue = orangTua.detail.kode_pos;
+      editInputKodePost.value = tempValue;
+      const labelEditInputKodePost = document.getElementById('edit-label-kode-post');
+      handleCheckInputValue(tempValue, labelEditInputKodePost);
       // ** Photo Profile
       // priview image
       const editPhotoProfile = document.getElementById('edit-preview-image');

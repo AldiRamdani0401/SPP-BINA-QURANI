@@ -30,13 +30,22 @@ class App
       $this->routes->get("/admin", "AdminController@index", $middleware = true);
     /* @@@ MASTER DATA @@@ */
         /* ### SISWA ### */
+          // *** SHOW : Siswa *** //
           $this->routes->get("/admin/master-data/siswa", "MasterDataController@siswa", $middleware = true);
+          // *** CREATE : Siswa *** //
           $this->routes->post("/master-data/siswa/create", "MasterDataController@createDataSiswa", $middleware = true);
+          // *** UPDATE : Siswa *** //
           $this->routes->post("/master-data/siswa/{siswa_id}/update", "MasterDataController@updateDataSiswa", $middleware = true);
+          // *** DELETE : Siswa *** //
+
         /* ### End of SISWA ### */
         /* ### ORANG TUA SISWA ### */
+          // *** SHOW : Orang Tua Siswa *** //
           $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
+          // *** CREATE : Orang Tua Siswa *** //
           $this->routes->post("/master-data/orang-tua/create", "MasterDataController@createDataOrangTuaSiswa", $middleware = true);
+          // *** UPDATE : Orang Tua Siswa *** //
+          $this->routes->post("/master-data/orang-tua/update", "MasterDataController@updateDataOrangTuaSiswa", $middleware = true);
         /* ### End of ORANG TUA SISWA ### */
         /* >>> kelas <<< */
         $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);

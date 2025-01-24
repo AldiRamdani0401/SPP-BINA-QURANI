@@ -1,7 +1,7 @@
 <?php
 
 function Helper_Load_Images ($main_folder, $sub_folder, $file_name) {
-  $fileJPGPath = BASE_PATH . "/assets/$main_folder/$sub_folder/$file_name.jpg";
+    $fileJPGPath = BASE_PATH . "/assets/$main_folder/$sub_folder/$file_name.jpg";
     $fileJPEGPath = BASE_PATH . "/assets/$main_folder/$sub_folder/$file_name.jpeg";
     $filePNGPath = BASE_PATH . "/assets/$main_folder/$sub_folder/$file_name.png";
 
