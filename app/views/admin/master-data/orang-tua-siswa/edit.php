@@ -26,8 +26,9 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Form Modal -->
-  <form id="form-edit-modal" enctype="multipart/form-data"
+  <form id="form-edit-modal" enctype="multipart/form-data" method="POST" action="/master-data/orang-tua/update"
     class="flex flex-col gap-5 justify-between">
+    <input type="hidden" name="_method" value="PUT" />
     <div class="flex flex-row gap-3 justify-between">
       <!-- Container 1 : Data Diri Siswa -->
       <div class="group flex flex-col w-64 gap-2 border py-2 px-3 rounded-md shadow-lg">
@@ -260,6 +261,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           onchange="updatePreview(event)">
       </div>
     </div>
+    <!-- Buttons -->
     <div class="flex flex-row gap-5 justify-between">
       <button type="button"
         class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md" onclick="closeModalTambah()">Batal</button>
@@ -267,7 +269,9 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         <button type="button"
           class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg rounded-md" onclick="handleResetEdit()">Reset</button>
         <button
-          class="bg-blue-600 hover:bg-blue-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md">Submit</button>
+          class="bg-blue-600 hover:bg-blue-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md"
+          >Submit
+        </button>
       </div>
     </div>
   </form>
