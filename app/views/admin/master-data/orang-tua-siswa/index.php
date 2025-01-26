@@ -632,7 +632,13 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     // ** Photo Profile
     const photoProfile = document.getElementById('detail-photo-profile');
     photoProfile.src = orangTua.detail.photo;
-    // photoProfile.src = "http://localhost:100/images/parents/_/parents_aldi";
+
+    // Set Edit Button Action
+    const containerDetailOrangTua = document.getElementById('container-detail-data-siswa');
+    const buttonEdit = containerDetailOrangTua.querySelector('#btn-edit');
+    buttonEdit.addEventListener('click', () => {
+      loadModalEdit(orangTua.detail.nomor_identitas_kependudukan);
+    });
   }
   // ** Modals Detail : Close
   function closeModalDetail() {
@@ -644,9 +650,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   // ** Modals Edit : Open
   function loadModalEdit(nik) {
     // Get Detail Data
-    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === nik);
+    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === parseInt(nik));
 
-    console.log(orangTua.detail);
+    console.log('Edit : ', orangTua.detail);
     const elements = document.getElementById('container-modal-edit');
           elements.classList.remove('hidden');
           elements.classList.add('absolute');
@@ -791,6 +797,40 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       editInputPhotoProfile.src = orangTua.detail.photo;
   }
 
+  // ** Modals Detail : Close
+  function closeModalEdit() {
+    const targetElement = document.getElementById('container-modal-edit');
+    Swal.fire({
+      title: "Batal Edit Data Orang Tua,<br> Anda Yakin?",
+      showConfirmButton: false,
+      showDenyButton: true,
+      showCancelButton: true,
+      cancelButtonColor: 'orange',
+      denyButtonText: `Ya, Saya Yakin`,
+      customClass: {
+        popup: 'swal-absolute', // Tambahkan kelas kustom
+      },
+      backdrop: false, // Tidak perlu backdrop diaktifkan jika masker kustom sudah digunakan
+      didOpen: () => {
+        const element = document.createElement('div'); // Membuat elemen div
+        element.setAttribute('id', 'swal-mask'); // Menetapkan ID untuk masker
+        element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute'); // Menambahkan kelas CSS
+        targetElement.appendChild(element); // Menambahkan elemen ke dalam targetElement
+      },
+      didClose: () => {
+        const swalMask = document.getElementById('swal-mask'); // Ambil masker berdasarkan ID
+        if (swalMask) {
+          targetElement.removeChild(swalMask); // Menghapus masker dari targetElement
+        }
+      }
+    }).then((result) => {
+      if (result.isDenied) {
+        targetElement.classList.remove('absolute');
+        targetElement.classList.add('hidden');
+      }
+    });
+  }
+
   // DOM Load Content
   window.addEventListener("DOMContentLoaded", () => {
     // initial value
@@ -805,7 +845,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     getBtnPagination();
     getInputSearch();
     // test
-    loadModalEdit(3275010101990004);
+    // loadModalEdit(3275010101990004);
     // loadModalTambah();
   });
 </script>

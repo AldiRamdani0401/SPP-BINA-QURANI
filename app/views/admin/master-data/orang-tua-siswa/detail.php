@@ -56,7 +56,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Container Detail Data Orang Tua -->
-  <div id="container-data-siswa"
+  <div id="container-detail-data-siswa"
     class="flex flex-col gap-5 justify-between">
     <div class="flex flex-row gap-3">
       <!-- Sub-Container 1 : Slide Data -->
@@ -342,8 +342,8 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       <button type="button"
         class="bg-blue-600 hover:bg-blue-400 hover:font-semibold text-white px-10 py-1 text-lg  rounded-md" onclick="closeModalDetail()">Kembali</button>
       <div class="flex flex-row gap-5">
-        <button type="button"
-          class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md" onclick="loadModalEdit()">Edit</button>
+        <button type="button" id="btn-edit"
+          class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md">Edit</button>
         <button
           class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md">Delete</button>
       </div>
