@@ -264,12 +264,14 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     <!-- Buttons -->
     <div class="flex flex-row gap-5 justify-between">
       <button type="button"
-        class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md" onclick="closeModalTambah()">Batal</button>
+        class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md" onclick="closeModalEdit()">Batal</button>
       <div class="flex flex-row gap-5">
         <button type="button"
           class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg rounded-md" onclick="handleResetEdit()">Reset</button>
         <button
+          type="button"
           class="bg-blue-600 hover:bg-blue-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md"
+          onclick="loadConfirmEdit()"
           >Submit
         </button>
       </div>
@@ -615,4 +617,45 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     const inputImage = document.getElementById('edit-photo-profile');
     inputImage.value = "";
   }
+
+    // ** Modals Edit : Confirm
+    function loadConfirmEdit() {
+      const targetElement = document.getElementById('container-modal-edit');
+      const formEdit = document.getElementById('form-edit-modal'); // Ambil elemen form
+
+      Swal.fire({
+        title: "Pembaruan Data Orang Tua,<br> Anda Yakin?",
+        showConfirmButton: true,
+        showDenyButton: false,
+        showCancelButton: true,
+        cancelButtonColor: 'orange',
+        confirmButtonColor: 'blue',
+        confirmButtonText: `Ya, Saya Yakin`,
+        customClass: {
+          popup: 'swal-absolute', // Tambahkan kelas kustom
+        },
+        backdrop: false, // Tidak perlu backdrop diaktifkan jika masker kustom sudah digunakan
+        didOpen: () => {
+          const element = document.createElement('div'); // Membuat elemen div
+          element.setAttribute('id', 'swal-mask'); // Menetapkan ID untuk masker
+          element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute'); // Menambahkan kelas CSS
+          targetElement.appendChild(element); // Menambahkan elemen ke dalam targetElement
+        },
+        didClose: () => {
+          const swalMask = document.getElementById('swal-mask'); // Ambil masker berdasarkan ID
+          if (swalMask) {
+            targetElement.removeChild(swalMask); // Menghapus masker dari targetElement
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Jika tombol Confirm ditekan, submit formulir
+          formEdit.submit();
+        } else if (result.isDenied || result.isDismissed) {
+          targetElement.classList.remove('absolute');
+          targetElement.classList.add('hidden');
+        }
+      });
+    }
+
 </script>

@@ -7,11 +7,11 @@ function Helper_Delete_Images($fileName) {
   echo $fileName . "<br>";
   if (file_exists($fileJPGPath)) {
       echo $fileJPGPath;
-      unlink($filePNGPath);
+      unlink($fileJPGPath);
   }
   if (file_exists($fileJPEGPath)) {
       echo $fileJPEGPath;
-      unlink($filePNGPath);
+      unlink($fileJPEGPath);
   }
   if (file_exists($filePNGPath)) {
       echo $filePNGPath;
