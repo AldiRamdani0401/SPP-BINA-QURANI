@@ -642,7 +642,18 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   }
   // ** Modals Detail : Close
   function closeModalDetail() {
+    orangTua.detail = [];
     const targetElement = document.getElementById('container-modal-detail');
+    // Reset Data Anak
+    const spanAnakElements = targetElement.querySelectorAll('span[id$="anak-value"]');
+    Array.from(spanAnakElements).map((element) => {
+      element.innerText = "?";
+    })
+    // Reset Data Pasangan
+    const spanPasanganElements = targetElement.querySelectorAll('span[id$="pasangan-value"]');
+    Array.from(spanPasanganElements).map((element) => {
+      element.innerText = "?";
+    })
     targetElement.classList.remove('absolute');
     targetElement.classList.add('hidden');
   }
@@ -797,7 +808,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       editInputPhotoProfile.src = orangTua.detail.photo;
   }
 
-  // ** Modals Detail : Close
+  // ** Modals Edit : Close
   function closeModalEdit() {
     const targetElement = document.getElementById('container-modal-edit');
     Swal.fire({
