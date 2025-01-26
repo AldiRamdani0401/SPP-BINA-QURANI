@@ -361,7 +361,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   function deleteEditDataOrangTuaSiswa() {
     const targetElement = document.getElementById('container-modal-detail');
     Swal.fire({
-      title: "<span class='text-red-500'>Danger Zone</span><br><hr class='my-1'>Hapus Data Orang Tua,<br> Anda Yakin?",
+      title: "<span class='text-red-500 font-semibold'>Danger Zone</span><br><hr class='my-1'>Hapus Data Orang Tua,<br> Anda Yakin?",
       showConfirmButton: true,
       showDenyButton: false,
       showCancelButton: true,

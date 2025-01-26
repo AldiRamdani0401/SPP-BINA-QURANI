@@ -808,34 +808,76 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   // ** Modals Edit : Close
   function closeModalEdit() {
     const targetElement = document.getElementById('container-modal-edit');
-    Swal.fire({
-      title: "Batal Edit Data Orang Tua,<br> Anda Yakin?",
-      showConfirmButton: false,
-      showDenyButton: true,
-      showCancelButton: true,
-      cancelButtonColor: 'orange',
-      denyButtonText: `Ya, Saya Yakin`,
-      customClass: {
-        popup: 'swal-absolute', // Tambahkan kelas kustom
-      },
-      backdrop: false, // Tidak perlu backdrop diaktifkan jika masker kustom sudah digunakan
-      didOpen: () => {
-        const element = document.createElement('div'); // Membuat elemen div
-        element.setAttribute('id', 'swal-mask'); // Menetapkan ID untuk masker
-        element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute'); // Menambahkan kelas CSS
-        targetElement.appendChild(element); // Menambahkan elemen ke dalam targetElement
-      },
-      didClose: () => {
-        const swalMask = document.getElementById('swal-mask'); // Ambil masker berdasarkan ID
-        if (swalMask) {
-          targetElement.removeChild(swalMask); // Menghapus masker dari targetElement
+
+  // old values
+  const oldValues = [
+    orangTua.detail.nama_lengkap,
+    orangTua.detail.nomor_identitas_kependudukan,
+    orangTua.detail.tempat_lahir,
+    orangTua.detail.tanggal_lahir,
+    orangTua.detail.pekerjaan,
+    orangTua.detail.email,
+    orangTua.detail.nomor_telepon,
+    orangTua.detail.provinsi,
+    orangTua.detail.kabupaten,
+    orangTua.detail.kecamatan,
+    orangTua.detail.desa,
+    orangTua.detail.rt,
+    orangTua.detail.rw,
+    orangTua.detail.kode_pos
+  ];
+
+  const inputElements = targetElement.querySelectorAll('input:not([type="hidden"]):not([type="file"])');
+
+  // Cek apakah ada input yang tidak sesuai dengan nilai lama
+  const isUpdated = Array.from(inputElements).some((input, index) => {
+    console.log(input.value, '=', oldValues[index]);
+
+    // Jika nilai input tidak sesuai dengan nilai lama, maka ada pembaruan
+    if (input.value !== oldValues[index]) {
+      console.log('Ada pembaruan pada input:', input.name);
+      return true; // Menunjukkan ada pembaruan
+    }
+
+    // Jika tidak ada perubahan
+    return false;
+  });
+
+  if (isUpdated) {
+    console.log('Ada pembaruan');
+      Swal.fire({
+        title: "Batal Edit Data Orang Tua,<br> Anda Yakin?",
+        showConfirmButton: false,
+        showDenyButton: true,
+        showCancelButton: true,
+        cancelButtonColor: 'orange',
+        denyButtonText: `Ya, Saya Yakin`,
+        customClass: {
+          popup: 'swal-absolute', // Tambahkan kelas kustom
+        },
+        backdrop: false, // Tidak perlu backdrop diaktifkan jika masker kustom sudah digunakan
+        didOpen: () => {
+          const element = document.createElement('div'); // Membuat elemen div
+          element.setAttribute('id', 'swal-mask'); // Menetapkan ID untuk masker
+          element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute'); // Menambahkan kelas CSS
+          targetElement.appendChild(element); // Menambahkan elemen ke dalam targetElement
+        },
+        didClose: () => {
+          const swalMask = document.getElementById('swal-mask'); // Ambil masker berdasarkan ID
+          if (swalMask) {
+            targetElement.removeChild(swalMask); // Menghapus masker dari targetElement
+          }
         }
-      }
-    }).then((result) => {
-      if (result.isDenied) {
-        targetElement.classList.remove('absolute');
-        targetElement.classList.add('hidden');
-      }
-    });
+      }).then((result) => {
+        if (result.isDenied) {
+          targetElement.classList.remove('absolute');
+          targetElement.classList.add('hidden');
+        }
+      });
+  } else {
+    targetElement.classList.remove('absolute');
+    targetElement.classList.add('hidden');
   }
+}
+
 </script>
