@@ -12,11 +12,25 @@ $app = new App();
 <script>
     const ws = new WebSocket("ws://localhost:3000");
 
+    ws.onopen = () => {
+        console.log("WebSocket connection established");
+    };
+
     ws.onmessage = (event) => {
-        if (event.data === "reload") {
-            console.log("Reloading page...");
-            window.location.reload();
+        try {
+            const data = JSON.parse(event.data);
+
+            if (data.action === "reload") {
+                console.log(`Reloading page due to changes in: ${data.file}`);
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error("Error parsing WebSocket message:", error);
         }
+    };
+
+    ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
     };
 
     ws.onclose = () => {

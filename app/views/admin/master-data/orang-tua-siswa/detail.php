@@ -344,12 +344,188 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       <div class="flex flex-row gap-5">
         <button type="button" id="btn-edit"
           class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md">Edit</button>
-        <button
-          class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md">Delete</button>
+          <form action="/master-data/orang-tua/delete" method="POST" id="delete-form">
+            <input type="hidden" name="_method" value="DELETE" />
+            <input type="hidden" id="deleted-nik" name="nik" />
+            <button type="button"
+            class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md"
+            onclick="deleteEditDataOrangTuaSiswa()">Delete</button>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+  // === ACTIONS ===
+  function deleteEditDataOrangTuaSiswa() {
+    const targetElement = document.getElementById('container-modal-detail');
+    Swal.fire({
+      title: "<span class='text-red-500 font-semibold'>Danger Zone</span><br><hr class='my-1'>Hapus Data Orang Tua,<br> Anda Yakin?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonColor: 'blue',
+      confirmButtonColor: 'red',
+      confirmButtonText: `Ya, Saya Yakin`,
+      customClass: {
+        popup: 'swal-absolute',
+      },
+      backdrop: false,
+      didOpen: () => {
+        const element = document.createElement('div');
+        element.setAttribute('id', 'swal-mask');
+        element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute');
+        targetElement.appendChild(element);
+      },
+      didClose: () => {
+        const swalMask = document.getElementById('swal-mask');
+        if (swalMask) {
+          targetElement.removeChild(swalMask);
+        }
+      },
+    }).then((result) => {
+        if (result.isConfirmed) {
+          // Jika tombol Confirm ditekan, submit formulir
+          document.getElementById("delete-form").submit();
+        }
+      });
+}
+
+  // === MODALS ===
+  // ** Modals Detail : Open
+  function loadModalDetail(nik) {
+    // Container
+    const elements = document.getElementById('container-modal-detail');
+      elements.classList.remove('hidden');
+      elements.classList.add('absolute');
+    const swalMask = document.getElementById('swal-mask');
+    if (swalMask) {
+      elements.removeChild(swalMask);
+    }
+
+    // Get Detail Data
+    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === nik);
+    console.log(orangTua.detail);
+
+    // Get Data Anak
+    const dataAnak = orangTua?.anak();
+    const dataPasangan = orangTua.pasangan(orangTua?.detail?.nama_lengkap, dataAnak);
+    console.log(dataPasangan);
+
+    // Get & Set Elements
+    // ** Nama Lengkap Orang Tua
+    const namaLengkapOrangTuaElement = document.getElementById('nama-lengkap-value');
+    namaLengkapOrangTuaElement.innerText = orangTua.detail.nama_lengkap;
+    // ** NIK
+    const nikOrangTuaElement = document.getElementById('nik-orangtua-value');
+    nikOrangTuaElement.innerText = orangTua.detail.nomor_identitas_kependudukan;
+    // ** Tempat Lahir
+    const tempatLahirElement = document.getElementById('tempat-lahir-value');
+    tempatLahirElement.innerText = orangTua.detail.tempat_lahir;
+    // ** Tanggal Lahir
+    const tanggalLahir = document.getElementById('tanggal-lahir-value');
+    tanggalLahir.innerText = Handler_Format_Date(orangTua.detail.tanggal_lahir); // format: 15 Oktober 2025
+    // ** Jenis Kelamin
+    const jenisKelamin = document.getElementById('jenis-kelamin-value');
+    jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    // ** Hubungan
+    // const jenisKelamin = document.getElementById('jenis-kelamin-value');
+    // jenisKelamin.innerText = orangTua.detail.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+    // ** Nomor Telepon
+    const nomorTelepon = document.getElementById('nomor-telepon-value');
+    nomorTelepon.innerText = orangTua.detail.nomor_telepon;
+    // ** Email
+    const email = document.getElementById('email-value');
+    email.innerText = orangTua.detail.email;
+    // ** Pekerjaan
+    const pekerjaan = document.getElementById('pekerjaan-value');
+    pekerjaan.innerText = orangTua.detail.pekerjaan;
+
+    if (dataAnak && dataPasangan) {
+      // ** (Data Pasangan: NIK, Nama Lengkap, Email, Nomor Telepon)
+      const labelPasangan = document.getElementById('label-pasangan');
+      labelPasangan.innerText = orangTua.detail?.hubungan === "Ayah" ? 'Istri' : 'Suami';
+      const nikPasangan = document.getElementById('nik-pasangan-value');
+      nikPasangan.innerText = dataPasangan.nomor_identitas_kependudukan;
+      const namaPasangan = document.getElementById('nama-lengkap-pasangan-value');
+      namaPasangan.innerText = dataPasangan.nama_lengkap;
+      const tempatLahirPasangan = document.getElementById('tempat-lahir-pasangan-value');
+      tempatLahirPasangan.innerText = dataPasangan.tempat_lahir;
+      const tanggalLahirPasangan = document.getElementById('tanggal-lahir-pasangan-value');
+      tanggalLahirPasangan.innerText = Handler_Format_Date(dataPasangan.tanggal_lahir);
+      const jenisKelaminPasangan = document.getElementById('jenis-kelamin-pasangan-value');
+      jenisKelaminPasangan.innerText = dataPasangan?.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';;
+      const nomorTeleponPasangan = document.getElementById('nomor-telepon-pasangan-value');
+      nomorTeleponPasangan.innerText = dataPasangan.nomor_telepon;
+      const emailPasangan = document.getElementById('email-pasangan-value');
+          emailPasangan.innerText = dataPasangan.email;
+      const pekerjaanPasangan = document.getElementById('pekerjaan-pasangan-value');
+          pekerjaanPasangan.innerText = dataPasangan.pekerjaan;
+      // ** (Data Anak: NISN, Nama Lengkap, Kelas, Tempat Lahir, Tanggal Lahir)
+      const nisnSiswa = document.getElementById('nisn-anak-value');
+        nisnSiswa.innerText = dataAnak.nomor_induk_siswa;
+      const namaLengkapAnak = document.getElementById('nama-lengkap-anak-value');
+        namaLengkapAnak.innerText = dataAnak.nama_lengkap;
+      const jenisKelaminAnak = document.getElementById('jenis-kelamin-anak-value');
+        jenisKelaminAnak.innerText = dataAnak.jenis_kelamin === 'L' ? 'Laki-Laki' : 'Perempuan';
+      const kelasAnak = document.getElementById('kelas-anak-value');
+        kelasAnak.innerText = dataAnak.kelas;
+      const tempatLahirAnak = document.getElementById('tempat-lahir-anak-value');
+        tempatLahirAnak.innerText = dataAnak.tempat_lahir;
+      const tanggalLahirAnak = document.getElementById('tanggal-lahir-anak-value');
+        tanggalLahirAnak.innerText = Handler_Format_Date(dataAnak?.tanggal_lahir);
+    }
+
+    // ** Provinsi
+    const provinsi = document.getElementById('provinsi-value');
+    provinsi.innerText = orangTua.detail.provinsi;
+    // ** Kabupaten
+    const kabupaten = document.getElementById('kabupaten-value');
+    kabupaten.innerText = orangTua.detail.kabupaten;
+    // ** Kecamatan
+    const kecamatan = document.getElementById('kecamatan-value');
+    kecamatan.innerText = orangTua.detail.kecamatan;
+    // ** Desa / Kelurahan
+    const desa = document.getElementById('desa-value');
+    desa.innerText = orangTua.detail.desa;
+    // ** RT / RW
+    const rt = document.getElementById('rt-value');
+    rt.innerText = orangTua.detail.rt;
+    const rw = document.getElementById('rw-value');
+    rw.innerText = orangTua.detail.rw;
+    // ** Kode Post
+    const kodePost = document.getElementById('kode-post-value');
+    kodePost.innerText = orangTua.detail.kode_pos;
+    // ** Photo Profile
+    const photoProfile = document.getElementById('detail-photo-profile');
+    photoProfile.src = orangTua.detail.photo;
+
+    // Set Edit Button Action
+    const containerDetailOrangTua = document.getElementById('container-detail-data-siswa');
+    const buttonEdit = containerDetailOrangTua.querySelector('#btn-edit');
+    buttonEdit.addEventListener('click', () => {
+      loadModalEdit(orangTua.detail.nomor_identitas_kependudukan);
+    });
+
+    const hiddenDeletedNIK = containerDetailOrangTua.querySelector('#deleted-nik');
+          hiddenDeletedNIK.value = orangTua.detail.nomor_identitas_kependudukan;
+  }
+  // ** Modals Detail : Close
+  function closeModalDetail() {
+    orangTua.detail = [];
+    const targetElement = document.getElementById('container-modal-detail');
+    // Reset Data Anak
+    const spanAnakElements = targetElement.querySelectorAll('span[id$="anak-value"]');
+    Array.from(spanAnakElements).map((element) => {
+      element.innerText = "?";
+    })
+    // Reset Data Pasangan
+    const spanPasanganElements = targetElement.querySelectorAll('span[id$="pasangan-value"]');
+    Array.from(spanPasanganElements).map((element) => {
+      element.innerText = "?";
+    })
+    targetElement.classList.remove('absolute');
+    targetElement.classList.add('hidden');
+  }
 </script>
