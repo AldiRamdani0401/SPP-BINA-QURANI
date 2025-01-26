@@ -618,7 +618,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     inputImage.value = "";
   }
 
-    // ** Modals Edit : Confirm
+    // ** Modals Edit Action : Confirm
     function loadConfirmEdit() {
       const targetElement = document.getElementById('container-modal-edit');
       const formEdit = document.getElementById('form-edit-modal'); // Ambil elemen form
@@ -651,11 +651,191 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         if (result.isConfirmed) {
           // Jika tombol Confirm ditekan, submit formulir
           formEdit.submit();
-        } else if (result.isDenied || result.isDismissed) {
-          targetElement.classList.remove('absolute');
-          targetElement.classList.add('hidden');
         }
       });
     }
 
+  // ** Modals Edit : Open
+  function loadModalEdit(nik) {
+    // Get Detail Data
+    orangTua.detail = orangTua.main_datas.find((data) => parseInt(data.nomor_identitas_kependudukan) === parseInt(nik));
+
+    console.log('Edit : ', orangTua.detail);
+    const elements = document.getElementById('container-modal-edit');
+          elements.classList.remove('hidden');
+          elements.classList.add('absolute');
+    const formEditModal = document.getElementById('form-edit-modal');
+          formEditModal.setAttribute('nik', orangTua.detail.nomor_identitas_kependudukan);
+    const swalMask = document.getElementById('swal-mask');
+    if (swalMask) {
+      elements.removeChild(swalMask);
+    }
+
+    // Handle Label
+    function handleCheckInputValue(value, target) {
+      // Hapus elemen lama jika ada
+      const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+
+      // Buat elemen baru
+      const span = document.createElement("span");
+      if (value === "") {
+        span.className = "text-red-500 text-lg";
+        span.textContent = "*";
+        span.id = "empty";
+      } else {
+        span.className = "font-bold text-green-500";
+        span.innerHTML = "&#10003;";
+        span.id = "no-empty";
+      }
+
+      // Tambahkan elemen baru ke target
+      target.appendChild(span);
+    }
+
+      // SET INPUT & LABEL VALUE
+      let tempValue = null;
+
+      // Nama Lengkap
+      const editInputNamaLengkap = document.getElementById('edit-nama-lengkap');
+      const labelEditInputNamaLengkap = document.getElementById('label-edit-nama-lengkap');
+      tempValue = orangTua.detail.nama_lengkap;
+      editInputNamaLengkap.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputNamaLengkap);
+      // NIK
+      const editInputNIK = document.getElementById('edit-nik');
+      const labelEditInputNIK = document.getElementById('label-edit-nik');
+      tempValue = orangTua.detail.nomor_identitas_kependudukan;
+      editInputNIK.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputNIK);
+      // Tempat Lahir
+      const editInputTempatLahir = document.getElementById('edit-tempat-lahir');
+      const labelEditInputTempatLahir = document.getElementById('label-edit-tempat-lahir');
+      tempValue = orangTua.detail.tempat_lahir;
+      editInputTempatLahir.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputTempatLahir);
+      // Tanggal Lahir
+      const editInputTanggalLahir = document.getElementById('edit-tanggal-lahir');
+      const labelEditInputTanggalLahir = document.getElementById('label-edit-tanggal-lahir');
+      tempValue = orangTua.detail.tanggal_lahir;
+      editInputTanggalLahir.value = tempValue;
+      handleCheckInputValue(tempValue, labelEditInputTanggalLahir);
+      editInputTanggalLahir.value = orangTua.detail.tanggal_lahir;
+      // Jenis Kelamin
+      const editSelectJenisKelamin = document.getElementById('edit-jenis-kelamin');
+      tempValue = orangTua.detail.jenis_kelamin;
+      editSelectJenisKelamin.value = tempValue;
+      const labelEditSelectJenisKelamin = document.getElementById('label-edit-jenis-kelamin');
+      handleCheckInputValue(tempValue, labelEditSelectJenisKelamin);
+      // Hubungan
+      const editSelectHubungan = document.getElementById('edit-hubungan');
+      tempValue = orangTua.detail.hubungan;
+      editSelectHubungan.value = tempValue;
+      const labelEditSelectHubungan = document.getElementById('label-edit-hubungan');
+      handleCheckInputValue(tempValue, labelEditSelectHubungan);
+      // Pekerjaan
+      const editInputPekerjaan = document.getElementById('edit-pekerjaan');
+      tempValue = orangTua.detail.pekerjaan;
+      editInputPekerjaan.value = tempValue;
+      const labelEditInputPekerjaan = document.getElementById('label-edit-pekerjaan');
+      handleCheckInputValue(tempValue, labelEditInputPekerjaan);
+      // Email
+      const editInputEmail = document.getElementById('edit-email');
+      tempValue = orangTua.detail.email;
+      editInputEmail.value = tempValue;
+      const labelEditInputEmail = document.getElementById('label-edit-email');
+      handleCheckInputValue(tempValue, labelEditInputEmail);
+      // Nomor Telepon
+      const editInputNomorTelepon = document.getElementById('edit-nomor-telepon');
+      tempValue = orangTua.detail.nomor_telepon;
+      editInputNomorTelepon.value = tempValue;
+      const labelEditInputNomorTelepon = document.getElementById('label-edit-nomor-telepon');
+      handleCheckInputValue(tempValue, labelEditInputNomorTelepon);
+      // Data Alamat
+      // ** Provinsi
+      const editInputProvinsi = document.getElementById('edit-provinsi');
+      tempValue = orangTua.detail.provinsi;
+      editInputProvinsi.value = tempValue;
+      const labelEditInputProvinsi = document.getElementById('edit-label-provinsi');
+      handleCheckInputValue(tempValue, labelEditInputProvinsi);
+      // ** Kabupaten
+      const editInputKabupaten = document.getElementById('edit-kabupaten');
+      tempValue = orangTua.detail.kabupaten;
+      editInputKabupaten.value = tempValue;
+      const labelEditInputKabupaten = document.getElementById('edit-label-kabupaten');
+      handleCheckInputValue(tempValue, labelEditInputKabupaten);
+      // ** Kecamatan
+      const editInputKecamatan = document.getElementById('edit-kecamatan');
+      tempValue = orangTua.detail.kecamatan;
+      editInputKecamatan.value = tempValue;
+      const labelEditInputKecamatan = document.getElementById('edit-label-kecamatan');
+      handleCheckInputValue(tempValue, labelEditInputKecamatan);
+      // ** Desa
+      const editInputDesa = document.getElementById('edit-desa');
+      tempValue = orangTua.detail.desa;
+      editInputDesa.value = tempValue;
+      const labelEditInputDesa = document.getElementById('edit-label-desa');
+      handleCheckInputValue(tempValue, labelEditInputDesa);
+      // ** RT
+      const editInputRT = document.getElementById('edit-rt');
+      tempValue = orangTua.detail.rt;
+      editInputRT.value = tempValue;
+      const labelEditInputRT = document.getElementById('edit-label-rt');
+      handleCheckInputValue(tempValue, labelEditInputRT);
+      // ** RW
+      const editInputRW = document.getElementById('edit-rw');
+      tempValue = orangTua.detail.rw;
+      editInputRW.value = tempValue;
+      const labelEditInputRW = document.getElementById('edit-label-rw');
+      handleCheckInputValue(tempValue, labelEditInputRW);
+      // ** Kode Post
+      const editInputKodePost = document.getElementById('edit-kode-post');
+      tempValue = orangTua.detail.kode_pos;
+      editInputKodePost.value = tempValue;
+      const labelEditInputKodePost = document.getElementById('edit-label-kode-post');
+      handleCheckInputValue(tempValue, labelEditInputKodePost);
+      // ** Photo Profile
+      // priview image
+      const editPhotoProfile = document.getElementById('edit-preview-image');
+      editPhotoProfile.src = orangTua.detail.photo;
+      // input photo profile
+      const editInputPhotoProfile = document.getElementById('edit-photo-profile');
+      editInputPhotoProfile.src = orangTua.detail.photo;
+  }
+
+  // ** Modals Edit : Close
+  function closeModalEdit() {
+    const targetElement = document.getElementById('container-modal-edit');
+    Swal.fire({
+      title: "Batal Edit Data Orang Tua,<br> Anda Yakin?",
+      showConfirmButton: false,
+      showDenyButton: true,
+      showCancelButton: true,
+      cancelButtonColor: 'orange',
+      denyButtonText: `Ya, Saya Yakin`,
+      customClass: {
+        popup: 'swal-absolute', // Tambahkan kelas kustom
+      },
+      backdrop: false, // Tidak perlu backdrop diaktifkan jika masker kustom sudah digunakan
+      didOpen: () => {
+        const element = document.createElement('div'); // Membuat elemen div
+        element.setAttribute('id', 'swal-mask'); // Menetapkan ID untuk masker
+        element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute'); // Menambahkan kelas CSS
+        targetElement.appendChild(element); // Menambahkan elemen ke dalam targetElement
+      },
+      didClose: () => {
+        const swalMask = document.getElementById('swal-mask'); // Ambil masker berdasarkan ID
+        if (swalMask) {
+          targetElement.removeChild(swalMask); // Menghapus masker dari targetElement
+        }
+      }
+    }).then((result) => {
+      if (result.isDenied) {
+        targetElement.classList.remove('absolute');
+        targetElement.classList.add('hidden');
+      }
+    });
+  }
 </script>

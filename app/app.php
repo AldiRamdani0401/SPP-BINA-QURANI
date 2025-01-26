@@ -46,6 +46,8 @@ class App
           $this->routes->post("/master-data/orang-tua/create", "MasterDataController@createDataOrangTuaSiswa", $middleware = true);
           // *** UPDATE : Orang Tua Siswa *** //
           $this->routes->post("/master-data/orang-tua/update", "MasterDataController@updateDataOrangTuaSiswa", $middleware = true);
+          // *** DELETE : Orang Tua Siswa *** //
+          $this->routes->post("/master-data/orang-tua/delete", "MasterDataController@deleteDataOrangTuaSiswa", $middleware = true);
         /* ### End of ORANG TUA SISWA ### */
         /* >>> kelas <<< */
         $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);

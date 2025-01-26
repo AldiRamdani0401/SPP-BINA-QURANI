@@ -30,7 +30,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     <hr class="bg-lime-400 py-[1.8px] rounded-full">
   </div>
   <!-- Form Modal -->
-  <form id="form-modal" method="POST" action="/master-data/orang-tua/create" enctype="multipart/form-data"
+  <form id="form-modal-tambah" method="POST" action="/master-data/orang-tua/create" enctype="multipart/form-data"
     class="flex flex-col gap-5 justify-between">
     <div class="flex flex-row gap-3 justify-between">
       <!-- Container 1 : Data Orang Tua Siswa -->
@@ -46,7 +46,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
            <div class="flex flex-col">
             <!-- NIK -->
             <div class="flex flex-col gap-1">
-              <label for="nik" id="label-nik" class="font-medium text-slate-700 text-nowrap">
+              <label for="nik" id="label-tambah-nik" class="font-medium text-slate-700 text-nowrap">
                 <span>Nomor Identitas Kependudukan (NIK) :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -59,7 +59,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Nama Lengkap -->
             <div class="group flex flex-col gap-1">
-              <label for="nama-lengkap" id="label-nama-lengkap" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="nama-lengkap" id="label-tambah-nama-lengkap" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Nama Lengkap :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -69,7 +69,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Tempat Lahir -->
             <div class="group flex flex-col gap-1">
-              <label for="tempat-lahir" id="label-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="tempat-lahir" id="label-tambah-tempat-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Tempat Lahir :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -79,7 +79,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Tanggal Lahir -->
             <div class="group flex flex-col gap-1">
-              <label for="tanggal-lahir" id="label-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="tanggal-lahir" id="label-tambah-tanggal-lahir" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Tanggal Lahir :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -88,7 +88,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Jenis Kelamin -->
             <div class="group flex flex-col gap-1">
-              <label for="jenis-kelamin" id="label-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+              <label for="jenis-kelamin" id="label-tambah-jenis-kelamin" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                 <span>Jenis Kelamin :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -104,7 +104,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
            <div class="flex flex-col">
              <!-- Hubungan : -->
              <div class="group flex flex-col gap-1">
-               <label for="hubungan" id="label-hubungan" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
+               <label for="hubungan" id="label-tambah-hubungan" class="font-medium text-slate-700 text-[16px] focus:font-semibold">
                  <span>Hubungan :</span>
                  <span id="empty" class="text-red-500 text-lg">*</span>
                </label>
@@ -117,7 +117,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
              </div>
             <!-- Email -->
             <div class="flex flex-col gap-1">
-              <label for="email" id="label-email" class="font-medium text-slate-700">
+              <label for="email" id="label-tambah-email" class="font-medium text-slate-700">
                 <span>Email :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -134,7 +134,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
              <!-- Nomor Telepon -->
              <div class="flex flex-col gap-1">
-               <label for="nomor-telepon" id="label-nomor-telepon" class="font-medium text-slate-700">
+               <label for="nomor-telepon" id="label-tambah-nomor-telepon" class="font-medium text-slate-700">
                  <span>Nomor Telepon :</span>
                  <span id="empty" class="text-red-500 text-lg">*</span>
                </label>
@@ -150,14 +150,14 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
              </div>
              <!-- Pekerjaan -->
              <div class="flex flex-col gap-1">
-               <label for="pekerjaan" id="label-pekerjaan" class="font-medium text-slate-700">
+               <label for="pekerjaan" id="label-tambah-pekerjaan" class="font-medium text-slate-700">
                  <span>Pekerjaan :</span>
                  <span id="empty" class="text-red-500 text-lg">*</span>
                </label>
                <input type="text" id="pekerjaan" name="pekerjaan"
                  class="px-2 border border-slate-300 rounded-md focus:ring-1 focus:ring-blue-300 "
                  placeholder="Nama Pekerjaan" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                 title="Masukkan pekerjaan yang valid">
+                 title="Masukkan pekerjaan yang valid" required>
              </div>
            </div>
          </div>
@@ -173,7 +173,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           <div class="flex flex-col">
             <!-- Provinsi -->
             <div class="flex flex-col gap-1">
-              <label for="provinsi" id="label-provinsi" class="font-medium text-slate-700">
+              <label for="provinsi" id="label-tambah-provinsi" class="font-medium text-slate-700">
                 <span>Provinsi :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -183,7 +183,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Kabupaten -->
             <div class="flex flex-col gap-1">
-              <label for="kabupaten" id="label-kabupaten" class="font-medium text-slate-700">
+              <label for="kabupaten" id="label-tambah-kabupaten" class="font-medium text-slate-700">
                 <span>Kabupaten :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -193,7 +193,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Kecamatan -->
             <div class="flex flex-col gap-1">
-              <label for="kecamatan" id="label-kecamatan" class="font-medium text-slate-700">
+              <label for="kecamatan" id="label-tambah-kecamatan" class="font-medium text-slate-700">
                 <span>Kecamatan :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -203,7 +203,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Desa / Kelurahan -->
             <div class="flex flex-col gap-1">
-              <label for="desa" id="label-desa" class="font-medium text-slate-700">
+              <label for="desa" id="label-tambah-desa" class="font-medium text-slate-700">
                 <span>Desa / Kelurahan :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -215,7 +215,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           <div class="flex flex-col">
             <!-- RT -->
             <div class="flex flex-col gap-1">
-              <label for="rt" id="label-rt" class="font-medium text-slate-700">
+              <label for="rt" id="label-tambah-rt" class="font-medium text-slate-700">
                 <span>RT :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -228,7 +228,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- RW -->
             <div class="flex flex-col gap-1">
-              <label for="rw" id="label-rw" class="font-medium text-slate-700">
+              <label for="rw" id="label-tambah-rw" class="font-medium text-slate-700">
                 <span>RW :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -240,7 +240,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             </div>
             <!-- Kode Post -->
             <div class="flex flex-col gap-1">
-              <label for="kode-post" id="label-kode-post" class="font-medium text-slate-700">
+              <label for="kode-post" id="label-tambah-kode-post" class="font-medium text-slate-700">
                 <span>Kode Post :</span>
                 <span id="empty" class="text-red-500 text-lg">*</span>
               </label>
@@ -261,11 +261,11 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         </div>
         <!-- Preview -->
         <output id="preview-container" name="x" class="h-60 w-full">
-          <img src="/images/logo/_/default-image" id="preview-image"
+          <img src="/images/logo/_/default-image" id="tambah-preview-image"
             class="h-full w-full border rounded-md object-cover" alt="default image">
         </output>
         <input type="file" id="photo-profile" name="photo-profile" accept="image/*" class="mt-2 border rounded-r-md"
-          onchange="updatePreview(event)">
+          onchange="updatePreviewTambahImage(event)">
       </div>
     </div>
     <div class="flex flex-row gap-5 justify-between">
@@ -273,7 +273,8 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         class="bg-red-600 hover:bg-red-400 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md" onclick="closeModalTambah()">Batal</button>
       <div class="flex flex-row gap-5">
         <button type="reset"
-          class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md">Reset</button>
+          class="bg-yellow-400 hover:bg-yellow-300 hover:font-semibold text-white px-10 py-2 text-lg  rounded-md"
+          onclick="handlerResetFormTambah()">Reset</button>
         <button
           class="bg-blue-600 hover:bg-blue-400 hover:font-semibold text-white px-12 py-2 text-lg  rounded-md">Submit</button>
       </div>
@@ -288,10 +289,6 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 
   // == Handlers
   function handleCheckInputValue(value, target, inputElement = null, invalidMSG = "") {
-    console.log(value);
-    console.log(target);
-    console.log(inputElement);
-
     // Hapus elemen lama jika ada
     const existingMessage = target.querySelector("span#empty") || target.querySelector("span#no-empty");
     if (existingMessage) {
@@ -311,7 +308,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       inputElement?.setCustomValidity(invalidMSG); // Pesan kesalahan
     } else {
       span.className = "font-bold text-green-500";
-      span.innerHTML = "&#10003;";
+      span.innerHTML = "&#5003;";
       span.id = "no-empty";
 
       // Tandai input sebagai valid
@@ -326,10 +323,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 
   let timer; // Variabel timer di luar fungsi untuk menjaga state debounce
   // ** NIK
-  function handleInputNIK(e) {
+  function handleInputTambahNIK(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-nik');
+    const element = document.getElementById('label-tambah-nik');
     let result;
     clearTimeout(timer); // Hapus timer sebelumnya
     timer = setTimeout(() => {
@@ -346,13 +343,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           handleCheckInputValue("", element, inputElement, "NIK Wajib di isi!");
         }
       }
-    }, 1000); // Waktu debounce 1 detik
+    }, 500); // Waktu debounce 1 detik
   }
-    // ** Nama Lengkap
-  function handleInputNamaLengkap(e) {
+  // ** Nama Lengkap
+  function handleInputTambahNamaLengkap(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-nama-lengkap');
+    const element = document.getElementById('label-tambah-nama-lengkap');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -363,10 +360,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     }, 500);
   }
   // ** Tempat Lahir
-  function handleInputTempatLahir(e) {
+  function handleInputTambahTempatLahir(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-tempat-lahir');
+    const element = document.getElementById('label-tambah-tempat-lahir');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -377,10 +374,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     }, 500);
   }
   // ** Tanggal Lahir
-  function handleSelectTanggalLahir(e) {
+  function handleSelectTambahTanggalLahir(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-tanggal-lahir');
+    const element = document.getElementById('label-tambah-tanggal-lahir');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -391,10 +388,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     }, 500);
   }
   // ** Jenis Kelamin
-  function handleJenisKelamin(e) {
+  function handleSelectTambahJenisKelamin(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-jenis-kelamin');
+    const element = document.getElementById('label-tambah-jenis-kelamin');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -405,10 +402,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     }, 500);
   }
   // ** Hubungan
-  function handleHubungan(e) {
+  function handleTambahHubungan(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-hubungan');
+    const element = document.getElementById('label-tambah-hubungan');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -431,10 +428,10 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     }
   }
 
-  function handleEmail(e) {
+  function handleTambahEmail(e) {
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-email');
+    const element = document.getElementById('label-tambah-email');
     clearTimeout(timer);
     timer = setTimeout(() => {
       result = md_ayah.find((data) => data.email === value) || md_ibu.find((data) => data.email === value);
@@ -452,14 +449,14 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           handleCheckInputValue("", element, inputElement, "Email Wajib diisi!"); // Email kosong
         }
       }
-    }, 1000);
+    }, 500);
   }
   // ** Nomor Telepon
   let nomorTelepon;
-  function handleNomorTelepon(e){
+  function handleTambahNomorTelepon(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-nomor-telepon');
+    const element = document.getElementById('label-tambah-nomor-telepon');
     clearTimeout(timer);
     timer = setTimeout(() => {
       console.log(md_ayah)
@@ -478,29 +475,28 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
           handleCheckInputValue("", element, inputElement, "Nomor Telepon Wajib diisi!"); // Nomor Telepon kosong
         }
       }
-    }, 1000);
+    }, 500);
   }
   // ** Pekerjaan
   let pekerjaan;
-  function handlePekerjaan(e){
+  function handleTambahPekerjaan(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-pekerjaan');
+    const element = document.getElementById('label-tambah-pekerjaan');
     clearTimeout(timer);
     timer = setTimeout(() => {
-      console.log(md_ayah)
       if (value == '') {
         handleCheckInputValue(value, element, inputElement, "Pekerjaan Tidak Boleh Kosong!");
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** Provinsi
-  function handleProvinsi(e){
+  function handleTambahProvinsi(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-provinsi');
+    const element = document.getElementById('label-tambah-provinsi');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -508,13 +504,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** Kabupaten
-  function handleKabupaten(e){
+  function handleTambahKabupaten(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-kabupaten');
+    const element = document.getElementById('label-tambah-kabupaten');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -522,13 +518,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** Kecamatan
-  function handleKecamatan(e){
+  function handleTambahKecamatan(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-kecamatan');
+    const element = document.getElementById('label-tambah-kecamatan');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -536,13 +532,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** Desa
-  function handleDesa(e){
+  function handleTambahDesa(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-desa');
+    const element = document.getElementById('label-tambah-desa');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -550,13 +546,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** RT
-  function handleRT(e){
+  function handleTambahRT(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-rt');
+    const element = document.getElementById('label-tambah-rt');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -564,13 +560,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** RW
-  function handleRW(e){
+  function handleTambahRW(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-rw');
+    const element = document.getElementById('label-tambah-rw');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -578,13 +574,13 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** KodePost
-  function handleKodePost(e){
+  function handleTambahKodePost(e){
     const value = e.target.value;
     const inputElement = e.target;
-    const element = document.getElementById('label-kode-post');
+    const element = document.getElementById('label-tambah-kode-post');
     clearTimeout(timer);
     timer = setTimeout(() => {
       if (value == '') {
@@ -592,12 +588,12 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       } else {
         handleCheckInputValue(value, element, inputElement, '');
       }
-    }, 1000);
+    }, 500);
   }
   // ** Photo Profile: Preview
-  function updatePreview(event) {
+  function updatePreviewTambahImage(event) {
     const file = event.target.files[0]; // Ambil file dari input
-    const previewImage = document.getElementById('preview-image'); // Elemen gambar untuk preview
+    const previewImage = document.getElementById('tambah-preview-image'); // Elemen gambar untuk preview
 
     if (file) {
       const reader = new FileReader(); // FileReader untuk membaca file
@@ -612,23 +608,25 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   };
 
   // ** RESET HANDLERS
-  function handlerResetLabels() {
-    const form = document.getElementById('form-modal');
+  function handlerResetFormTambah() {
+    const form = document.getElementById('form-modal-tambah');
 
     // Remove Input
     const inputElements = form.getElementsByTagName('input');
     Array.from(inputElements).forEach((input) => {
       input.classList.remove('bg-green-200');
       input.classList.remove('bg-red-200');
+      input.value = '';
     });
 
     // Remove Select
     const selectElements = form.getElementsByTagName('select');
     Array.from(selectElements).forEach((select) => {
       select.classList.remove('bg-green-200');
+      select.value = '';
     });
 
-    const labelElements = document.querySelectorAll('label[id^="label-"]'); // Mengambil semua label dengan ID yang diawali "label-"
+    const labelElements = document.querySelectorAll('label[id^="label-tambah"]'); // Mengambil semua label dengan ID yang diawali "tambah-"
     // Iterasi melalui NodeList
     labelElements.forEach((element) => {
         const spanElement = element.querySelector('span[id="no-empty"]'); // Mencari span dengan ID "no-empty"
@@ -645,63 +643,127 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
             element.appendChild(span); // Tambahkan span baru ke elemen label
         }
     });
+
+    const previewImage = document.getElementById('tambah-preview-image');
+    previewImage.src = "/images/logo/_/default-image"; // Gambar default
   }
 
   // Load Elements
   // ** Form Event
-  document.getElementById('form-modal').addEventListener('reset', () => {
-    const previewImage = document.getElementById('preview-image');
-    previewImage.src = "/images/logo/_/default-image"; // Gambar default
-    handlerResetLabels();
-  });
+  // document.getElementById('form-modal-tambah').addEventListener('reset', () => {
+  //   const previewImage = document.getElementById('tambah-preview-image');
+  //   previewImage.src = "/images/logo/_/default-image"; // Gambar default
+  //   handlerResetFormTambah();
+  // });
   // ** Nama Lengkap Siswa : Input
   const inputNamaLengkapSiswa = document.getElementById('nama-lengkap');
-  inputNamaLengkapSiswa.addEventListener('keyup', (e) => handleInputNamaLengkap(e));
+  inputNamaLengkapSiswa.addEventListener('keyup', (e) => handleInputTambahNamaLengkap(e));
   // ** NIK : Input
   const inputNIK = document.getElementById('nik');
-  inputNIK.addEventListener('keyup', (e) => handleInputNIK(e));
+  inputNIK.addEventListener('keyup', (e) => handleInputTambahNIK(e));
   // ** Tempat Lahir : Input
   const inputTempatLahir = document.getElementById('tempat-lahir');
-  inputTempatLahir.addEventListener('keyup', (e) => handleInputTempatLahir(e));
+  inputTempatLahir.addEventListener('keyup', (e) => handleInputTambahTempatLahir(e));
   // ** Tanggal Lahir : Select
   const selectTanggalLahir = document.getElementById('tanggal-lahir');
-  selectTanggalLahir.addEventListener('change', (e) => handleSelectTanggalLahir(e));
+  selectTanggalLahir.addEventListener('change', (e) => handleSelectTambahTanggalLahir(e));
   // ** Jenis Kelamin : Select
   const selectJenisKelamin = document.getElementById('jenis-kelamin');
-  selectJenisKelamin.addEventListener('change', (e) => handleJenisKelamin(e));
+  selectJenisKelamin.addEventListener('change', (e) => handleSelectTambahJenisKelamin(e));
   // ** Hubungan : Select
   const selectHubungan = document.getElementById('hubungan');
-  selectHubungan.addEventListener('change', (e) => handleHubungan(e));
+  selectHubungan.addEventListener('change', (e) => handleTambahHubungan(e));
   // ** Email : Input
   const inputEmail = document.getElementById('email');
-  inputEmail.addEventListener('change', (e) => handleEmail(e));
+  inputEmail.addEventListener('change', (e) => handleTambahEmail(e));
   // ** Nomor Telepon : Input
   const inputNomorTelepon = document.getElementById('nomor-telepon');
-  inputNomorTelepon.addEventListener('change', (e) => handleNomorTelepon(e));
+  inputNomorTelepon.addEventListener('change', (e) => handleTambahNomorTelepon(e));
   // ** Pekerjaan : Input
   const inputPekerjaan = document.getElementById('pekerjaan');
-  inputPekerjaan.addEventListener('change', (e) => handlePekerjaan(e));
+  inputPekerjaan.addEventListener('change', (e) => handleTambahPekerjaan(e));
   // ** Provinsi : Input
   const inputProvinsi = document.getElementById('provinsi');
-  inputProvinsi.addEventListener('keyup', (e) => handleProvinsi(e));
+  inputProvinsi.addEventListener('keyup', (e) => handleTambahProvinsi(e));
   // ** Kabupaten : Input
   const inputKabupaten = document.getElementById('kabupaten');
-  inputKabupaten.addEventListener('keyup', (e) => handleKabupaten(e));
+  inputKabupaten.addEventListener('keyup', (e) => handleTambahKabupaten(e));
   // ** Kecamatan : Input
   const inputKecamatan = document.getElementById('kecamatan');
-  inputKecamatan.addEventListener('keyup', (e) => handleKecamatan(e));
+  inputKecamatan.addEventListener('keyup', (e) => handleTambahKecamatan(e));
   // ** Desa : Input
   const inputDesa = document.getElementById('desa');
-  inputDesa.addEventListener('keyup', (e) => handleDesa(e));
+  inputDesa.addEventListener('keyup', (e) => handleTambahDesa(e));
   // ** RT : Input
   const inputRT = document.getElementById('rt');
-  inputRT.addEventListener('keyup', (e) => handleRT(e));
+  inputRT.addEventListener('keyup', (e) => handleTambahRT(e));
   // ** RW : Input
   const inputRW = document.getElementById('rw');
-  inputRW.addEventListener('keyup', (e) => handleRW(e));
+  inputRW.addEventListener('keyup', (e) => handleTambahRW(e));
   // ** KodePost : Input
   const inputKodePost = document.getElementById('kode-post');
-  inputKodePost.addEventListener('keyup', (e) => handleKodePost(e));
+  inputKodePost.addEventListener('keyup', (e) => handleTambahKodePost(e));
+
+  // === MODALS ====
+  // ** Modals Tambah : Open
+  function loadModalTambah() {
+    const elements = document.getElementById('container-modal-tambah');
+      elements.classList.remove('hidden');
+      elements.classList.add('absolute');
+    const swalMask = document.getElementById('swal-mask');
+    if (swalMask) {
+      elements.removeChild(swalMask);
+    }
+  }
+  // ** Modals Tambah : Close
+  function closeModalTambah() {
+    const targetElement = document.getElementById('container-modal-tambah');
+    const inputElements = targetElement.getElementsByTagName('input');
+
+    // Cek apakah ada input yang tidak kosong
+    const isNotEmpty = Array.from(inputElements).some((input) => input.value !== '');
+
+    if (isNotEmpty) {
+      // Jika ada input yang terisi (tidak kosong)
+      Swal.fire({
+        title: "Batal Tambah Data Orang Tua,<br> Anda Yakin?",
+        showConfirmButton: false,
+        showDenyButton: true,
+        showCancelButton: true,
+        cancelButtonColor: 'orange',
+        denyButtonText: `Ya, Saya Yakin`,
+        customClass: {
+          popup: 'swal-absolute',
+        },
+        backdrop: false,
+        didOpen: () => {
+          const element = document.createElement('div');
+          element.setAttribute('id', 'swal-mask');
+          element.classList.add('h-full', 'w-full', 'bg-black', 'bg-opacity-60', 'absolute');
+          targetElement.appendChild(element);
+        },
+        didClose: () => {
+          const swalMask = document.getElementById('swal-mask');
+          if (swalMask) {
+            targetElement.removeChild(swalMask);
+          }
+        }
+      }).then((result) => {
+        if (result.isDenied) {
+          targetElement.classList.remove('absolute');
+          targetElement.classList.add('hidden');
+          // Reset Form
+          handlerResetFormTambah();
+        }
+      });
+    } else {
+      // Jika semua input kosong
+      targetElement.classList.remove('absolute');
+      targetElement.classList.add('hidden');
+      // Reset Form
+      handlerResetFormTambah();
+    }
+  }
 
   // INITIAL
   // ** Kelas  : Select

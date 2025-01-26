@@ -212,7 +212,7 @@ class MasterDataController
                 // ** Kode Pos
                 $kodePos = !empty($_POST['kode-post']) ? $_POST['kode-post'] : null;
                 // ** Photo Profile
-                $photoProfile = (isset($_FILES['photo-profile']) && $_FILES['photo-profile']['error'] === UPLOAD_ERR_OK) ? Helper_Images('parents', $_FILES['photo-profile']) : null;
+                $photoProfile = (isset($_FILES['photo-profile']) && $_FILES['photo-profile']['error'] === UPLOAD_ERR_OK) ? Helper_Images('parents', null, $_FILES['photo-profile']) : null;
 
                 // check validate data
                 if ($nik && $namaLengkap && $tempatLahir &&
@@ -352,6 +352,40 @@ class MasterDataController
             }
         }
 
+        /* @@@ DELETE : ORANG TUA SISWA @@@ */
+        public function deleteDataOrangTuaSiswa() {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && strtolower($_POST['_method']) === 'delete') {
+                $nik = $_POST['nik'];
+
+                // Database Connect
+                $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Get Image
+                $query = "SELECT photo FROM tb_orang_tua_siswa WHERE nomor_identitas_kependudukan = ?";
+
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param('s', $nik);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $result = $result->fetch_assoc();
+                echo $result['photo'];
+                Helper_Delete_Images($result['photo']);
+
+                // Delete Data
+                $query = "DELETE FROM tb_orang_tua_siswa WHERE nomor_identitas_kependudukan = ?";
+
+                $stmt = $conn->prepare($query);
+                $stmt->bind_param('s', $nik);
+
+                if ($stmt->execute()) {
+                    header("Location:/admin/master-data/orang-tua-siswa");
+                }
+            }
+        }
 
     /* ======= End of ORANG TUA SISWA ===== */
 
