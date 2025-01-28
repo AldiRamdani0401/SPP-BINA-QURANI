@@ -250,7 +250,12 @@ class MasterDataController
                 echo 'error';
             }
         }
-
+        /* @@@ CREATE (IMPORT DATA FROM FILE) : ORANG TUA SISWA @@@ */
+        public function createDataOrangTuaSiswaFromFile() {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                var_dump($_POST['datas']);
+            }
+        }
         /* @@@ UPDATE : ORANG TUA SISWA @@@ */
         public function updateDataOrangTuaSiswa() {
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && strtolower($_POST['_method']) === 'put') {
