@@ -42,7 +42,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
       <hr class="bg-lime-300 py-[1.8px] rounded-full">
     </div>
     <!-- Form Import File -->
-     <form id="form-import-file" class="mx-auto overflow-hidden w-[500px]" enctype="multipart/form-data" method="POST" action="/master-data/orang-tua/update"
+     <form id="form-import-file" class="mx-auto overflow-hidden w-[500px]" enctype="multipart/form-data"
        class="flex flex-col gap-5 justify-between">
        <input type="hidden" name="_method" value="PUT" />
        <div id="container-input-data-file" class="flex flex-col gap-3">
@@ -103,42 +103,42 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
                       </thead>
                     <tbody>
                       <tr class="text-nowrap">
-                        <td class="border border-slate-700">1</td>
-                        <td class="border border-slate-700">Aldi Ramdani</td>
-                        <td class="border border-slate-700">3210022334455661</td>
-                        <td class="border border-slate-700">Laki-Laki</td>
-                        <td class="border border-slate-700">Karawang</td>
-                        <td class="border border-slate-700">1998-01-04</td>
-                        <td class="border border-slate-700">Software Architech</td>
-                        <td class="border border-slate-700">Ayah</td>
-                        <td class="border border-slate-700">aldi@gmail.com</td>
-                        <td class="border border-slate-700">0858112233445</td>
-                        <td class="border border-slate-700">Jawa Barat</td>
-                        <td class="border border-slate-700">Karawang</td>
-                        <td class="border border-slate-700">Telagasari</td>
-                        <td class="border border-slate-700">Talagasari</td>
-                        <td class="border border-slate-700">001</td>
-                        <td class="border border-slate-700">002</td>
-                        <td class="border border-slate-700">112233</td>
+                        <td class="border border-slate-700 px-2">1</td>
+                        <td class="border border-slate-700 px-2">Aldi Ramdani</td>
+                        <td class="border border-slate-700 px-2">3210022334455661</td>
+                        <td class="border border-slate-700 px-2">Laki-Laki</td>
+                        <td class="border border-slate-700 px-2">Karawang</td>
+                        <td class="border border-slate-700 px-2">1998-01-04</td>
+                        <td class="border border-slate-700 px-2">Software Architech</td>
+                        <td class="border border-slate-700 px-2">Ayah</td>
+                        <td class="border border-slate-700 px-2">aldi@gmail.com</td>
+                        <td class="border border-slate-700 px-2">0858112233445</td>
+                        <td class="border border-slate-700 px-2">Jawa Barat</td>
+                        <td class="border border-slate-700 px-2">Karawang</td>
+                        <td class="border border-slate-700 px-2">Telagasari</td>
+                        <td class="border border-slate-700 px-2">Talagasari</td>
+                        <td class="border border-slate-700 px-2">001</td>
+                        <td class="border border-slate-700 px-2">002</td>
+                        <td class="border border-slate-700 px-2">112233</td>
                       </tr>
                       <tr class="text-nowrap">
-                        <td class="border border-slate-700">2</td>
-                        <td class="border border-slate-700">Hilda Amelia</td>
-                        <td class="border border-slate-700">3210022334455662</td>
-                        <td class="border border-slate-700">Perempuan</td>
-                        <td class="border border-slate-700">Karawang</td>
-                        <td class="border border-slate-700">2003-03-24</td>
-                        <td class="border border-slate-700">Administration</td>
-                        <td class="border border-slate-700">Ibu</td>
-                        <td class="border border-slate-700">hilda@gmail.com</td>
-                        <td class="border border-slate-700">0858112233445</td>
-                        <td class="border border-slate-700">Jawa Barat</td>
-                        <td class="border border-slate-700">Karawang</td>
-                        <td class="border border-slate-700">Telagasari</td>
-                        <td class="border border-slate-700">Talagasari</td>
-                        <td class="border border-slate-700">001</td>
-                        <td class="border border-slate-700">002</td>
-                        <td class="border border-slate-700">112233</td>
+                        <td class="border border-slate-700 px-2">2</td>
+                        <td class="border border-slate-700 px-2">Hilda Amelia</td>
+                        <td class="border border-slate-700 px-2">3210022334455662</td>
+                        <td class="border border-slate-700 px-2">Perempuan</td>
+                        <td class="border border-slate-700 px-2">Karawang</td>
+                        <td class="border border-slate-700 px-2">2003-03-24</td>
+                        <td class="border border-slate-700 px-2">Administration</td>
+                        <td class="border border-slate-700 px-2">Ibu</td>
+                        <td class="border border-slate-700 px-2">hilda@gmail.com</td>
+                        <td class="border border-slate-700 px-2">0858112233445</td>
+                        <td class="border border-slate-700 px-2">Jawa Barat</td>
+                        <td class="border border-slate-700 px-2">Karawang</td>
+                        <td class="border border-slate-700 px-2">Telagasari</td>
+                        <td class="border border-slate-700 px-2">Talagasari</td>
+                        <td class="border border-slate-700 px-2">001</td>
+                        <td class="border border-slate-700 px-2">002</td>
+                        <td class="border border-slate-700 px-2">112233</td>
                       </tr>
                     </tbody>
                   </table>
@@ -191,7 +191,12 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
   </div>
   <!-- Card 2 : Show Result Import File -->
    <div id="container-show-result-import" class="hidden bg-white w-full h-fit xl:h-[80%] rounded-lg shadow-xl">
-    <h1 class="bg-blue-600 text-white p-2 text-xl font-semibold rounded-t-lg">Pratinjau Data Baru : Data Orang Tua</h1>
+    <form class="flex flex-row items-center justify-between px-2 py-1 bg-blue-600 text-xl rounded-t-lg" method="POST" action="/master-data/orang-tua/file/create" onsubmit="submitImportDataFile()">
+      <input type="hidden" id="input-file-datas" name="datas">
+      <h1 class="text-white font-semibold">Pratinjau Data Baru : Data Orang Tua</h1>
+      <!-- Tambah -->
+       <button class="bg-green-600 text-sm px-2 py-1 text-white h-fit rounded-md hover:bg-green-800">Tambah</button>
+    </form>
     <div class="gap-4 bg-white w-full h-[90%] rounded-b-lg shadow-xl overflow-auto">
       <table class="text-center h-fit w-full">
         <thead class="sticky top-[-2px] shadow-sm">
@@ -435,6 +440,38 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
         targetElement.appendChild(row);
       }
     });
+  }
+
+  // ### ACTIONS ###
+  function submitImportDataFile() {
+    // Reformating Data
+    const formattedData = [];
+
+    files.main_datas.map((data, index) => {
+      if (index !== 0){
+        const value = {
+          "nama_lengkap": data[0],
+          "nomor_identitas_kependudukan": data[1],
+          "jenis_kelamin": data[2],
+          "tempat_lahir": data[3],
+          "tanggal_lahir": data[4],
+          "pekerjaan": data[5],
+          "hubungan": data[6],
+          "email": data[7],
+          "nomor_telepon": data[8],
+          "provinsi": data[9],
+          "kabupaten": data[10],
+          "kecamatan": data[11],
+          "desa": data[12],
+          "rt": data[13],
+          "rw": data[14],
+          "kode_pos": data[15]
+        }
+        formattedData.push(value);
+      }
+    });
+
+    document.getElementById("input-file-datas").value = JSON.stringify(formattedData);
   }
 
   // ### ONLOAD ###

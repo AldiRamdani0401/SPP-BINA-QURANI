@@ -44,19 +44,22 @@ class App
           $this->routes->get("/admin/master-data/orang-tua-siswa", "MasterDataController@orangTuaSiswa", $middleware = true);
           // *** CREATE : Orang Tua Siswa *** //
           $this->routes->post("/master-data/orang-tua/create", "MasterDataController@createDataOrangTuaSiswa", $middleware = true);
+          // *** CREATE (IMPORT DATA FROM FILE) : Orang Tua Siswa *** //
+          $this->routes->post("/master-data/orang-tua/file/create", "MasterDataController@createDataOrangTuaSiswaFromFile", $middleware = true);
           // *** UPDATE : Orang Tua Siswa *** //
           $this->routes->post("/master-data/orang-tua/update", "MasterDataController@updateDataOrangTuaSiswa", $middleware = true);
           // *** DELETE : Orang Tua Siswa *** //
           $this->routes->post("/master-data/orang-tua/delete", "MasterDataController@deleteDataOrangTuaSiswa", $middleware = true);
         /* ### End of ORANG TUA SISWA ### */
-        /* >>> kelas <<< */
-        $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);
-        /* >>> biaya spp <<< */
-        $this->routes->get("/admin/master-data/biaya-spp", "MasterDataController@spp", $middleware = true);
-        /* >>> pembayaran <<< */
-        $this->routes->get("/admin/master-data/pembayaran", "MasterDataController@pembayaran", $middleware = true);
-        /* >>> admin <<< */
-        $this->routes->get("/admin/master-data/admin", "MasterDataController@admin", $middleware = true);
+
+          /* >>> kelas <<< */
+          $this->routes->get("/admin/master-data/kelas", "MasterDataController@kelas", $middleware = true);
+          /* >>> biaya spp <<< */
+          $this->routes->get("/admin/master-data/biaya-spp", "MasterDataController@spp", $middleware = true);
+          /* >>> pembayaran <<< */
+          $this->routes->get("/admin/master-data/pembayaran", "MasterDataController@pembayaran", $middleware = true);
+          /* >>> admin <<< */
+          $this->routes->get("/admin/master-data/admin", "MasterDataController@admin", $middleware = true);
     /* @@@ End of MASTER DATA @@@ */
 
     /* @@@ PEMBAYARAN SPP @@@ */
