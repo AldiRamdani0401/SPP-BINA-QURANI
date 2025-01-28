@@ -96,7 +96,39 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
           <!-- Button Reset: Search -->
           <!-- <button id="btn-reset-group-by" class="bg-red-500 text-white px-2 rounded-md">reset</button> -->
         </div>
-        <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah</button>
+        <!-- Tools : Document -->
+        <div class="flex flex-row justify-center gap-5 bg-slate-400">
+          <!-- Download -->
+          <div class="flex flex-row items-center">
+            <!-- CSV -->
+            <button
+              type="button"
+              class="flex flex-row items-center gap-2 p-2 bg-lime-300 text-sm font-medium hover:text-white hover:bg-lime-700 rounded-md"
+              onclick="loadImportFileCSV()">
+              <span>Import CSV / XLSX</span>
+              <svg
+                width="1.5em"
+                height="1.5em"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.517 14.841a1.13 1.13 0 0 0 .401.823q.195.162.478.252.284.091.665.091.507 0 .859-.158.354-.158.539-.44.187-.284.187-.656 0-.336-.134-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.566-.21l-.621-.144a1 1 0 0 1-.404-.176.37.37 0 0 1-.144-.299q0-.234.185-.384.188-.152.512-.152.214 0 .37.068a.6.6 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.2-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.439 0-.776.15-.337.149-.527.421-.19.273-.19.639 0 .302.122.524.124.223.352.367.228.143.539.213l.618.144q.31.073.463.193a.39.39 0 0 1 .152.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.167.07-.413.07-.175 0-.32-.04a.8.8 0 0 1-.248-.115.58.58 0 0 1-.255-.384zM.806 13.693q0-.373.102-.633a.87.87 0 0 1 .302-.399.8.8 0 0 1 .475-.137q.225 0 .398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.4 1.4 0 0 0-.489-.272 1.8 1.8 0 0 0-.606-.097q-.534 0-.911.223-.375.222-.572.632-.195.41-.196.979v.498q0 .568.193.976.197.407.572.626.375.217.914.217.439 0 .785-.164t.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.8.8 0 0 1-.118.363.7.7 0 0 1-.272.25.9.9 0 0 1-.401.087.85.85 0 0 1-.478-.132.83.83 0 0 1-.299-.392 1.7 1.7 0 0 1-.102-.627zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879z"
+                />
+              </svg>
+            </button>
+          </div>
+          <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah</button>
+          <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah Banyak</button>
+          <!-- Range Tanggal -->
+          <!-- <div class="flex flex-row gap-2 px-2 items-center h-7 bg-slate-50 rounded-sm border">
+            <span class="font-medium">Tanggal</span>
+            <input type="date" class="rounded-sm px-2 h-full text-slate-800">
+            <span class="font-medium">s/d</span>
+            <input type="date" class="rounded-sm px-2 h-full text-slate-800">
+          </div> -->
+        </div>
       </div>
       <!-- Table -->
       <table class="text-center h-full">
@@ -147,6 +179,11 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     <!-- Container: Detail -->
      <?php include "edit.php"?>
   </div>
+  <!-- Container 6 : Modal-Import-File -->
+  <div id="container-modal-import-file" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
+    <!-- Container: Detail -->
+     <?php include "components/import.php"?>
+  </div>
 <script>
   // States
   const md_siswa = <?= json_encode($dataSiswa)?>;
@@ -191,6 +228,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   };
 
   // Handlers
+  // *** INITIAL VALUES *** //
   function initialValues() {
     const datas = chunkArray(orangTua.main_datas, orangTua.limit);
     orangTua.index = 0;
@@ -223,6 +261,13 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     const year = dateObj.getFullYear(); // Ambil tahun (4 digit)
 
     return `${day} ${months[month]} ${year}`; // Format ke "15 Oktober 2025"
+  }
+
+  // *** LOAD IMPORT FILE CSV
+  function loadImportFileCSV() {
+    const containerImport = document.getElementById("container-modal-import-file");
+          containerImport.classList.remove("hidden");
+          containerImport.classList.add("absolute");
   }
 
   // === Toolbar
@@ -280,7 +325,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
   // ** Group By Handler
   groupByElement.addEventListener("change", (e) => {
     // set default limit
-    siswa.limit = 10;
+    orangTua.limit = 10;
 
     // get elements
     const element = document.getElementById('cont-group-by-values');
@@ -292,7 +337,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     selectElement.innerHTML = '';
 
     // get values for option values (no duplicate data)
-    const groupByOptionValues = [...new Set(siswa.main_datas.map(data => data[keyObject]))];
+    const groupByOptionValues = [...new Set(orangTua.main_datas.map(data => data[keyObject]))];
 
     // render Group By Values
     // ** default value
@@ -313,18 +358,18 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
 
     selectElement.addEventListener("change", (e) => {
       const selectGroupByValue = e.target.value;
-      const resultGroupBy = siswa.main_datas.filter((data) => data[keyObject] === selectGroupByValue);
+      const resultGroupBy = orangTua.main_datas.filter((data) => data[keyObject] === selectGroupByValue);
 
-      const chunkData = chunkArray(resultGroupBy, siswa.limit);
-      siswa.filtered_data = chunkData;
-      siswa.render = chunkData[0];
-      siswa.index = 0;
-      siswa.current = 1;
-      siswa.load_data = resultGroupBy.length < siswa.limit ? resultGroupBy.length : siswa.limit;
-      siswa.total_data = resultGroupBy.length;
-      siswa.total_page = chunkData.length;
+      const chunkData = chunkArray(resultGroupBy, orangTua.limit);
+      orangTua.filtered_data = chunkData;
+      orangTua.render = chunkData[0];
+      orangTua.index = 0;
+      orangTua.current = 1;
+      orangTua.load_data = resultGroupBy.length < orangTua.limit ? resultGroupBy.length : orangTua.limit;
+      orangTua.total_data = resultGroupBy.length;
+      orangTua.total_page = chunkData.length;
       console.log('result', chunkData);
-      console.log('filtered', siswa.filtered_data);
+      console.log('filtered', orangTua.filtered_data);
 
       // set limit with filtered values
       setLimitOption();
@@ -337,7 +382,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       e.target.selectedIndex = 0;
       element.classList.add('hidden');
       selectElement.innerHTML = '';
-      siswa.filtered_data = [];
+      orangTua.filtered_data = [];
       initialValues();
       renderTable();
     });
@@ -413,10 +458,9 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     if (searchValue !== '') {
       if (search.filter === null) {
           // Mencari data berdasarkan nama_lengkap, nomor_induk_siswa, dan kelas
-          result = siswa.main_datas.filter((data) =>
+          result = orangTua.main_datas.filter((data) =>
             data.nama_lengkap.toString().toLowerCase().includes(searchValue) || // Pencarian pada nama_lengkap
-            data.nomor_induk_siswa.toString().toLowerCase().includes(searchValue) || // Pencarian pada nomor_induk_siswa
-            data.kelas.toString().toLowerCase().includes(searchValue) // Pencarian pada kelas
+            data.nomor_identitas_kependudukan.toString().toLowerCase().includes(searchValue) // Pencarian pada nomor_induk_siswa
           );
       } else {
 
@@ -424,22 +468,22 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
       // Menampilkan hasil
       if (result.length > 0) {
           console.log('Hasil Pencarian:', result);
-          const dataFind = chunkArray(result, siswa.limit);
+          const dataFind = chunkArray(result, orangTua.limit);
           console.log('chunk', dataFind);
-            siswa.index = 0;
-            siswa.current = 1;
-            siswa.load_data = result.length > 10 ? siswa.limit : result.length;
-            siswa.total_data = result.length;
-            siswa.total_page = dataFind.length;
-            siswa.filtered_data = dataFind;
-            siswa.render = dataFind[0];
+            orangTua.index = 0;
+            orangTua.current = 1;
+            orangTua.load_data = result.length > 10 ? orangTua.limit : result.length;
+            orangTua.total_data = result.length;
+            orangTua.total_page = dataFind.length;
+            orangTua.filtered_data = dataFind;
+            orangTua.render = dataFind[0];
             renderTable();
       } else {
         console.log('Data tidak ditemukan.');
         renderTable();
       }
     } else {
-      siswa.filtered_data = [];
+      orangTua.filtered_data = [];
       initialValues();
       renderTable();
     }
@@ -497,5 +541,6 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     // test
     // loadModalEdit(3275010101990004);
     // loadModalTambah();
+    loadImportFileCSV();
   });
 </script>
