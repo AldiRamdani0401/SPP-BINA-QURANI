@@ -214,7 +214,7 @@ class MasterDataController
                 // ** Photo Profile
                 $photoProfile = (isset($_FILES['photo-profile']) && $_FILES['photo-profile']['error'] === UPLOAD_ERR_OK) ? Helper_Images('parents', null, $_FILES['photo-profile']) : null;
 
-                // check validate data
+                // check data validate
                 if ($nik && $namaLengkap && $tempatLahir &&
                 $tanggalLahir && $jenisKelamin && $hubungan &&
                 $email && $nomorTelepon && $pekerjaan &&
@@ -251,9 +251,108 @@ class MasterDataController
             }
         }
         /* @@@ CREATE (IMPORT DATA FROM FILE) : ORANG TUA SISWA @@@ */
-        public function createDataOrangTuaSiswaFromFile() {
+        public function createDataOrangTuaSiswaFromFile()
+        {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                var_dump($_POST['datas']);
+                $datas = json_decode($_POST['datas'], true);
+
+                if (!is_array($datas) || empty($datas)) {
+                    die("Data tidak valid atau kosong.");
+                }
+
+                // Database Connect
+                $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname, $this->port);
+
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // Query Insert
+                $tableOrangTua = 'tb_orang_tua_siswa';
+                $stmt = $conn->prepare("INSERT INTO $tableOrangTua (
+                            nama_lengkap, nomor_identitas_kependudukan, tempat_lahir, tanggal_lahir, jenis_kelamin,
+                            email, nomor_telepon, hubungan, pekerjaan, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                if (!$stmt) {
+                    die("Prepare failed: " . $conn->error);
+                }
+
+                // Query Cek NIK
+                $cekStmt = $conn->prepare("SELECT COUNT(*) FROM $tableOrangTua WHERE nomor_identitas_kependudukan = ?");
+                if (!$cekStmt) {
+                    die("Prepare failed: " . $conn->error);
+                }
+
+                // Memulai transaksi
+                if (!$conn->begin_transaction()) {
+                    die("Gagal memulai transaksi: " . $conn->error);
+                }
+
+                try {
+                    foreach ($datas as $data) {
+                        $nik = $data['nomor_identitas_kependudukan'];
+
+                        // Cek apakah NIK sudah ada
+                        $cekStmt->bind_param("s", $nik);
+                        $cekStmt->execute();
+                        $cekStmt->bind_result($count);
+                        $cekStmt->fetch();
+                        $cekStmt->close(); // Menutup statement agar tidak terjadi out of sync
+
+                        if ($count == 0) {
+                            $jenis_kelamin = ($data['jenis_kelamin'] === "Laki-Laki") ? "L" : "P";
+                            $defaultImagePath = "/images/logo/_/default-image";
+
+                            // Bind parameter untuk insert
+                            $stmt->bind_param(
+                                "sssssssssssssssss",
+                                $data['nama_lengkap'],
+                                $nik,
+                                $data['tempat_lahir'],
+                                $data['tanggal_lahir'],
+                                $jenis_kelamin,
+                                $data['email'],
+                                $data['nomor_telepon'],
+                                $data['hubungan'],
+                                $data['pekerjaan'],
+                                $data['provinsi'],
+                                $data['kabupaten'],
+                                $data['kecamatan'],
+                                $data['desa'],
+                                $data['rt'],
+                                $data['rw'],
+                                $data['kode_pos'],
+                                $defaultImagePath
+                            );
+
+                            // Eksekusi insert
+                            $stmt->execute();
+                        }
+
+                        // Re-open cekStmt setelah ditutup sebelumnya
+                        $cekStmt = $conn->prepare("SELECT COUNT(*) FROM $tableOrangTua WHERE nomor_identitas_kependudukan = ?");
+                        if (!$cekStmt) {
+                            throw new Exception("Prepare failed: " . $conn->error);
+                        }
+                    }
+
+                    // Commit transaksi jika semua berhasil
+                    $conn->commit();
+                } catch (Exception $e) {
+                    // Rollback jika ada error
+                    $conn->rollback();
+                    die("Insert gagal: " . $e->getMessage());
+                }
+
+                // Tutup statement dan koneksi
+                $cekStmt->close();
+                $stmt->close();
+                $conn->close();
+
+                // Redirect
+                header("Location: /admin/master-data/orang-tua-siswa");
+                exit;
             }
         }
         /* @@@ UPDATE : ORANG TUA SISWA @@@ */
