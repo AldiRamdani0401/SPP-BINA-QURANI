@@ -1,32 +1,5 @@
 <?php require BASE_PATH . "/views/admin/header.php"; ?>
 
-<?php
-$servername = "localhost";
-$port = 9090;
-$username = "root";
-$password = "root";
-$dbname = "db_spp_bina_qurani";
-
-$conn = new mysqli($servername, $username, $password, $dbname, $port);
-
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-// Load Data Orang Tua
-$stmt = $conn->prepare("SELECT nomor_identitas_kependudukan, nama_lengkap, email, nomor_telepon, hubungan, pekerjaan, tempat_lahir, tanggal_lahir, jenis_kelamin, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo FROM tb_orang_tua_siswa");
-$stmt->execute();
-$result = $stmt->get_result();
-$dataOrangTua = $result->fetch_all(MYSQLI_ASSOC);
-
-// Load Data Siswa
-$stmt = $conn->prepare("SELECT nomor_induk_siswa, nama_lengkap, nama_ayah, nama_ibu, tempat_lahir, tanggal_lahir, jenis_kelamin, kelas, provinsi, kabupaten, kecamatan, desa, rt, rw, kode_pos, photo_siswa FROM tb_siswa");
-$stmt->execute();
-$result = $stmt->get_result();
-$dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
-
-?>
-
 <style>
   input:focus {
     outline: none;
@@ -39,8 +12,6 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     transform: translate(-50%, -50%) !important; /* Pusatkan */
     z-index: 888;                /* Pastikan di atas elemen lain */
   }
-
-
 </style>
 <!-- Content -->
 <div class="flex flex-col w-[80%] bg-slate-100">
@@ -120,7 +91,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
             </button>
           </div>
           <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah</button>
-          <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambah()"> + Tambah Banyak</button>
+          <button class="px-2 bg-blue-800 text-white rounded-md hover:bg-blue-600" onclick="loadModalTambahBanyak()"> + Tambah Banyak</button>
           <!-- Range Tanggal -->
           <!-- <div class="flex flex-row gap-2 px-2 items-center h-7 bg-slate-50 rounded-sm border">
             <span class="font-medium">Tanggal</span>
@@ -169,25 +140,28 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     <!-- Container: Form Modal -->
      <?php include "tambah.php"?>
   </div>
-  <!-- Container 4 : Modal-Detail -->
+  <!-- Container 4 : Modal-Tambah-Banyak -->
+  <div id="container-modal-tambah-banyak" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full p-5 z-40 hidden left-0 top-0">
+    <!-- Container: Form Modal -->
+     <?php include "components/bulk.php"?>
+  </div>
+  <!-- Container 5 : Modal-Detail -->
   <div id="container-modal-detail" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
      <?php include "detail.php"?>
   </div>
-  <!-- Container 5 : Modal-Edit -->
+  <!-- Container 6 : Modal-Edit -->
   <div id="container-modal-edit" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
      <?php include "edit.php"?>
   </div>
-  <!-- Container 6 : Modal-Import-File -->
+  <!-- Container 7 : Modal-Import-File -->
   <div id="container-modal-import-file" class="flex flex-row justify-center items-center gap-5 bg-black bg-opacity-60 w-screen h-full z-40 hidden left-0 right-0 top-0">
     <!-- Container: Detail -->
      <?php include "components/import.php"?>
   </div>
 <script>
-  // States
-  const md_siswa = <?= json_encode($dataSiswa)?>;
-
+  // * Note : md_siswa in file admin/header.php
   const orangTua = {
     main_datas: <?= json_encode($dataOrangTua) ?>,
     render: [],
@@ -541,6 +515,7 @@ $dataSiswa = $result->fetch_all(MYSQLI_ASSOC);
     // test
     // loadModalEdit(3275010101990004);
     // loadModalTambah();
-    loadImportFileCSV();
+    // loadImportFileCSV();
+    loadModalTambahBanyak();
   });
 </script>

@@ -280,9 +280,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 </div>
 
 <script>
-  // States
-  const dt_ayah = <?= json_encode($dataAyah) ?>;
-  const dt_ibu = <?= json_encode($dataIbu) ?>;
+  // * Note: md_ayah & md_ibu in admin/header.php
 
   // == Handlers
   function handleCheckInputValue(value, target) {
@@ -364,7 +362,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     clearTimeout(editTimer); // Hapus editTimer sebelumnya
     editTimer = setTimeout(() => {
       if (inputId == 'edit-nik-ayah') {
-        result = dt_ayah.find((data) => data.nomor_identitas_kependudukan == value);
+        result = md_ayah.find((data) => data.nomor_identitas_kependudukan == value);
                       document.getElementById('edit-nama-lengkap-ayah').value = result?.nama_lengkap ?? '';
                       document.getElementById('edit-email-ayah').value = result?.email ?? '';
                       document.getElementById('edit-nomor-telepon-ayah').value = result?.nomor_telepon ?? '';
@@ -588,11 +586,11 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
     // Get data NIK
     const formEditModal = document.getElementById('form-edit-modal')
     const nik = formEditModal.getAttribute('nik');
-    const result = dt_ayah.find((data) => {
+    const result = md_ayah.find((data) => {
       if (data.nomor_identitas_kependudukan == nik) {
         return data
       }
-    }) || dt_ibu.find((data) => {
+    }) || md_ibu.find((data) => {
       if (data.nomor_identitas_kependudukan == nik) {
         return data
       }

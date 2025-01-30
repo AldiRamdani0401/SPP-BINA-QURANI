@@ -283,9 +283,7 @@ $dataIbu = $result->fetch_all(MYSQLI_ASSOC);
 </div>
 
 <script>
-  // States
-  const md_ayah = <?= json_encode($dataAyah) ?>;
-  const md_ibu = <?= json_encode($dataIbu) ?>;
+  // * Note: md_ayah & md_ibu in file admin/header.php
 
   // == Handlers
   function handleCheckInputValue(value, target, inputElement = null, invalidMSG = "") {
